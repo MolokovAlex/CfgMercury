@@ -375,17 +375,20 @@ class TableProfilePowerDialog(QDialog):
                 self.model.set(self.data.copy())
                 self.tableProfilePowerCounts.resizeColumnsToContents()
 
-                #
+                # сделаем вторую таблицу, которая будет прсто шапкой над первой
                 self.model2.lst_header_table = mg.create_header_table2(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter)
                 self.data2 = arr_Table
                 self.model2.set(self.data2.copy())
                 self.tableProfilePowerCounts2.resizeColumnsToContents()
                 for num_time, val in enumerate(arr_Table):
-                    # if num_time !=0:
                     self.tableProfilePowerCounts2.hideRow(num_time)
 
                 #
-
+                for num_colunm in range (0,np.shape(arr_Table)[1],1):
+                    if self.tableProfilePowerCounts.columnWidth(num_colunm) >= self.tableProfilePowerCounts2.columnWidth(num_colunm):
+                        self.tableProfilePowerCounts2.setColumnWidth(num_colunm, self.tableProfilePowerCounts.columnWidth(num_colunm))
+                    else:
+                        self.tableProfilePowerCounts.setColumnWidth(num_colunm, self.tableProfilePowerCounts2.columnWidth(num_colunm))
                 # QTableView.columnWidth(column)¶
                 # setColumnWidth(column, width)¶
 
@@ -555,6 +558,7 @@ class NpModel(QAbstractTableModel):
             if 'ИТОГО' in self.npdata[index.row()][0]:
                 font = QFont() 
                 font.setBold(True)
+                # font.setColor(QPen('blue'))
                 return font
         if role == Qt.TextAlignmentRole:
             if ('ИТОГО' in self.npdata[index.row()][0]) and ('ГРУПП' in self.npdata[index.row()][0]):

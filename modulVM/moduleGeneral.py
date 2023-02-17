@@ -1229,7 +1229,8 @@ def create_header_table(lst_checked_counter):
     """сделаем список для заголовки шапки таблицы на экране названиями выбранных счетчиков
     """
 
-    lst_header_table = ['Дата', 'Время']
+    # lst_header_table = ['Дата', 'Время']
+    lst_header_table = ["",""]
     list_GroupDB, rezult_getListOfGroupDB = msql.getListGroupDB()
         # узнаем полное наименование счетчика через id  и добавим его в первую строку массива
     list_counterDB, rezult_getListOfCounterDB = msql.getListCounterDB()
@@ -1250,7 +1251,8 @@ def create_header_table(lst_checked_counter):
                     if item['id'] == itemGroup:
                         name_group = item["name_group_full"]
                 #
-                lst_header_table.append("Группа:" + name_group +"\n"+name_counter)
+                # lst_header_table.append("Группа:" + name_group +"\n"+name_counter)
+                lst_header_table.append(name_counter)
                 num_counters_in_groups +=1
 
 # после выходной список дополним одиночными счетчиками
