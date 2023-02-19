@@ -610,37 +610,8 @@ class NpModel2(QAbstractTableModel):
         return len(self.npdata[0])
     
     # def data(self,index,role):
-    #     if not index.isValid():# or role != Qt.DisplayRole: 
-    #         return None
-    #     if role == Qt.DisplayRole:
-    #         # елси это обычное число из таблицы - поменяем разделитель с . на , (для соблюдения нац стандартов)
-    #         # и заменим nan на отсутствие
-    #         if (index.column() != 0 or index.column() != 1):
-    #             val = self.npdata[index.row()][index.column()]
-    #             val = val.replace('.', ',')
-    #             if val == 'nan': val = ''
-    #             return str(val)
-    #         else:
-    #             val = self.npdata[index.row()][index.column()]
-    #             return str(val)
-    #     if role == Qt.FontRole: 
-    #         if (index.column() == 0 or index.column() == 1):
-    #             font = QFont() 
-    #             font.setBold(True)
-    #             return font
-    #         if 'ИТОГО' in self.npdata[index.row()][0]:
-    #             font = QFont() 
-    #             font.setBold(True)
-    #             return font
-    #     if role == Qt.TextAlignmentRole:
-    #         if ('ИТОГО' in self.npdata[index.row()][0]) and ('ГРУПП' in self.npdata[index.row()][0]):
-    #             # font = QFont() 
-    #             # font.setBold(True)
-    #             return Qt.AlignCenter #QVariant(int(Qt.AlignHCenter|Qt.AlignVCenter))
-    
-
-
-    
+    #     return None
+   
     def headerData(self,section,orientation,role):
         # if role != Qt.DisplayRole: 
         #     return None

@@ -660,3 +660,69 @@ root-DEBUG-18-Feb-23 01:12:32-старт потока
 root-DEBUG-18-Feb-23 01:12:32-поток стартовал
 root-DEBUG-18-Feb-23 01:12:32-cfg.ON_TRANSFER_DATA_COUNTER=False
 root-DEBUG-18-Feb-23 01:12:47- открытие окна вывода таблицы профиля мощности
+root-DEBUG-19-Feb-23 09:08:10-логирование включено
+root-DEBUG-19-Feb-23 09:08:10-создание главного окна
+root-INFO-19-Feb-23 09:08:11-подключение файла БД...
+root-INFO-19-Feb-23 09:08:11-Проверка наличия файла БД SQLite D:\Python\CfgMercury\DB\ViewMercuryDB.sqlite...
+root-INFO-19-Feb-23 09:08:11-файл БД найден
+root-INFO-19-Feb-23 09:08:11-База данных создана и успешно подключена к SQLite
+root-DEBUG-19-Feb-23 09:08:11-Версия базы данных SQLite: [('3.35.5',)]
+root-DEBUG-19-Feb-23 09:08:11-Соединение с SQLite закрыто
+root-DEBUG-19-Feb-23 09:08:11-старт потока
+root-DEBUG-19-Feb-23 09:08:12-поток стартовал
+root-DEBUG-19-Feb-23 09:08:12-cfg.ON_TRANSFER_DATA_COUNTER=False
+root-DEBUG-19-Feb-23 09:08:14- открытие окна вывода таблицы профиля мощности
+root-DEBUG-19-Feb-23 09:09:14-закрытие главного окна
+root-DEBUG-19-Feb-23 09:09:14-закрытие потока...
+root-DEBUG-19-Feb-23 09:09:14-закрытие потока...ОК
+root-DEBUG-19-Feb-23 09:12:46-логирование включено
+root-DEBUG-19-Feb-23 09:12:46-создание главного окна
+root-INFO-19-Feb-23 09:12:46-подключение файла БД...
+root-INFO-19-Feb-23 09:12:46-Проверка наличия файла БД SQLite D:\Python\CfgMercury\DB\ViewMercuryDB.sqlite...
+root-INFO-19-Feb-23 09:12:46-файл БД найден
+root-INFO-19-Feb-23 09:12:46-База данных создана и успешно подключена к SQLite
+root-DEBUG-19-Feb-23 09:12:46-Версия базы данных SQLite: [('3.35.5',)]
+root-DEBUG-19-Feb-23 09:12:46-Соединение с SQLite закрыто
+root-DEBUG-19-Feb-23 09:12:46-старт потока
+root-DEBUG-19-Feb-23 09:12:47-поток стартовал
+root-DEBUG-19-Feb-23 09:12:47-cfg.ON_TRANSFER_DATA_COUNTER=False
+root-DEBUG-19-Feb-23 09:12:48- открытие окна вывода таблицы профиля мощности
+root-DEBUG-19-Feb-23 09:15:38-логирование включено
+root-DEBUG-19-Feb-23 09:15:38-создание главного окна
+root-INFO-19-Feb-23 09:15:38-подключение файла БД...
+root-INFO-19-Feb-23 09:15:38-Проверка наличия файла БД SQLite D:\Python\CfgMercury\DB\ViewMercuryDB.sqlite...
+root-INFO-19-Feb-23 09:15:38-файл БД найден
+root-INFO-19-Feb-23 09:15:38-База данных создана и успешно подключена к SQLite
+root-DEBUG-19-Feb-23 09:15:38-Версия базы данных SQLite: [('3.35.5',)]
+root-DEBUG-19-Feb-23 09:15:38-Соединение с SQLite закрыто
+root-DEBUG-19-Feb-23 09:15:38-старт потока
+root-DEBUG-19-Feb-23 09:15:38-поток стартовал
+root-DEBUG-19-Feb-23 09:15:38-cfg.ON_TRANSFER_DATA_COUNTER=False
+root-DEBUG-19-Feb-23 09:15:40- открытие окна вывода таблицы профиля мощности
+root-DEBUG-19-Feb-23 09:19:17-логирование включено
+root-DEBUG-19-Feb-23 09:19:17-создание главного окна
+root-INFO-19-Feb-23 09:19:17-подключение файла БД...
+root-INFO-19-Feb-23 09:19:17-Проверка наличия файла БД SQLite D:\Python\CfgMercury\DB\ViewMercuryDB.sqlite...
+root-INFO-19-Feb-23 09:19:17-файл БД найден
+root-INFO-19-Feb-23 09:19:17-База данных создана и успешно подключена к SQLite
+root-DEBUG-19-Feb-23 09:19:17-Версия базы данных SQLite: [('3.35.5',)]
+root-DEBUG-19-Feb-23 09:19:17-Соединение с SQLite закрыто
+root-DEBUG-19-Feb-23 09:19:17-старт потока
+root-DEBUG-19-Feb-23 09:19:17-поток стартовал
+root-DEBUG-19-Feb-23 09:19:17-cfg.ON_TRANSFER_DATA_COUNTER=False
+root-DEBUG-19-Feb-23 09:19:19- открытие окна вывода таблицы профиля мощности
+root-DEBUG-19-Feb-23 09:31:41-логирование включено
+root-DEBUG-19-Feb-23 09:31:41-создание главного окна
+root-INFO-19-Feb-23 09:31:41-подключение файла БД...
+root-INFO-19-Feb-23 09:31:41-Проверка наличия файла БД SQLite D:\Python\CfgMercury\DB\ViewMercuryDB.sqlite...
+root-INFO-19-Feb-23 09:31:41-файл БД найден
+root-INFO-19-Feb-23 09:31:41-База данных создана и успешно подключена к SQLite
+root-DEBUG-19-Feb-23 09:31:41-Версия базы данных SQLite: [('3.35.5',)]
+root-DEBUG-19-Feb-23 09:31:41-Соединение с SQLite закрыто
+root-DEBUG-19-Feb-23 09:31:41-старт потока
+root-DEBUG-19-Feb-23 09:31:41-поток стартовал
+root-DEBUG-19-Feb-23 09:31:41-cfg.ON_TRANSFER_DATA_COUNTER=False
+root-DEBUG-19-Feb-23 09:31:50- открытие окна вывода таблицы профиля мощности
+root-DEBUG-19-Feb-23 09:32:51-закрытие главного окна
+root-DEBUG-19-Feb-23 09:32:51-закрытие потока...
+root-DEBUG-19-Feb-23 09:32:51-закрытие потока...ОК

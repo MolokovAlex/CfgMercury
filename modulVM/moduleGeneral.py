@@ -1297,12 +1297,13 @@ def create_header_table2(lst_checked_counter):
 
 # после выходной список дополним одиночными счетчиками
         #  для начала выделим из списка только одиночные счетчики         
-        # lst_checked_counter = lst_checked_counter[num_counters_in_groups:]
+        lst_checked_counter = lst_checked_counter[num_counters_in_groups:]
 
-        # for item_checked in lst_checked_counter:
-        #     for item in list_counterDB:
-        #         if item['id'] == item_checked:
-        #             lst_header_table.append(item["name_counter_full"])
+        for item_checked in lst_checked_counter:
+            for item in list_counterDB:
+                if item['id'] == item_checked:
+                    # lst_header_table.append(item["name_counter_full"])
+                    lst_header_table.append("")
 
     return lst_header_table
 
