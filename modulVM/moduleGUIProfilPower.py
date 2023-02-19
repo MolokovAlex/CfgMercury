@@ -382,15 +382,18 @@ class TableProfilePowerDialog(QDialog):
                 self.tableProfilePowerCounts2.resizeColumnsToContents()
                 for num_time, val in enumerate(arr_Table):
                     self.tableProfilePowerCounts2.hideRow(num_time)
+                    # self.tableProfilePowerCounts2.setRowHidden(row=num_time, hide=True)
 
-                #
+                # выравниваем ширину столбцов у двух таблиц исходя из максимальной ширины
                 for num_colunm in range (0,np.shape(arr_Table)[1],1):
                     if self.tableProfilePowerCounts.columnWidth(num_colunm) >= self.tableProfilePowerCounts2.columnWidth(num_colunm):
                         self.tableProfilePowerCounts2.setColumnWidth(num_colunm, self.tableProfilePowerCounts.columnWidth(num_colunm))
                     else:
                         self.tableProfilePowerCounts.setColumnWidth(num_colunm, self.tableProfilePowerCounts2.columnWidth(num_colunm))
-                # QTableView.columnWidth(column)¶
-                # setColumnWidth(column, width)¶
+
+                #  запретим пользователю изменять ширину столбцов
+                self.tableProfilePowerCounts.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)#,QHeaderView.ResizeToContents)
+                self.tableProfilePowerCounts2.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)#,QHeaderView.ResizeToContents)
 
                 #
                 cfg.running_thread1 = True
