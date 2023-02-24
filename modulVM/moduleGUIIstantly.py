@@ -51,8 +51,8 @@ class InstantlyParamCountersDialog(QDialog):
 
         self.de_dateFrom = QDateEdit(self)
         self.de_dateFrom.setCalendarPopup(True) 
-        self.de_dateFrom.setDate(QDate(2022, 12, 25))
-        # self.de_dateFrom.setDate(QDate.currentDate())
+        # self.de_dateFrom.setDate(QDate(2022, 12, 25))
+        self.de_dateFrom.setDate(QDate.currentDate())
 
         lbl_empty3 = QLabel("    ")
         self.btnRefreshGraph = QPushButton("Обновить")

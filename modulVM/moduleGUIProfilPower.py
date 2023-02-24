@@ -56,10 +56,18 @@ class TableProfilePowerDialog(QDialog):
             self.de_dateFrom = QDateEdit(self)
             layout.addWidget(self.de_dateFrom, 0, 2)
             self.de_dateFrom.setCalendarPopup(True) 
-            ddatefrom = QDate.currentDate()
+            # ddatefrom = QDate.currentDate()
             # ddatefrom.currentDate()
             # self.de_dateFrom.setDate(QDate(2022, 12, 25))
-            self.de_dateFrom.setDate(ddatefrom)
+            
+            # ddate_now = QDate.currentDate()
+            # d = QDate.currentDate().day()
+            # m = QDate.currentDate().month()
+            # y = QDate.currentDate().year()
+            # от первого дня месяца
+            ddate_from = QDate(QDate.currentDate().year(), QDate.currentDate().month(), 1)
+            # до текущей даты
+            ddate_to = QDate.currentDate()
 
             lbl_empty2 = QLabel("<-интервал->")
             layout.addWidget(lbl_empty2, 0, 3)
@@ -71,7 +79,8 @@ class TableProfilePowerDialog(QDialog):
             # self.de_dateTo.setDate(QDate(2022, 12, 25))
             # d = ddatefrom.addDays(2)
             # print(d)
-            self.de_dateTo.setDate(ddatefrom.addDays(7))
+            self.de_dateFrom.setDate(ddate_from)
+            self.de_dateTo.setDate(ddate_to)
 
             lbl_empty4 = QLabel("Период отображения")
             layout.addWidget(lbl_empty4, 0, 6)
