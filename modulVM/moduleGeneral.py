@@ -1292,7 +1292,7 @@ def create_header_table2(lst_checked_counter):
                     if item['id'] == itemGroup:
                         name_group = item["name_group_full"]
                 #
-                lst_header_table.append("Группа:\n" + name_group)# +"\n"+name_counter)
+                lst_header_table.append("Группа:\n" + name_group+"\n\n")# +"\n"+name_counter)
                 num_counters_in_groups +=1
 
 # после выходной список дополним одиночными счетчиками

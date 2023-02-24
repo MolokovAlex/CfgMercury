@@ -783,3 +783,174 @@ root-DEBUG-20-Feb-23 01:02:41- открытие окна вывода табли
 root-DEBUG-20-Feb-23 01:03:05-закрытие главного окна
 root-DEBUG-20-Feb-23 01:03:05-закрытие потока...
 root-DEBUG-20-Feb-23 01:03:05-закрытие потока...ОК
+root-DEBUG-24-Feb-23 21:31:39-логирование включено
+root-DEBUG-24-Feb-23 21:31:39-создание главного окна
+root-INFO-24-Feb-23 21:31:41-подключение файла БД...
+root-INFO-24-Feb-23 21:31:41-Проверка наличия файла БД SQLite D:\Python\CfgMercury\DB\ViewMercuryDB.sqlite...
+root-INFO-24-Feb-23 21:31:41-файл БД найден
+root-INFO-24-Feb-23 21:31:41-База данных создана и успешно подключена к SQLite
+root-DEBUG-24-Feb-23 21:31:41-Версия базы данных SQLite: [('3.35.5',)]
+root-DEBUG-24-Feb-23 21:31:41-Соединение с SQLite закрыто
+root-DEBUG-24-Feb-23 21:31:41-старт потока
+root-DEBUG-24-Feb-23 21:31:42-поток стартовал
+root-DEBUG-24-Feb-23 21:31:42-cfg.ON_TRANSFER_DATA_COUNTER=False
+root-DEBUG-24-Feb-23 21:31:46-открытие окна просмотра мгновенных значений
+root-DEBUG-24-Feb-23 21:47:36-закрытие главного окна
+root-DEBUG-24-Feb-23 21:47:36-закрытие потока...
+root-DEBUG-24-Feb-23 21:47:36-закрытие потока...ОК
+root-DEBUG-24-Feb-23 21:49:14-логирование включено
+root-DEBUG-24-Feb-23 21:49:14-создание главного окна
+root-INFO-24-Feb-23 21:49:14-подключение файла БД...
+root-INFO-24-Feb-23 21:49:14-Проверка наличия файла БД SQLite D:\Python\CfgMercury\DB\ViewMercuryDB.sqlite...
+root-INFO-24-Feb-23 21:49:14-файл БД найден
+root-INFO-24-Feb-23 21:49:14-База данных создана и успешно подключена к SQLite
+root-DEBUG-24-Feb-23 21:49:14-Версия базы данных SQLite: [('3.35.5',)]
+root-DEBUG-24-Feb-23 21:49:14-Соединение с SQLite закрыто
+root-DEBUG-24-Feb-23 21:49:14-старт потока
+root-DEBUG-24-Feb-23 21:49:15-поток стартовал
+root-DEBUG-24-Feb-23 21:49:15-cfg.ON_TRANSFER_DATA_COUNTER=False
+root-DEBUG-24-Feb-23 21:49:17-открытие окна просмотра мгновенных значений
+root-DEBUG-24-Feb-23 21:52:27-логирование включено
+root-DEBUG-24-Feb-23 21:52:27-создание главного окна
+root-INFO-24-Feb-23 21:52:27-подключение файла БД...
+root-INFO-24-Feb-23 21:52:27-Проверка наличия файла БД SQLite D:\Python\CfgMercury\DB\ViewMercuryDB.sqlite...
+root-INFO-24-Feb-23 21:52:27-файл БД найден
+root-INFO-24-Feb-23 21:52:27-База данных создана и успешно подключена к SQLite
+root-DEBUG-24-Feb-23 21:52:27-Версия базы данных SQLite: [('3.35.5',)]
+root-DEBUG-24-Feb-23 21:52:27-Соединение с SQLite закрыто
+root-DEBUG-24-Feb-23 21:52:27-старт потока
+root-DEBUG-24-Feb-23 21:52:28-поток стартовал
+root-DEBUG-24-Feb-23 21:52:28-cfg.ON_TRANSFER_DATA_COUNTER=False
+root-DEBUG-24-Feb-23 21:52:30-открытие окна просмотра мгновенных значений
+root-DEBUG-24-Feb-23 21:53:18-логирование включено
+root-DEBUG-24-Feb-23 21:53:18-создание главного окна
+root-INFO-24-Feb-23 21:53:18-подключение файла БД...
+root-INFO-24-Feb-23 21:53:18-Проверка наличия файла БД SQLite D:\Python\CfgMercury\DB\ViewMercuryDB.sqlite...
+root-INFO-24-Feb-23 21:53:18-файл БД найден
+root-INFO-24-Feb-23 21:53:18-База данных создана и успешно подключена к SQLite
+root-DEBUG-24-Feb-23 21:53:18-Версия базы данных SQLite: [('3.35.5',)]
+root-DEBUG-24-Feb-23 21:53:18-Соединение с SQLite закрыто
+root-DEBUG-24-Feb-23 21:53:18-старт потока
+root-DEBUG-24-Feb-23 21:53:18-поток стартовал
+root-DEBUG-24-Feb-23 21:53:18-cfg.ON_TRANSFER_DATA_COUNTER=False
+root-DEBUG-24-Feb-23 21:53:20-открытие окна просмотра мгновенных значений
+root-DEBUG-24-Feb-23 22:03:59-закрытие главного окна
+root-DEBUG-24-Feb-23 22:03:59-закрытие потока...
+root-DEBUG-24-Feb-23 22:03:59-закрытие потока...ОК
+root-DEBUG-24-Feb-23 22:31:08-логирование включено
+root-DEBUG-24-Feb-23 22:31:08-создание главного окна
+root-INFO-24-Feb-23 22:31:08-подключение файла БД...
+root-INFO-24-Feb-23 22:31:08-Проверка наличия файла БД SQLite D:\Python\CfgMercury\DB\ViewMercuryDB.sqlite...
+root-INFO-24-Feb-23 22:31:08-файл БД найден
+root-INFO-24-Feb-23 22:31:08-База данных создана и успешно подключена к SQLite
+root-DEBUG-24-Feb-23 22:31:08-Версия базы данных SQLite: [('3.35.5',)]
+root-DEBUG-24-Feb-23 22:31:08-Соединение с SQLite закрыто
+root-DEBUG-24-Feb-23 22:31:08-старт потока
+root-DEBUG-24-Feb-23 22:31:08-поток стартовал
+root-DEBUG-24-Feb-23 22:31:08-cfg.ON_TRANSFER_DATA_COUNTER=False
+root-DEBUG-24-Feb-23 22:31:10-открытие окна просмотра мгновенных значений
+root-DEBUG-24-Feb-23 22:33:26-логирование включено
+root-DEBUG-24-Feb-23 22:33:26-создание главного окна
+root-INFO-24-Feb-23 22:33:26-подключение файла БД...
+root-INFO-24-Feb-23 22:33:26-Проверка наличия файла БД SQLite D:\Python\CfgMercury\DB\ViewMercuryDB.sqlite...
+root-INFO-24-Feb-23 22:33:26-файл БД найден
+root-INFO-24-Feb-23 22:33:26-База данных создана и успешно подключена к SQLite
+root-DEBUG-24-Feb-23 22:33:26-Версия базы данных SQLite: [('3.35.5',)]
+root-DEBUG-24-Feb-23 22:33:26-Соединение с SQLite закрыто
+root-DEBUG-24-Feb-23 22:33:26-старт потока
+root-DEBUG-24-Feb-23 22:33:26-поток стартовал
+root-DEBUG-24-Feb-23 22:33:26-cfg.ON_TRANSFER_DATA_COUNTER=False
+root-DEBUG-24-Feb-23 22:33:28-открытие окна просмотра мгновенных значений
+root-DEBUG-24-Feb-23 22:34:30-закрытие главного окна
+root-DEBUG-24-Feb-23 22:34:30-закрытие потока...
+root-DEBUG-24-Feb-23 22:34:30-закрытие потока...ОК
+root-DEBUG-24-Feb-23 22:38:12-логирование включено
+root-DEBUG-24-Feb-23 22:38:12-создание главного окна
+root-INFO-24-Feb-23 22:38:12-подключение файла БД...
+root-INFO-24-Feb-23 22:38:12-Проверка наличия файла БД SQLite D:\Python\CfgMercury\DB\ViewMercuryDB.sqlite...
+root-INFO-24-Feb-23 22:38:12-файл БД найден
+root-INFO-24-Feb-23 22:38:12-База данных создана и успешно подключена к SQLite
+root-DEBUG-24-Feb-23 22:38:12-Версия базы данных SQLite: [('3.35.5',)]
+root-DEBUG-24-Feb-23 22:38:12-Соединение с SQLite закрыто
+root-DEBUG-24-Feb-23 22:38:12-старт потока
+root-DEBUG-24-Feb-23 22:38:12-поток стартовал
+root-DEBUG-24-Feb-23 22:38:12-cfg.ON_TRANSFER_DATA_COUNTER=False
+root-DEBUG-24-Feb-23 22:38:14-открытие окна просмотра мгновенных значений
+root-DEBUG-24-Feb-23 22:39:45-закрытие главного окна
+root-DEBUG-24-Feb-23 22:39:45-закрытие потока...
+root-DEBUG-24-Feb-23 22:39:45-закрытие потока...ОК
+root-DEBUG-24-Feb-23 22:40:21-логирование включено
+root-DEBUG-24-Feb-23 22:40:21-создание главного окна
+root-INFO-24-Feb-23 22:40:21-подключение файла БД...
+root-INFO-24-Feb-23 22:40:21-Проверка наличия файла БД SQLite D:\Python\CfgMercury\DB\ViewMercuryDB.sqlite...
+root-INFO-24-Feb-23 22:40:21-файл БД найден
+root-INFO-24-Feb-23 22:40:21-База данных создана и успешно подключена к SQLite
+root-DEBUG-24-Feb-23 22:40:21-Версия базы данных SQLite: [('3.35.5',)]
+root-DEBUG-24-Feb-23 22:40:21-Соединение с SQLite закрыто
+root-DEBUG-24-Feb-23 22:40:21-старт потока
+root-DEBUG-24-Feb-23 22:40:21-поток стартовал
+root-DEBUG-24-Feb-23 22:40:21-cfg.ON_TRANSFER_DATA_COUNTER=False
+root-DEBUG-24-Feb-23 22:40:23-открытие окна просмотра мгновенных значений
+root-DEBUG-24-Feb-23 22:41:12-закрытие главного окна
+root-DEBUG-24-Feb-23 22:41:12-закрытие потока...
+root-DEBUG-24-Feb-23 22:41:12-закрытие потока...ОК
+root-DEBUG-24-Feb-23 22:45:27-логирование включено
+root-DEBUG-24-Feb-23 22:45:27-создание главного окна
+root-INFO-24-Feb-23 22:45:27-подключение файла БД...
+root-INFO-24-Feb-23 22:45:27-Проверка наличия файла БД SQLite D:\Python\CfgMercury\DB\ViewMercuryDB.sqlite...
+root-INFO-24-Feb-23 22:45:27-файл БД найден
+root-INFO-24-Feb-23 22:45:27-База данных создана и успешно подключена к SQLite
+root-DEBUG-24-Feb-23 22:45:27-Версия базы данных SQLite: [('3.35.5',)]
+root-DEBUG-24-Feb-23 22:45:27-Соединение с SQLite закрыто
+root-DEBUG-24-Feb-23 22:45:27-старт потока
+root-DEBUG-24-Feb-23 22:45:28-поток стартовал
+root-DEBUG-24-Feb-23 22:45:28-cfg.ON_TRANSFER_DATA_COUNTER=False
+root-DEBUG-24-Feb-23 22:45:30-открытие окна просмотра мгновенных значений
+root-DEBUG-24-Feb-23 22:46:09-закрытие главного окна
+root-DEBUG-24-Feb-23 22:46:09-закрытие потока...
+root-DEBUG-24-Feb-23 22:46:09-закрытие потока...ОК
+root-DEBUG-24-Feb-23 22:47:47-логирование включено
+root-DEBUG-24-Feb-23 22:47:47-создание главного окна
+root-INFO-24-Feb-23 22:47:47-подключение файла БД...
+root-INFO-24-Feb-23 22:47:47-Проверка наличия файла БД SQLite D:\Python\CfgMercury\DB\ViewMercuryDB.sqlite...
+root-INFO-24-Feb-23 22:47:47-файл БД найден
+root-INFO-24-Feb-23 22:47:47-База данных создана и успешно подключена к SQLite
+root-DEBUG-24-Feb-23 22:47:47-Версия базы данных SQLite: [('3.35.5',)]
+root-DEBUG-24-Feb-23 22:47:47-Соединение с SQLite закрыто
+root-DEBUG-24-Feb-23 22:47:47-старт потока
+root-DEBUG-24-Feb-23 22:47:47-поток стартовал
+root-DEBUG-24-Feb-23 22:47:47-cfg.ON_TRANSFER_DATA_COUNTER=False
+root-DEBUG-24-Feb-23 22:47:49-открытие окна просмотра мгновенных значений
+root-DEBUG-24-Feb-23 22:48:38-закрытие главного окна
+root-DEBUG-24-Feb-23 22:48:38-закрытие потока...
+root-DEBUG-24-Feb-23 22:48:38-закрытие потока...ОК
+root-DEBUG-24-Feb-23 22:49:01-логирование включено
+root-DEBUG-24-Feb-23 22:49:02-создание главного окна
+root-INFO-24-Feb-23 22:49:02-подключение файла БД...
+root-INFO-24-Feb-23 22:49:02-Проверка наличия файла БД SQLite D:\Python\CfgMercury\DB\ViewMercuryDB.sqlite...
+root-INFO-24-Feb-23 22:49:02-файл БД найден
+root-INFO-24-Feb-23 22:49:02-База данных создана и успешно подключена к SQLite
+root-DEBUG-24-Feb-23 22:49:02-Версия базы данных SQLite: [('3.35.5',)]
+root-DEBUG-24-Feb-23 22:49:02-Соединение с SQLite закрыто
+root-DEBUG-24-Feb-23 22:49:02-старт потока
+root-DEBUG-24-Feb-23 22:49:02-поток стартовал
+root-DEBUG-24-Feb-23 22:49:02-cfg.ON_TRANSFER_DATA_COUNTER=False
+root-DEBUG-24-Feb-23 22:49:04-открытие окна просмотра мгновенных значений
+root-DEBUG-24-Feb-23 22:49:35-закрытие главного окна
+root-DEBUG-24-Feb-23 22:49:35-закрытие потока...
+root-DEBUG-24-Feb-23 22:49:35-закрытие потока...ОК
+root-DEBUG-24-Feb-23 22:49:54-логирование включено
+root-DEBUG-24-Feb-23 22:49:54-создание главного окна
+root-INFO-24-Feb-23 22:49:54-подключение файла БД...
+root-INFO-24-Feb-23 22:49:54-Проверка наличия файла БД SQLite D:\Python\CfgMercury\DB\ViewMercuryDB.sqlite...
+root-INFO-24-Feb-23 22:49:54-файл БД найден
+root-INFO-24-Feb-23 22:49:54-База данных создана и успешно подключена к SQLite
+root-DEBUG-24-Feb-23 22:49:54-Версия базы данных SQLite: [('3.35.5',)]
+root-DEBUG-24-Feb-23 22:49:54-Соединение с SQLite закрыто
+root-DEBUG-24-Feb-23 22:49:54-старт потока
+root-DEBUG-24-Feb-23 22:49:55-поток стартовал
+root-DEBUG-24-Feb-23 22:49:55-cfg.ON_TRANSFER_DATA_COUNTER=False
+root-DEBUG-24-Feb-23 22:49:58-открытие окна просмотра мгновенных значений
+root-DEBUG-24-Feb-23 22:50:33-закрытие главного окна
+root-DEBUG-24-Feb-23 22:50:33-закрытие потока...
+root-DEBUG-24-Feb-23 22:50:33-закрытие потока...ОК

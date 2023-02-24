@@ -10,7 +10,8 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 import pyqtgraph as pg
 import numpy as np
-from random import randint
+# from random import randint
+from time import mktime
 import datetime 
 from datetime import timedelta
 from datetime import datetime
@@ -47,9 +48,11 @@ class InstantlyParamCountersDialog(QDialog):
         self.cb_InstCounter.currentIndexChanged.connect(self.onSelectedCount)
         self.selectedCount = self.cb_InstCounter.currentText()
         lbl_empty1.setAlignment(Qt.AlignRight)
+
         self.de_dateFrom = QDateEdit(self)
         self.de_dateFrom.setCalendarPopup(True) 
         self.de_dateFrom.setDate(QDate(2022, 12, 25))
+        # self.de_dateFrom.setDate(QDate.currentDate())
 
         lbl_empty3 = QLabel("    ")
         self.btnRefreshGraph = QPushButton("Обновить")
@@ -80,9 +83,13 @@ class InstantlyParamCountersDialog(QDialog):
         # self.graphWidget.setXRange(0, 10, padding=0)
         self.graphWidget.setYRange(20, 55, padding=0)
         styles = {'color':'r', 'font-size':'12px'}
+        # self.graphWidget.setLabel('left', 'Величина', units='V', **styles)
         self.graphWidget.setLabel('left', 'Величина', **styles)
         self.graphWidget.setLabel('bottom', 'Время', **styles)
-        layout.addWidget(self.graphWidget,  1, 1, 1, 5)        
+        layout.addWidget(self.graphWidget,  1, 1, 1, 5)       
+
+        self.scroll = QScrollBar(Qt.Horizontal) 
+        self.layout.addWidget(self.scroll, 2, 0)
         
         layout.setColumnStretch(0, 0)
         layout.setColumnStretch(1, 2)
@@ -351,6 +358,8 @@ class InstantlyParamCountersDialog(QDialog):
     
 
 class TimeAxisItem(pg.AxisItem):
+    _pxLabelWidth = 80
+
     def __init__(self, *args, **kwargs):
         pg.AxisItem.__init__(self, *args, **kwargs)
         self._oldAxis = None
@@ -368,8 +377,126 @@ class TimeAxisItem(pg.AxisItem):
     #     pos = plotItem.axes[self.orientation]['pos']
     #     plotItem.layout.addItem(self, *pos)
     #     self.setZValue(-1000)    
-        
-    def tickStrings(self, values, scale, spacing):
-        return [datetime.fromtimestamp(value).strftime("%m/%d/%y %H:%M") for value in values]
 
+    def tickValues(self, minVal, maxVal, size):
+        """
+        Reimplemented from PlotItem to adjust to the range and to force
+        the ticks at "round" positions in the context of time units instead of
+        rounding in a decimal base
+        """
+
+        maxMajSteps = int(size/self._pxLabelWidth)
+
+        dt1 = datetime.fromtimestamp(minVal)
+        dt2 = datetime.fromtimestamp(maxVal)
+
+        dx = maxVal - minVal
+        majticks = []
+
+        if dx > 63072001:  # 3600s*24*(365+366) = 2 years (count leap year)
+            d = timedelta(days=366)
+            for y in range(dt1.year + 1, dt2.year):
+                dt = datetime(year=y, month=1, day=1)
+                majticks.append(mktime(dt.timetuple()))
+
+        elif dx > 5270400:  # 3600s*24*61 = 61 days
+            d = timedelta(days=31)
+            dt = dt1.replace(day=1, hour=0, minute=0,
+                             second=0, microsecond=0) + d
+            while dt < dt2:
+                # make sure that we are on day 1 (even if always sum 31 days)
+                dt = dt.replace(day=1)
+                majticks.append(mktime(dt.timetuple()))
+                dt += d
+
+        elif dx > 172800:  # 3600s24*2 = 2 days
+            d = timedelta(days=1)
+            dt = dt1.replace(hour=0, minute=0, second=0, microsecond=0) + d
+            while dt < dt2:
+                majticks.append(mktime(dt.timetuple()))
+                dt += d
+
+        elif dx > 7200:  # 3600s*2 = 2hours
+            d = timedelta(hours=1)
+            dt = dt1.replace(minute=0, second=0, microsecond=0) + d
+            while dt < dt2:
+                majticks.append(mktime(dt.timetuple()))
+                dt += d
+
+        elif dx > 1200:  # 60s*20 = 20 minutes
+            d = timedelta(minutes=10)
+            dt = dt1.replace(minute=(dt1.minute // 10) * 10,
+                             second=0, microsecond=0) + d
+            while dt < dt2:
+                majticks.append(mktime(dt.timetuple()))
+                dt += d
+
+        elif dx > 120:  # 60s*2 = 2 minutes
+            d = timedelta(minutes=1)
+            dt = dt1.replace(second=0, microsecond=0) + d
+            while dt < dt2:
+                majticks.append(mktime(dt.timetuple()))
+                dt += d
+
+        elif dx > 20:  # 20s
+            d = timedelta(seconds=10)
+            dt = dt1.replace(second=(dt1.second // 10) * 10, microsecond=0) + d
+            while dt < dt2:
+                majticks.append(mktime(dt.timetuple()))
+                dt += d
+
+        elif dx > 2:  # 2s
+            d = timedelta(seconds=1)
+            majticks = range(int(minVal), int(maxVal))
+
+        else:  # <2s , use standard implementation from parent
+            return pg.AxisItem.tickValues(self, minVal, maxVal, size)
+
+        L = len(majticks)
+        if L > maxMajSteps:
+            majticks = majticks[::int(np.ceil(float(L) / maxMajSteps))]
+
+        return [(d.total_seconds(), majticks)]
+
+    def tickStrings(self, values, scale, spacing):
+        # return [datetime.fromtimestamp(value).strftime("%m/%d/%y %H:%M") for value in values]
+        """Reimplemented from PlotItem to adjust to the range"""
+        ret = []
+        if not values:
+            return []
+
+        if spacing >= 31622400:  # 366 days
+            fmt = "%Y"
+
+        elif spacing >= 2678400:  # 31 days
+            # fmt = "%Y %b"
+            fmt = "%m/%Y"
+
+        elif spacing >= 86400:  # = 1 day
+            # fmt = "%b/%d"
+            fmt = "%d/%m/%Y"
+
+        elif spacing >= 3600:  # 1 h
+            # fmt = "%b/%d-%Hh"
+            fmt = "%d/%m/%Y-%H:%M"
+
+        elif spacing >= 60:  # 1 m
+            fmt = "%H:%M"
+
+        elif spacing >= 1:  # 1s
+            fmt = "%H:%M:%S"
+
+        else:
+            # less than 2s (show microseconds)
+            # fmt = '%S.%f"'
+            fmt = '[+%fms]'  # explicitly relative to last second
+
+        for x in values:
+            try:
+                t = datetime.fromtimestamp(x)
+                ret.append(t.strftime(fmt))
+            except ValueError:  # Windows can't handle dates before 1970
+                ret.append('')
+
+        return ret
 

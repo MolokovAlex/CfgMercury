@@ -36,11 +36,12 @@ class TableProfilePowerDialog(QDialog):
                 | Qt.WindowMinimizeButtonHint
                 | Qt.WindowMaximizeButtonHint
                 )
-            self.setMinimumSize(QSize(800, 600))         # Устанавливаем размеры
+            self.setMinimumSize(QSize(800, 400))         # Устанавливаем размеры
             self.setWindowTitle("Таблица профиля мощности") # Устанавливаем заголовок окна
 
             layout = QGridLayout()
-
+            layout.setSpacing(1)
+            
             # флаг разрешения нажатия на кнопки Обновить и Импорт в Иксель - пока не выбраны счетчики и группы он опущен
             self.flag_caseCountersAndGroups = False
             # значение Combox периода интегрирования в окне профиля мощности
@@ -49,11 +50,11 @@ class TableProfilePowerDialog(QDialog):
             self.lst_checkItemTree=[]
 
             btn_caseCountsAndGroups = QPushButton("Выбор счетчиков и групп")
-            layout.addWidget(btn_caseCountsAndGroups, 1, 0)
+            layout.addWidget(btn_caseCountsAndGroups, 0, 0)
             btn_caseCountsAndGroups.clicked.connect(self.click_btn_caseCountsAndGroups)
             
             self.de_dateFrom = QDateEdit(self)
-            layout.addWidget(self.de_dateFrom, 1, 2)
+            layout.addWidget(self.de_dateFrom, 0, 2)
             self.de_dateFrom.setCalendarPopup(True) 
             ddatefrom = QDate.currentDate()
             # ddatefrom.currentDate()
@@ -61,11 +62,11 @@ class TableProfilePowerDialog(QDialog):
             self.de_dateFrom.setDate(ddatefrom)
 
             lbl_empty2 = QLabel("<-интервал->")
-            layout.addWidget(lbl_empty2, 1, 3)
+            layout.addWidget(lbl_empty2, 0, 3)
             lbl_empty2.setAlignment(Qt.AlignCenter)
 
             self.de_dateTo = QDateEdit(self)
-            layout.addWidget(self.de_dateTo, 1, 4)
+            layout.addWidget(self.de_dateTo, 0, 4)
             self.de_dateTo.setCalendarPopup(True)
             # self.de_dateTo.setDate(QDate(2022, 12, 25))
             # d = ddatefrom.addDays(2)
@@ -73,16 +74,16 @@ class TableProfilePowerDialog(QDialog):
             self.de_dateTo.setDate(ddatefrom.addDays(7))
 
             lbl_empty4 = QLabel("Период отображения")
-            layout.addWidget(lbl_empty4, 1, 6)
+            layout.addWidget(lbl_empty4, 0, 6)
             lbl_empty4.setAlignment(Qt.AlignRight)
             self.cb_interval = QComboBox()
-            layout.addWidget(self.cb_interval, 1, 7)
+            layout.addWidget(self.cb_interval, 0, 7)
             self.cb_interval.addItems(cfg.VALUE_PERIOD_INTEGR_POFIL)
             self.cb_interval.currentIndexChanged.connect( self.change_cb_interval )
             self.period_integr = self.cb_interval.currentText()
 
             self.btnRefreshTableProfilePowerCounts = QPushButton("Обновить")
-            layout.addWidget(self.btnRefreshTableProfilePowerCounts, 1, 9)
+            layout.addWidget(self.btnRefreshTableProfilePowerCounts, 0, 9)
             self.btnRefreshTableProfilePowerCounts.clicked.connect(self.click_btnRefreshTableProfilePowerCounts_ver2)
             if not self.flag_caseCountersAndGroups:
                 self.btnRefreshTableProfilePowerCounts.setEnabled(False)
@@ -93,10 +94,10 @@ class TableProfilePowerDialog(QDialog):
             # layout.addWidget(ckb_cycleRefresh, 1, 10)
 
             lbl_empty3 = QLabel("    ")
-            layout.addWidget(lbl_empty3, 1, 11)
+            layout.addWidget(lbl_empty3, 0, 11)
 
             self.btnImportTableProfilePowerCounts = QPushButton("Импорт в Excel")
-            layout.addWidget(self.btnImportTableProfilePowerCounts, 1, 12)
+            layout.addWidget(self.btnImportTableProfilePowerCounts, 0, 12)
             self.btnImportTableProfilePowerCounts.clicked.connect(self.click_bth_ImportInExcel)
             if not self.flag_caseCountersAndGroups:
                 self.btnImportTableProfilePowerCounts.setEnabled(False)
@@ -111,12 +112,10 @@ class TableProfilePowerDialog(QDialog):
             # self.tableProfilePowerCounts.horizontalHeader().setSectionResizeMode(1)#,QHeaderView.ResizeToContents)
             # self.tableProfilePowerCounts.horizontalHeader().hide()
             self.tableProfilePowerCounts2.verticalHeader().hide()
-            self.tableProfilePowerCounts2.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
-            layout.addWidget(self.tableProfilePowerCounts2,2,0, 2, 13)
+            # self.tableProfilePowerCounts2.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
+            layout.addWidget(self.tableProfilePowerCounts2, 1, 0, 1, 13, alignment=Qt.AlignmentFlag.AlignBottom)
+            
             #
-
-
-
             self.model = NpModel()
             self.tableProfilePowerCounts = QTableView()
             self.tableProfilePowerCounts.setModel(self.model)
@@ -126,8 +125,11 @@ class TableProfilePowerDialog(QDialog):
             self.tableProfilePowerCounts.verticalHeader().hide()
             self.tableProfilePowerCounts.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
             # layout.addWidget(self.tableProfilePowerCounts,2,0, 10, 13)
-            layout.addWidget(self.tableProfilePowerCounts,3,0, 10, 13)
+            layout.addWidget(self.tableProfilePowerCounts,2,0, 2, 13, alignment=Qt.AlignmentFlag.AlignTop)
 
+            # layout.setRowStretch(0, 0)
+            # layout.setRowStretch(1, 0)
+            # layout.setRowStretch(2, 0)
             self.setLayout(layout)
 
             # self.load()
@@ -285,7 +287,7 @@ class TableProfilePowerDialog(QDialog):
                             if dt_arrTimeAxis < dt_arr_dataDB:
                                 pass
                             if dt_arrTimeAxis > dt_arr_dataDB:
-                                arr = np.insert(arr, num_arrTimeAxis+1, arr_dataDB[num_rowDB], axis=0) # ??????????????????????????????
+                                arr_data = np.insert(arr_data, num_arrTimeAxis+1, arr_dataDB[num_rowDB], axis=0) # ??????????????????????????????
                                 num_rowDB +=1
                                 if num_rowDB >= np.shape(arr_dataDB)[0]: break
 
@@ -314,6 +316,7 @@ class TableProfilePowerDialog(QDialog):
                 # округлим все  float в массиве до трех знаков после запятой
                 arr_data_custom = np.around(arr_data_custom, 3)
                 #
+                
                 # перобразовать массив из  int в str чтобы добавлять текст "итого"
                 # преобразуем и дату и загоовок, а потом склеим
                 arr_data_custom = np.array(arr_data_custom, dtype=str)
@@ -368,6 +371,10 @@ class TableProfilePowerDialog(QDialog):
                 #
                 arr_Table = np.hstack((arr_TimeAxis_custom, arr_data_custom))
                 #
+                # добавим в конец таблицы еще пустых строк (нужно для визуализации первой таблицы групп заголовков)
+                leng = np.shape(arr_Table)[0]
+                for i in range (0,30,1):
+                    arr_Table = np.insert(arr_Table, leng+i, "", axis=0)
                 # дополним списко заголовки шапки таблицы на экране названиями выбранных счетчиков
                 self.model.lst_header_table = mg.create_header_table(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter)
                 #
@@ -381,8 +388,10 @@ class TableProfilePowerDialog(QDialog):
                 self.model2.set(self.data2.copy())
                 self.tableProfilePowerCounts2.resizeColumnsToContents()
                 for num_time, val in enumerate(arr_Table):
-                    self.tableProfilePowerCounts2.hideRow(num_time)
-                    # self.tableProfilePowerCounts2.setRowHidden(row=num_time, hide=True)
+                    self.tableProfilePowerCounts2.setRowHeight(num_time, 1)
+                    # self.tableProfilePowerCounts2.hideRow(num_time)
+                    self.tableProfilePowerCounts2.setRowHidden(num_time, True)
+                    
 
                 # выравниваем ширину столбцов у двух таблиц исходя из максимальной ширины
                 for num_colunm in range (0,np.shape(arr_Table)[1],1):
@@ -438,7 +447,9 @@ class TableProfilePowerDialog(QDialog):
                 model = self.tableProfilePowerCounts.model()
 
                 # дополним списк заголовки шапки таблицы
+                lst_header_table2 = mg.create_header_table2(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter)
                 lst_header_table = mg.create_header_table(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter)
+                _list.append(lst_header_table2)
                 _list.append(lst_header_table)
 
                 for row in range(model.rowCount()):
@@ -472,7 +483,8 @@ class TableProfilePowerDialog(QDialog):
                 cell_format.set_bottom(1)
                 cell_format.set_align('center')
                 cell_format.set_align('vcenter')
-                worksheet.set_row(0, 18, cell_format) # Установка стиля для строки 2 и высоты 11
+                worksheet.set_row(0, 18, cell_format) # Установка стиля для строки 
+                worksheet.set_row(1, 18, cell_format) # Установка стиля для строки 
                 for r in bold_row:
                     worksheet.set_row(r, 18, cell_format)
                 workbook.close()  
@@ -612,8 +624,8 @@ class NpModel2(QAbstractTableModel):
     def columnCount(self,index=QModelIndex()):
         return len(self.npdata[0])
     
-    # def data(self,index,role):
-    #     return None
+    def data(self,index,role):
+        return None
    
     def headerData(self,section,orientation,role):
         # if role != Qt.DisplayRole: 
