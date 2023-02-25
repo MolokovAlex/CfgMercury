@@ -666,9 +666,6 @@ def selectPandQfromDBPP(item_counter, item_datetime=None,dateFrom=None, dateTo=N
     lst_pole = ['datetime','P_plus', 'P_minus', 'Q_plus', 'Q_minus']
     cursorDB = cfg.sql_base_conn.cursor()
     with cfg.sql_base_conn:
-        # cursorDB.execute("""SELECT P_plus, P_minus, Q_plus, Q_minus FROM DBPP WHERE id_counter=? AND 
-        #                                                                                 datetime = ? AND 
-        #                                                                                 period_int ='30'""", (item_counter, item_datetime,))
         cursorDB.execute("""SELECT datetime, P_plus, P_minus, Q_plus, Q_minus FROM DBPP WHERE id_counter=? AND 
                                                                                         datetime >= ? AND
                                                                                         datetime <= ? AND

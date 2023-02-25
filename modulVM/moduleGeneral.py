@@ -1094,6 +1094,28 @@ def calc_full_power(arr):
     arr = np.delete(arr, [6,7,8] , axis = 1)
     return arr
 
+def kWT(arr_data, arr_axisTime, lst_checked_group_and_conters):
+    """приведение цифр из БД в реальные цифры кВт*час
+    """
+    # запросить из БД все счетчики  
+    lst_counterDB, rezult_get = msql.getListCounterDB()
+    if rezult_get:
+        # по каждому счетчику
+        for num_counter, item_counter in enumerate(lst_checked_group_and_conters):
+            # ищем конкретный счетчик
+            for itemCounter in lst_counterDB:
+                if itemCounter['id'] == item_counter:
+                    # делим на постоянную счетчика A
+                    koefA = itemCounter['koefA']
+                    if (koefA == 0) or (koefA == ''): 
+                        koefA = 1.0     # защита от дел на ноль ели в базе каким-то образом не оказалось этого коэффициента
+                    # по всем временным меткам
+                    for num, val in enumerate(arr_axisTime):
+                        arr_data[num][num_counter] = arr_data[num][num_counter]/koefA
+
+
+    return arr_data
+
 def summ_per_day_and_month_and_year_v2(arr_data, arr_TimeAxis, lst_checked_group, lst_checked_counter_in_group, lst_checked_single_counter):
     """ найдем сумму для Итого за месяц (num_period_sum=1) - по каждому месяцу
     и для Итого за год (num_period_sum=0) 
@@ -1307,27 +1329,7 @@ def create_header_table2(lst_checked_counter):
 
     return lst_header_table
 
-def kWT(arr_data, arr_axisTime, lst_checked_group_and_conters):
-    """приведение цифр из БД в реальные цифры кВт*час
-    """
-    # запросить из БД все счетчики  
-    lst_counterDB, rezult_get = msql.getListCounterDB()
-    if rezult_get:
-        # по каждому счетчику
-        for num_counter, item_counter in enumerate(lst_checked_group_and_conters):
-            # ищем конкретный счетчик
-            for itemCounter in lst_counterDB:
-                if itemCounter['id'] == item_counter:
-                    # делим на постоянную счетчика A
-                    koefA = itemCounter['koefA']
-                    if (koefA == 0) or (koefA == ''): 
-                        koefA = 1.0     # защита от дел на ноль ели в базе каким-то образом не оказалось этого коэффициента
-                    # по всем временным меткам
-                    for num, val in enumerate(arr_axisTime):
-                        arr_data[num][num_counter] = arr_data[num][num_counter]/koefA
 
-
-    return arr_data
 
 def kWT_summ(arr_summ_Alltime_day, arr_summ_Alltime_month, arr_summ_Alltime_year, arr_summ_Alltime_dayGroup, arr_summ_Alltime_monthGroup, arr_summ_Alltime_yearGroup):
 
@@ -1399,3 +1401,31 @@ def cut_arr_custom_time(arr_data, arr_TimeAxis_full, dateFrom, dateTo):
     arr_TimeAxis_cust = arr_TimeAxis_full[num_dateFrom:num_dateTo,:]
     return arr_data_cust, arr_TimeAxis_cust
 
+
+
+def korrekt_dataDB(arr_dataDB, dateFrom:datetime, dateTo:datetime):
+    """ корректировка данных профиля мощности  полученных из БД - добавление пустых пропущенных/напринятых профилей 30-минуток
+    """
+    num_rowDB = 0
+    tick_datetime = dateFrom
+    while tick_datetime <= dateTo:
+        dt_arr_dataDB = datetime(arr_dataDB[num_rowDB][0], arr_dataDB[num_rowDB][1], arr_dataDB[num_rowDB][2], arr_dataDB[num_rowDB][3], arr_dataDB[num_rowDB][4])
+        if tick_datetime == dt_arr_dataDB:
+            num_rowDB += 1
+            tick_datetime = tick_datetime + timedelta(minutes=30)
+        elif tick_datetime < dt_arr_dataDB:
+            # подготовим строку для вставки
+            date_tuple = tick_datetime.timetuple()
+            # поскольку неизвестно сколько счетчиков и групп выбрано - возьмем обычную строку из БД и на ее базе сделаем пустую
+            arr_data = arr_dataDB[0,:]
+            arr_insert = np.full(shape=(np.shape(arr_data)),fill_value=0)
+            arr_insert[0] = date_tuple[0]
+            arr_insert[1] = date_tuple[1]
+            arr_insert[2] = date_tuple[2]
+            arr_insert[3] = date_tuple[3]
+            arr_insert[4] = date_tuple[4]
+            #
+            arr_dataDB = np.insert(arr_dataDB, num_rowDB, arr_insert, axis=0)
+        elif tick_datetime > dt_arr_dataDB:
+            arr_dataDB = np.delete(arr_dataDB, num_rowDB, 0)
+    return arr_dataDB
