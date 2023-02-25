@@ -8,12 +8,12 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 # from PyQt5.QtCore import QDateTime
 from PyQt5.QtGui import *
-from time import time
+# from time import time
 import numpy as np
 import datetime # обязательно до import sqlite3 as sql3  !!!!!
-from datetime import date, timedelta
-from statistics import mean
-import sqlite3 as sql3
+# from datetime import date, timedelta
+# from statistics import mean
+# import sqlite3 as sql3
 from xlsxwriter.workbook import Workbook
 
 # import modulVM.moduleConfigApp as mca
@@ -56,14 +56,7 @@ class TableProfilePowerDialog(QDialog):
             self.de_dateFrom = QDateEdit(self)
             layout.addWidget(self.de_dateFrom, 0, 2)
             self.de_dateFrom.setCalendarPopup(True) 
-            # ddatefrom = QDate.currentDate()
-            # ddatefrom.currentDate()
-            # self.de_dateFrom.setDate(QDate(2022, 12, 25))
-            
-            # ddate_now = QDate.currentDate()
-            # d = QDate.currentDate().day()
-            # m = QDate.currentDate().month()
-            # y = QDate.currentDate().year()
+
             # от первого дня месяца
             ddate_from = QDate(QDate.currentDate().year(), QDate.currentDate().month(), 1)
             # до текущей даты
@@ -226,37 +219,9 @@ class TableProfilePowerDialog(QDialog):
             self.DialogCaseCounterAndGroups.hide()
             return
         
-        def create_Array_TimeAxis(self):
-            """ создаем массив временной оси (массив с датами времени) для таблицы профиля мощности
-            """
-            rezult = False
-            arr_TimeAxis = None
-            dateFrom_full = None
-            dateTo_full =None
-            dateFrom = None
-            dateTo = None
-            try:
-                # создает список с штампами времени типа datetime от даты dateFrom до даты dateTo с шагом
-                # преобразуем составне части в формат datetime
-                dateFrom = self.de_dateFrom.dateTime().toPyDateTime()
-                #конечную дату дополним часами до конца дня, до 23.30
-                dateTo = self.de_dateTo.dateTime().toPyDateTime().replace(hour=23,  minute = 30)
-                # вычисляем полные полные месяца
-                dateFrom_full = self.de_dateFrom.dateTime().toPyDateTime().replace(day =1 , hour=0,  minute = 0)
-                selected_date = dateTo
-                if selected_date.month == 12: # December
-                    last_day_selected_month = date(selected_date.year, selected_date.month, 31)
-                else:
-                    last_day_selected_month = date(selected_date.year, selected_date.month + 1, 1) - timedelta(days=1)
-                dateTo_full = selected_date.replace(day=last_day_selected_month.day , hour=23,  minute = 30)
-                #
-                lst_datetime_step30_full, lstsu_full, rezult = mg.createLstIntervalDateTime(dateFrom=dateFrom_full, dateTo=dateTo_full, stepTime=30)
-                arr_TimeAxis = np.array(lstsu_full)
-                rezult = True
-            except:
-                rezult = False
+        
 
-            return arr_TimeAxis, dateFrom_full, dateTo_full, dateFrom, dateTo, rezult
+        
 
         def click_btnRefreshTableProfilePowerCounts_ver2(self):
             """
@@ -266,17 +231,19 @@ class TableProfilePowerDialog(QDialog):
             self.emit_string_statusBar("Пожалуйста, подождите. Идут запросы в БД...")
             self.emit_value(5)
 
+            # подготавливаем даты От и До
+            # как для выбранного пользователем диапазона,
+            # так и полного диапазона - там где ОТ: от первого числа месяца, - там где ДО: до последнего числа месяца (для вычисления суммы "ВСЕГО")
+            dateFrom_full, dateTo_full, dateFrom, dateTo = mg.create_full_datetime_FromTo(self.de_dateFrom, self.de_dateTo)
+
             # создаем массив временной оси (массив с датами времени) для таблицы профиля мощности
             # arr_TimeAxis_full, dateFrom_full, dateTo_full, dateFrom, dateTo, rezult = self.create_Array_TimeAxis()
-            arr_TiAxis_full, dateFrom_full, dateTo_full, dateFrom, dateTo, rezult = self.create_Array_TimeAxis()
+            # arr_TiAxis_full, rezult = mg.create_Array_TimeAxis(dateFrom_full, dateTo_full)
             #
             self.emit_value(20)
-            if rezult:
+            if True:
                 self.emit_value(25)
                 #
-                #  сделаем пустой массив с количеством столбцов равным количеству выбранных счетчиков и с количеством строк - количеству временных меток в массиве оси времени
-                # arr_data = np.full(shape=(np.shape(arr_TimeAxis_full)[0], len(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter)),fill_value=0)
-
                 for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
                     rezult, lst_data = msql.selectPandQfromDBPP(item_counter=item_counter, item_datetime=None, dateFrom=dateFrom_full, dateTo=dateTo_full)
                     if rezult:
@@ -295,24 +262,7 @@ class TableProfilePowerDialog(QDialog):
                             arr_data = arr_dataDB[:,5:]
                         else:
                             arr_data = np.hstack((arr_data, arr_dataDB[:,5:]))
-                        # arr_data = np.delete(arr_dataDB, [0,1,2,3,4] , axis = 1)  # удалим ненужные столбцы
-                        #
-                        # защита от пустых строк в БД, коорые можно затащить в datetime header
-                        # num_rowDB = 0
-                        # for num_arrTimeAxis, val_arrTimeAxis in enumerate(arr_TimeAxis_full):
-                        #     dt_arrTimeAxis = datetime.datetime(val_arrTimeAxis[0], val_arrTimeAxis[1], val_arrTimeAxis[2], val_arrTimeAxis[3], val_arrTimeAxis[4])
-                        #     dt_arr_dataDB = datetime.datetime(arr_dataDB[num_rowDB][0], arr_dataDB[num_rowDB][1], arr_dataDB[num_rowDB][2], arr_dataDB[num_rowDB][3], arr_dataDB[num_rowDB][4])
-                        #     # если даты и времена совпадают с датой и временем заголовка
-                        #     if dt_arrTimeAxis == dt_arr_dataDB:
-                        #         arr_data[num_arrTimeAxis][num_counter] = arr_dataDB[num_rowDB][5]
-                        #         num_rowDB +=1
-                        #         if num_rowDB >= np.shape(arr_dataDB)[0]: break
-                        #     if dt_arrTimeAxis < dt_arr_dataDB:
-                        #         pass
-                        #     if dt_arrTimeAxis > dt_arr_dataDB:
-                        #         arr_data = np.insert(arr_data, num_arrTimeAxis+1, arr_dataDB[num_rowDB], axis=0) # ??????????????????????????????
-                        #         num_rowDB +=1
-                        #         if num_rowDB >= np.shape(arr_dataDB)[0]: break
+
 
                 # теперь в массиве будут храниться числа с плавающей точкой
                 arr_data = np.array(arr_data, dtype=float)

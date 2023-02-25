@@ -31,7 +31,7 @@ class EditGroupsCounterDialog (QDialog):
             | Qt.WindowMinimizeButtonHint
             | Qt.WindowMaximizeButtonHint
             )
-        self.setMinimumSize(QSize(800, 600))         # Устанавливаем размеры
+        self.setMinimumSize(QSize(800, 800))         # Устанавливаем размеры
         self.setWindowTitle("Редактирование групп и счетчиков") # Устанавливаем заголовок окна
         
         # layout = QHBoxLayout()
@@ -484,6 +484,7 @@ class EditGroupsCounterDialog (QDialog):
         self.DialogCounterInGroup = QDialog()
         self.DialogCounterInGroup.setWindowTitle("Редактирование состава счетчиков в группах")
         self.DialogCounterInGroup.setWindowModality(Qt.ApplicationModal)
+        self.DialogCounterInGroup.resize(900,900)
         
         layout = QHBoxLayout()
         self.DialogCounterInGroup.setLayout(layout)
@@ -491,6 +492,10 @@ class EditGroupsCounterDialog (QDialog):
         gb_Counter = QGroupBox("Счетчики")
         layout.addWidget(gb_Counter)
         self.treeCounter = QTreeWidget()
+        self.treeCounter.setHeaderHidden(True)
+        # self.treeCounter.setAllColumnsShowFocus(True)
+        self.treeCounter.setSelectionBehavior(QAbstractItemView.SelectItems)
+        # self.treeCounter.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.renderTreePanelOnlyCounter()
         self.treeCounter.clicked.connect(self.onClickedTreeCounter)
         layout2 = QVBoxLayout()
@@ -511,6 +516,8 @@ class EditGroupsCounterDialog (QDialog):
         gb_Group = QGroupBox("Группы")
         layout.addWidget(gb_Group)
         self.treeGroup = QTreeWidget()
+        self.treeGroup.setHeaderHidden(True)
+        self.treeGroup.setSelectionBehavior(QAbstractItemView.SelectItems)
         layout3 = QVBoxLayout()
         gb_Group.setLayout(layout3)
         layout3.addWidget(self.treeGroup)
@@ -526,6 +533,7 @@ class EditGroupsCounterDialog (QDialog):
         обработка выбора элемента в дереве Счетчики
         """
         self.currentItemTreeCounter=self.treeCounter.currentItem().text(0)
+        # self.currItemTreeCounter = self.treeCounter.currentItem().setBackground(Qt.green)
         return None
     
     def onClickedTreeGroup(self):

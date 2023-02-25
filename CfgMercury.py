@@ -7,7 +7,7 @@ import sys
 
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtWidgets import *
-from time import sleep
+# from time import sleep
 import modulVM.moduleAppGUIQt as magqt
 import modulVM.config as cfg
 import modulVM.moduleSQLite as msql
