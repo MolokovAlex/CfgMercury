@@ -383,7 +383,7 @@ def insert_summ_v2 (arr_data, arr_TimeAxis, period_View:str, arr_summ_Alltime, a
                     for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
                         arr_data[num_time+1][num_counter] = str(arr_summ_time[0][num_day][num_counter])
 
-                    num_time = num_time+1
+                    # num_time = num_time+1
 
                     # arr_data, arr_TimeAxis = insert_row(arr_data, arr_TimeAxis, num_time, key_alldaygr)
                     # len_arr +=1
@@ -397,8 +397,8 @@ def insert_summ_v2 (arr_data, arr_TimeAxis, period_View:str, arr_summ_Alltime, a
                     # for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
                     #     arr_data[num_time+1][num_counter] = str(arr_summ_Alltime_day[num_day][num_counter])
 
-                    # num_day +=1                    
-                    # num_time = num_time+1
+                    num_day +=1                    
+                    num_time = num_time+1
 
                 if month_past != month_future:
 
@@ -1292,7 +1292,7 @@ def create_header_table2(lst_checked_counter):
                     if item['id'] == itemGroup:
                         name_group = item["name_group_full"]
                 #
-                lst_header_table.append("Группа:\n" + name_group+"\n\n")# +"\n"+name_counter)
+                lst_header_table.append("\nГруппа:\n" + name_group+"\n\n")# +"\n"+name_counter)
                 num_counters_in_groups +=1
 
 # после выходной список дополним одиночными счетчиками
