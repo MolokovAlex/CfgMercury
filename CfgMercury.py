@@ -23,6 +23,7 @@ def main():
     # создаем графический оконный интерфейс
     # global window
     app = QApplication(sys.argv)
+    # app = QApplication()
     app.setStyle('Windows')
     if True:     
         ml.logger.debug('создание главного окна')
