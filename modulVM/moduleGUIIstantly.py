@@ -88,8 +88,6 @@ class InstantlyParamCountersDialog(QDialog):
         self.graphWidget.setLabel('bottom', 'Время', **styles)
         layout.addWidget(self.graphWidget,  1, 1, 1, 5)       
 
-        self.scroll = QScrollBar(Qt.Horizontal) 
-        self.layout.addWidget(self.scroll, 2, 0)
         
         layout.setColumnStretch(0, 0)
         layout.setColumnStretch(1, 2)
@@ -478,7 +476,7 @@ class TimeAxisItem(pg.AxisItem):
 
         elif spacing >= 3600:  # 1 h
             # fmt = "%b/%d-%Hh"
-            fmt = "%d/%m/%Y-%H:%M"
+            fmt = "%d/%m/%Y"+"\n"+"%H:%M"
 
         elif spacing >= 60:  # 1 m
             fmt = "%H:%M"
