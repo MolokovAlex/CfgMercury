@@ -116,8 +116,8 @@ class InstantlyParamCountersDialog(QDialog):
         for item_inst_group in cfg.dic_inst_param.keys():
             parent = QTreeWidgetItem(self.tree)
             parent.setText(0, item_inst_group)
-            parent.setFlags(parent.flags() | Qt.ItemIsUserCheckable)
-            parent.setCheckState(0, Qt.Unchecked)
+            # parent.setFlags(parent.flags() ^ Qt.ItemIsUserCheckable)
+            # parent.setCheckState(0, Qt.Unchecked)
             for item_inst_param in cfg.dic_inst_param[item_inst_group]:
                 child = QTreeWidgetItem(parent)
                 child.setText(0, item_inst_param)

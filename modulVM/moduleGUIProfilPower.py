@@ -238,9 +238,10 @@ class TableProfilePowerDialog(QDialog):
 
             # создаем массив временной оси (массив с датами времени) для таблицы профиля мощности
             # arr_TimeAxis_full, dateFrom_full, dateTo_full, dateFrom, dateTo, rezult = self.create_Array_TimeAxis()
-            # arr_TiAxis_full, rezult = mg.create_Array_TimeAxis(dateFrom_full, dateTo_full)
+            arr_TimeAxis_full, rezult = mg.create_Array_TimeAxis(dateFrom_full, dateTo_full)
             #
             self.emit_value(20)
+            arr_data = np.full(shape=(np.shape(arr_TimeAxis_full)[0], len(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter)),fill_value=0)
             if True:
                 self.emit_value(25)
                 #
@@ -249,19 +250,44 @@ class TableProfilePowerDialog(QDialog):
                     if rezult:
                         arr_dataDB = np.array(lst_data)
                         # корректировка данных профиля мощности  полученных из БД - добавление пустых пропущенных/напринятых профилей 30-минуток
-                        arr_dataDB = mg.korrekt_dataDB(arr_dataDB, dateFrom_full, dateTo_full)
+                        # arr_dataDB = mg.korrekt_dataDB(arr_dataDB, dateFrom_full, dateTo_full)
                         #
                         # вычисление полной мощьности
                         arr_dataDB = mg.calc_full_power(arr_dataDB)
                         #
                         # выделение временной оси в отдельный массив
-                        arr_TimeAxis_full = arr_dataDB[:,0:5]
+                        # arr_TimeAxis_full = arr_dataDB[:,0:5]
                         #
                         # выделим только данные
-                        if num_counter == 0: 
-                            arr_data = arr_dataDB[:,5:]
-                        else:
-                            arr_data = np.hstack((arr_data, arr_dataDB[:,5:]))
+                        # if num_counter == 0: 
+                        #     arr_data = arr_dataDB[:,5:]
+                        # else:
+                        #     arr_data = np.hstack((arr_data, arr_dataDB[:,5:]))
+                        # защита от пустых строк в БД, коорые можно затащить в datetime header
+                        num_rowDB = 0
+                        for num_arrTimeAxis, val_arrTimeAxis in enumerate(arr_TimeAxis_full):
+                            dt_arrTimeAxis = datetime.datetime(val_arrTimeAxis[0], val_arrTimeAxis[1], val_arrTimeAxis[2], val_arrTimeAxis[3], val_arrTimeAxis[4])
+                            dt_arr_dataDB = datetime.datetime(arr_dataDB[num_rowDB][0], arr_dataDB[num_rowDB][1], arr_dataDB[num_rowDB][2], arr_dataDB[num_rowDB][3], arr_dataDB[num_rowDB][4])
+
+                            if dt_arrTimeAxis < dt_arr_dataDB:
+                                # сюда приходим при пропуске в данных БД записи с каким-то временем
+                                pass
+                            if dt_arrTimeAxis > dt_arr_dataDB:
+                                # сюда приходим при появлении дубликата записи из БД
+                                # перебираем записи с одинаковыми дата-штампами пока они не закончаться
+                                # запоминаем время дубликата
+                                dt_arr_dataDB_prev = dt_arr_dataDB
+                                while dt_arr_dataDB_prev == dt_arr_dataDB:
+                                    # dt_arr_dataDB_prev = dt_arr_dataDB
+                                    num_rowDB +=1
+                                    if num_rowDB >= np.shape(arr_dataDB)[0]: break
+                                    dt_arr_dataDB = datetime.datetime(arr_dataDB[num_rowDB][0], arr_dataDB[num_rowDB][1], arr_dataDB[num_rowDB][2], arr_dataDB[num_rowDB][3], arr_dataDB[num_rowDB][4])
+                                if num_rowDB >= np.shape(arr_dataDB)[0]: break    
+                            # если даты и времена совпадают с датой и временем заголовка
+                            if dt_arrTimeAxis == dt_arr_dataDB:
+                                arr_data[num_arrTimeAxis][num_counter] = arr_dataDB[num_rowDB][5]
+                                num_rowDB +=1
+                                if num_rowDB >= np.shape(arr_dataDB)[0]: break
 
 
                 # теперь в массиве будут храниться числа с плавающей точкой
