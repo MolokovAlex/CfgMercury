@@ -215,27 +215,29 @@ class InstantlyParamCountersDialog(QDialog):
                 self.emit_value(35)
                 # применим коэффициенты к разным мгн значениям
                 # по всем временным меткам
+                ki = float(item_counter['ki'])
+                ku = float(item_counter['ku'])
                 for num_arrTable, val_arrTable in enumerate(arr_Table):
                     # мгновенные токи - коэф 1000
-                    arr_Table[num_arrTable][0] = val_arrTable[0]/1000
-                    arr_Table[num_arrTable][1] = val_arrTable[1]/1000
-                    arr_Table[num_arrTable][2] = val_arrTable[2]/1000
-                    arr_Table[num_arrTable][3] = val_arrTable[3]/1000
+                    arr_Table[num_arrTable][0] = (val_arrTable[0]*ki)/1000
+                    arr_Table[num_arrTable][1] = (val_arrTable[1]*ki)/1000
+                    arr_Table[num_arrTable][2] = (val_arrTable[2]*ki)/1000
+                    arr_Table[num_arrTable][3] = (val_arrTable[3]*ki)/1000
                     # мгн мощности - коэфф 100
-                    arr_Table[num_arrTable][4] = val_arrTable[4]/100
-                    arr_Table[num_arrTable][5] = val_arrTable[5]/100
-                    arr_Table[num_arrTable][6] = val_arrTable[6]/100
-                    arr_Table[num_arrTable][7] = val_arrTable[7]/100
+                    arr_Table[num_arrTable][4] = (val_arrTable[4]*ki*ku)/100
+                    arr_Table[num_arrTable][5] = (val_arrTable[5]*ki*ku)/100
+                    arr_Table[num_arrTable][6] = (val_arrTable[6]*ki*ku)/100
+                    arr_Table[num_arrTable][7] = (val_arrTable[7]*ki*ku)/100
 
-                    arr_Table[num_arrTable][8] = val_arrTable[8]/100
-                    arr_Table[num_arrTable][9] = val_arrTable[9]/100
-                    arr_Table[num_arrTable][10] = val_arrTable[10]/100
-                    arr_Table[num_arrTable][11] = val_arrTable[11]/100
+                    arr_Table[num_arrTable][8] = (val_arrTable[8] *ki*ku)  /100
+                    arr_Table[num_arrTable][9] = (val_arrTable[9] *ki*ku)  /100
+                    arr_Table[num_arrTable][10] =(val_arrTable[10]*ki*ku)  /100
+                    arr_Table[num_arrTable][11] =(val_arrTable[11]*ki*ku)  /100
 
-                    arr_Table[num_arrTable][12] = val_arrTable[12]/100
-                    arr_Table[num_arrTable][13] = val_arrTable[13]/100
-                    arr_Table[num_arrTable][14] = val_arrTable[14]/100
-                    arr_Table[num_arrTable][15] = val_arrTable[15]/100
+                    arr_Table[num_arrTable][12] =(val_arrTable[12]*ki*ku)  /100
+                    arr_Table[num_arrTable][13] =(val_arrTable[13]*ki*ku)  /100
+                    arr_Table[num_arrTable][14] =(val_arrTable[14]*ki*ku)  /100
+                    arr_Table[num_arrTable][15] =(val_arrTable[15]*ki*ku)  /100
                     # KPowerFaze - коэф 1000
                     arr_Table[num_arrTable][16] = val_arrTable[16]/100
                     arr_Table[num_arrTable][17] = val_arrTable[17]/100

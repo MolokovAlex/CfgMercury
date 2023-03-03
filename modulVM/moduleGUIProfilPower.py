@@ -325,44 +325,52 @@ class TableProfilePowerDialog(QDialog):
                 # по всем временным меткам
                 for num_time, val in enumerate(arr_TimeAxis_custom):
                     if arr_TimeAxis_custom[num_time][0] ==   '111': 
-                        arr_TimeAxis_custom[num_time][0] = 'ВСЕГО ДЕНЬ'
+                        arr_TimeAxis_custom[num_time][0] = 'ВСЕГО ДЕНЬ по счетчику'
                         arr_TimeAxis_custom[num_time][3] = ''
                     elif arr_TimeAxis_custom[num_time][0] == '222': 
-                        arr_TimeAxis_custom[num_time][0] = 'ВСЕГО ДЕНЬ ПО ГРУППЕ'
+                        arr_TimeAxis_custom[num_time][0] = 'ВСЕГО ДЕНЬ по группе'
                         arr_TimeAxis_custom[num_time][3] = ''
                     elif arr_TimeAxis_custom[num_time][0] == '333': 
-                        arr_TimeAxis_custom[num_time][0] = 'ВСЕГО МЕСЯЦ'
+                        arr_TimeAxis_custom[num_time][0] = 'ВСЕГО МЕСЯЦ по счетчику'
                         arr_TimeAxis_custom[num_time][3] = ''
                     elif arr_TimeAxis_custom[num_time][0] == '444': 
-                        arr_TimeAxis_custom[num_time][0] = 'ВСЕГО МЕСЯЦ ПО ГРУППЕ'
+                        arr_TimeAxis_custom[num_time][0] = 'ВСЕГО МЕСЯЦ по группе'
                         arr_TimeAxis_custom[num_time][3] = ''
                     elif arr_TimeAxis_custom[num_time][0] == '555': 
-                        arr_TimeAxis_custom[num_time][0] = 'ВСЕГО ГОД'
+                        arr_TimeAxis_custom[num_time][0] = 'ВСЕГО ГОД по счетчику'
                         arr_TimeAxis_custom[num_time][3] = ''
                     elif arr_TimeAxis_custom[num_time][0] == '777': 
-                        arr_TimeAxis_custom[num_time][0] = 'ВСЕГО ГОД ПО ГРУППЕ'
+                        arr_TimeAxis_custom[num_time][0] = 'ВСЕГО ГОД по группе'
                         arr_TimeAxis_custom[num_time][3] = ''
+
                     elif arr_TimeAxis_custom[num_time][0] == '110': 
-                        arr_TimeAxis_custom[num_time][0] = 'ИТОГО ДЕНЬ'
+                        # arr_TimeAxis_custom[num_time][0] = 'ИТОГО ДЕНЬ'
+                        arr_TimeAxis_custom[num_time][0] = 'ИТОГО ДЕНЬ по счетчику'
                         arr_TimeAxis_custom[num_time][3] = ''
                     elif arr_TimeAxis_custom[num_time][0] == '220': 
-                        arr_TimeAxis_custom[num_time][0] = 'ИТОГО ДЕНЬ ПО ГРУППЕ'
+                        arr_TimeAxis_custom[num_time][0] = 'ИТОГО ДЕНЬ по группе'
                         arr_TimeAxis_custom[num_time][3] = ''
                     elif arr_TimeAxis_custom[num_time][0] == '330':
-                        arr_TimeAxis_custom[num_time][0] = 'ИТОГО МЕСЯЦ'
+                        # arr_TimeAxis_custom[num_time][0] = 'ИТОГО МЕСЯЦ'
+                        # arr_TimeAxis_custom[num_time][0] = 'ИТОГО ЗА запрошенный ИНТЕРВАЛ'
+                        arr_TimeAxis_custom[num_time][0] = 'ИТОГО МЕСЯЦ по счетчику'
                         arr_TimeAxis_custom[num_time][3] = ''
                     elif arr_TimeAxis_custom[num_time][0] == '440': 
-                        arr_TimeAxis_custom[num_time][0] = 'ИТОГО МЕСЯЦ ПО ГРУППЕ'
+                        arr_TimeAxis_custom[num_time][0] = 'ИТОГО МЕСЯЦ по группе'
                         arr_TimeAxis_custom[num_time][3] = ''
                     elif arr_TimeAxis_custom[num_time][0] == '550': 
-                        arr_TimeAxis_custom[num_time][0] = 'ИТОГО ГОД'
+                        arr_TimeAxis_custom[num_time][0] = 'ИТОГО ГОД по счетчику'
+                        # arr_TimeAxis_custom[num_time][0] = 'ИТОГО ЗА запрошенный ИНТЕРВАЛ'
                         arr_TimeAxis_custom[num_time][3] = ''
                     elif arr_TimeAxis_custom[num_time][0] == '770': 
-                        arr_TimeAxis_custom[num_time][0] = 'ИТОГО ГОД ПО ГРУППЕ'
+                        arr_TimeAxis_custom[num_time][0] = 'ИТОГО ГОД по группе'
                         arr_TimeAxis_custom[num_time][3] = ''
                     elif arr_TimeAxis_custom[num_time][0] == '880': 
-                        arr_TimeAxis_custom[num_time][0] = 'ИТОГО ПО ГРУППЕ ЗА ПЕРИОД'
+                        arr_TimeAxis_custom[num_time][0] = 'ИТОГО по группе ЗА ПЕРИОД'
                         arr_TimeAxis_custom[num_time][3] = ''    
+                    elif arr_TimeAxis_custom[num_time][0] == '990': 
+                        arr_TimeAxis_custom[num_time][0] = 'ИТОГО по счетчику ЗА ПЕРИОД'
+                        arr_TimeAxis_custom[num_time][3] = ''
                     else:
                         arr_TimeAxis_custom[num_time][0] = mg.appendZero(arr_TimeAxis_custom[num_time][2])+'/'+mg.appendZero(arr_TimeAxis_custom[num_time][1])+'/'+arr_TimeAxis_custom[num_time][0]
                         arr_TimeAxis_custom[num_time][3] = mg.appendZero(arr_TimeAxis_custom[num_time][3])+':'+mg.appendZero(arr_TimeAxis_custom[num_time][4])
@@ -412,7 +420,7 @@ class TableProfilePowerDialog(QDialog):
                 font = QFont()
                 font.setBold(True)
                 for num_time, val in enumerate(arr_Table):
-                    if ('ИТОГО' in arr_Table[num_time][0]) and ('ГРУПП' in arr_Table[num_time][0]):
+                    if ('ИТОГО' in arr_Table[num_time][0].upper()) and ('ГРУПП' in arr_Table[num_time][0].upper()):
                         self.tableProfilePowerCounts.setSpan(num_time, 0, 1, 2)
                         for num_group, itemGroup in enumerate(cfg.lst_checked_group):
                             list_counter_in_group, rezult_get = msql.get_list_counter_in_group_DBGC(itemGroup)
@@ -468,7 +476,16 @@ class TableProfilePowerDialog(QDialog):
 
                 for r, row in enumerate(_list):
                     for c, col in enumerate(row):
-                        worksheet.write(r, c, col)  
+                        # worksheet.write(r, c, col)
+                        # сделаем так, чтобы в иксель числа сохранялись как числа, а не строки
+                        # все числа типа float имеют разделитель ','
+                        if ',' in col:
+                            col = col.replace(',', '.' )
+                            col = float(col)
+                            worksheet.write(r, c, col)  
+                        else:
+                            # если это не число
+                            worksheet.write(r, c, col)
 
                 cell_format = workbook.add_format()
                 cell_format.set_bold()
@@ -575,7 +592,7 @@ class NpModel(QAbstractTableModel):
                 # font.setColor(QPen('blue'))
                 return font
         if role == Qt.TextAlignmentRole:
-            if ('ИТОГО' in self.npdata[index.row()][0]) and ('ГРУПП' in self.npdata[index.row()][0]):
+            if ('ИТОГО' in self.npdata[index.row()][0]):# and ('ГРУПП' in self.npdata[index.row()][0]):
                 # font = QFont() 
                 # font.setBold(True)
                 return Qt.AlignCenter #QVariant(int(Qt.AlignHCenter|Qt.AlignVCenter))

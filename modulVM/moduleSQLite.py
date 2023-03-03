@@ -391,6 +391,74 @@ def editCounterDB(new_NameCounter:dict):
         rezult_edit = False
     return rezult_edit
 
+def insert_kU_kI_in_DBC():
+    rezult = False
+    data_list_kU_kI = [
+        {'id':"",   'name_counter_full': 'РП 21 - Сушильный барабан №3',                         'net_adress': '63',  'ku': '1',  'ki': '60'},
+        {'id':"",   'name_counter_full': 'Дымосос на сепаратор и ФРИ-360',                       'net_adress': '60',  'ku': '1',  'ki': '60'},
+        {'id':"",   'name_counter_full': 'РП 23 - Электрощитовая помольного отделения',          'net_adress': '89',  'ku': '1',  'ki': '60'},
+        {'id':"",   'name_counter_full': 'Шаровая мельница №2',                                  'net_adress': '97',  'ku': '1',  'ki': '60'},
+        {'id':"",   'name_counter_full': 'Шаровая мельница №1',                                  'net_adress': '134', 'ku': '1',  'ki': '60'},
+        {'id':"",   'name_counter_full': 'Шаровая мельница №3',                                  'net_adress': '40',  'ku': '1',  'ki': '60'},
+        {'id':"",   'name_counter_full': 'линия строительного гипса',                            'net_adress': '149', 'ku': '1',  'ki': '60'},
+        {'id':"",   'name_counter_full': 'Шахтная мельница',                                     'net_adress': '22',  'ku': '1',  'ki': '60'},
+        {'id':"",   'name_counter_full': 'ФРЗВ',                                                 'net_adress': '190', 'ku': '1',  'ki': '60'},
+        {'id':"",   'name_counter_full': 'Строительная сепарированная РП2',                      'net_adress': '81',  'ku': '1',  'ki': '60'},
+        {'id':"",   'name_counter_full': 'РП 18 - Дымосос сепарированной линии',                 'net_adress': '1',   'ku': '1',  'ki': '60'},
+        {'id':"",   'name_counter_full': 'Дисмембратор',                                         'net_adress': '18',  'ku': '1',  'ki': '60'},
+        {'id':"",   'name_counter_full': 'Европлиты упаковка',                                   'net_adress': '79',  'ku': '1',  'ki': '60'},
+        {'id':"",   'name_counter_full': 'Европлиты формовка РП4',                               'net_adress': '146', 'ku': '1',  'ki': '160'},
+        {'id':"",   'name_counter_full': 'Выбросная вентиляция компрессорной',                   'net_adress': '37',  'ku': '1',  'ki': '30'},
+        {'id':"",   'name_counter_full': 'Приточная вентиляция компрессорной',                   'net_adress': '57',  'ku': '1',  'ki': '30'},
+        {'id':"",   'name_counter_full': 'Компрессора 1-5, Осушители 1-5',                       'net_adress': '223', 'ku': '1',  'ki': '400'},
+        {'id':"",   'name_counter_full': 'РП 8 - Дробилка',                                      'net_adress': '78',  'ku': '1',  'ki': '60'},
+        {'id':"",   'name_counter_full': 'Склад камня, лебедка 1 и 2',                           'net_adress': '90',  'ku': '1',  'ki': '60'},
+        {'id':"",   'name_counter_full': 'РП 17 - Склад камня, гараж',                           'net_adress': '16',  'ku': '1',  'ki': '60'},
+        {'id':"",   'name_counter_full': 'РП 19 - грохот, весовая, питатели строительной линии', 'net_adress': '75',  'ku': '1',  'ki': '60'},
+        {'id':"",   'name_counter_full': 'Сушильная камера ПГП',                                 'net_adress': '236', 'ku': '1',  'ki': '60'},
+        {'id':"",   'name_counter_full': 'ПГП Сушила',                                           'net_adress': '145', 'ku': '1',  'ki': '160'},
+        {'id':"",   'name_counter_full': 'Цех ПГП - старые установки',                           'net_adress': '3',   'ku': '1',  'ki': '60'},
+        {'id':"",   'name_counter_full': '3Щ-ПССС "Затарка"',                                    'net_adress': '12',  'ku': '1',  'ki': '60'},
+        {'id':"",   'name_counter_full': 'ЩХС-ПССС "Компрессорная"',                             'net_adress': '194', 'ku': '1',  'ki': '60'},
+        {'id':"",   'name_counter_full': '2Щ- ПССС "Компрессорная"',                             'net_adress': '127', 'ku': '1',  'ki': '40'},
+        {'id':"",   'name_counter_full': 'ПССС "Затарка"',                                       'net_adress': '94',  'ku': '1',  'ki': '60'},
+        {'id':"",   'name_counter_full': '1Щ - ПССС "Операторная"',                              'net_adress': '234', 'ku': '1',  'ki': '80'},
+        {'id':"",   'name_counter_full': 'Стр.Техн. Банки, здание логистики, Кран-балка',        'net_adress': '17',  'ku': '1',  'ki': '60'},
+        {'id':"",   'name_counter_full': 'АБК',                                                  'net_adress': '23',  'ku': '1',  'ki': '30'},
+        {'id':"",   'name_counter_full': 'ОТК',                                                  'net_adress': '8',   'ku': '1',  'ki': '60'},
+        {'id':"",   'name_counter_full': 'Резерв',                                               'net_adress': '74',  'ku': '1',  'ki': '30'},
+        {'id':"",   'name_counter_full': 'воздуходувка охлаждения ячеек РУ-04 Компрессорная',    'net_adress': '62',  'ku': '1',  'ki': '30'},
+        {'id':"",   'name_counter_full': 'РП 16 - Мех. цех',                                     'net_adress': '46',  'ku': '1',  'ki': '60'},
+        {'id':"",   'name_counter_full': '1000 Мелочей',                                         'net_adress': '99',  'ku': '1',  'ki': '30'},
+        {'id':"",   'name_counter_full': 'РП 14 тяговая лебедка №3, склад камня',                'net_adress': '96',  'ku': '1',  'ki': '60'},
+        {'id':"",   'name_counter_full': 'резерв QF1',                                           'net_adress': '28',  'ku': '1',  'ki': '60'},
+        {'id':"",   'name_counter_full': 'резрв QF53',                                           'net_adress': '95',  'ku': '1',  'ki': '60'},
+        {'id':"",   'name_counter_full': ' резерв QF6',                                          'net_adress': '135', 'ku': '1',  'ki': '60'},
+        {'id':"",   'name_counter_full': 'Резерв РП 7 QF7',                                      'net_adress': '34',  'ku': '1',  'ki': '60'},
+        {'id':"",   'name_counter_full': 'Ввод №1 от БТЭЦ',                                      'net_adress': '245', 'ku': '1',  'ki': '80'},
+        {'id':"",   'name_counter_full': 'Ввод №2 от ГПП АВИС',                                  'net_adress': '71',  'ku': '1',  'ki': '80'},
+        {'id':"",   'name_counter_full': 'Тестовый счетчик #77',                                 'net_adress': '77',  'ku': '1',  'ki': '1'},
+        {'id':"",   'name_counter_full': 'Тестовый счетчик #135 переимен в 136',                 'net_adress': '136', 'ku': '1',  'ki': '1'},
+        {'id':"",   'name_counter_full': 'Виртуальный счетчик #255',                             'net_adress': '255', 'ku': '1',  'ki': '1'},
+        {'id':"",   'name_counter_full': 'Виртуальный счетчик #254',                             'net_adress': '254', 'ku': '1',  'ki': '1'}
+    ]
+    # запросить из БД все счетчики  
+    lst_counterDB, rezult_get = getListCounterDB()
+    if rezult_get:
+        # найдем одиниковые записи в списке словарей БД и в списке словарей data_list_kU_kI
+        for num, dic_counter in enumerate(lst_counterDB):
+            for num2, data in enumerate(data_list_kU_kI):
+                if dic_counter['net_adress'] == data['net_adress']:
+                    # перезапишем коэфициенты
+                    dic_counter['ku'] = data['ku']
+                    dic_counter['ki'] = data['ki']
+                    rezult_EditCounterDB = editCounterDB(dic_counter)
+                    if rezult_EditCounterDB:                    #  переделать todo
+                        rezult = True
+
+
+    return rezult
+
 def getListCounterInGroupDB(self, textFullNameGroup):
     rezult_get = False
     lst_counterInGroupDB = []

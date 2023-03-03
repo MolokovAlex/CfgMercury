@@ -67,6 +67,10 @@ class MainWindow(QMainWindow):
             ml.logger.error("Ошибка в подключении БД - Exception occurred", exc_info=True)
             # sql3.viewCodeError (error_sql)
 
+        # запись в БД кофф KU kI
+        # отключить эти сроки на последющем update
+        msql.insert_kU_kI_in_DBC()
+
         # включение потока
         # if not self.thread:
         ml.logger.debug('старт потока')

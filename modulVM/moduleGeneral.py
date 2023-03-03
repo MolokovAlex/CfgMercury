@@ -242,30 +242,65 @@ def createView_periodView(arr_data, arr_TimeAxis, periodIntegr:str):
                 if (num+1) >= arr_data.shape[0]: break
     return arr_data, arr_TimeAxis
 
+
+def _insert_row(arr_ins, arr_axis, num_ins:int, key_strng:int):
+    arr_ins = np.insert(arr_ins, num_ins+1, np.nan, axis=0)
+    # arr_axis = np.insert(arr_axis, num_ins+1, np.nan, axis=0)
+    arr_axis = np.insert(arr_axis, num_ins+1, 0, axis=0)
+    arr_axis[num_ins+1][0] = key_strng
+    return arr_ins, arr_axis
+
+def _insert_row_itogo_month_group(arr_data, arr_TimeAxis, num_time, key_monthgr, len_arr, mesto, num_month, arr_summ_time_Group):
+    arr_data, arr_TimeAxis = _insert_row(arr_data, arr_TimeAxis, num_time, key_monthgr)
+    len_arr +=1
+    for num_group, item_group in enumerate(cfg.lst_checked_group):
+        arr_data[num_time+1][mesto[num_group]] = str(arr_summ_time_Group[1][num_month][num_group])
+    num_time = num_time+1
+    return arr_data, arr_TimeAxis, num_time, len_arr
+
+def _insert_row_itogo_month_counter(arr_data, arr_TimeAxis, num_time, key_month, len_arr, num_month, arr_summ_time):
+    arr_data, arr_TimeAxis = _insert_row(arr_data, arr_TimeAxis, num_time, key_month)
+    len_arr +=1
+    for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
+        arr_data[num_time+1][num_counter] = str(arr_summ_time[1][num_month][num_counter])
+    num_time = num_time+1
+    return arr_data, arr_TimeAxis, num_time, len_arr
+
+def _insert_row_itogo_day_counter(arr_data, arr_TimeAxis, num_time, key_day, len_arr, num_day, arr_summ_time):
+    arr_data, arr_TimeAxis = _insert_row(arr_data, arr_TimeAxis, num_time, key_day)
+    len_arr +=1
+    for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
+        arr_data[num_time+1][num_counter] = str(arr_summ_time[0][num_day][num_counter])
+    num_time = num_time+1
+    return arr_data, arr_TimeAxis, num_time, len_arr
+
+def _insert_row_itogo_day_group(arr_data, arr_TimeAxis, num_time, key_daygr, len_arr, mesto, num_day, arr_summ_time_Group):
+    arr_data, arr_TimeAxis = _insert_row(arr_data, arr_TimeAxis, num_time, key_daygr)
+    len_arr +=1
+    for num_group, item_group in enumerate(cfg.lst_checked_group):
+        arr_data[num_time+1][mesto[num_group]] = str(arr_summ_time_Group[0][num_day][num_group])
+    num_time = num_time+1
+    return arr_data, arr_TimeAxis, num_time, len_arr
+
 def insert_summ_v2 (arr_data, arr_TimeAxis, period_View:str, arr_summ_Alltime, arr_summ_Alltime_Group, arr_summ_time, arr_summ_time_Group, arr_symm_GroupPeriod):
-    """вставка пустых строк/столбцов в итого
+    """вставка строк 'итого'
     """
-    def insert_row(arr_ins, arr_axis, num_ins:int, key_strng:int):
-        arr_ins = np.insert(arr_ins, num_ins+1, np.nan, axis=0)
-        # arr_axis = np.insert(arr_axis, num_ins+1, np.nan, axis=0)
-        arr_axis = np.insert(arr_axis, num_ins+1, 0, axis=0)
-        arr_axis[num_ins+1][0] = key_strng
-        return arr_ins, arr_axis
+
     # ключи для установки в эти места определнных слов ИТОГО... или ВСЕГО...
     key_allday = 111  # 'ВСЕГО ДЕНЬ'
-    key_alldaygr = 222  # 'ВСЕГО ДЕНЬ ПО ГРУППЕ'
-    key_allmoth = 333  # 'ВСЕГО МЕСЯЦ'
-    key_allmothgr = 444  # 'ВСЕГО МЕСЯЦ ПО ГРУППЕ'
-    key_allyear = 555       # 'ВСЕГО ГОД'
-    key_allyeargr = 777     # 'ВСЕГО ГОД ПО ГРУППЕ'
+    # key_alldaygr = 222  # 'ВСЕГО ДЕНЬ ПО ГРУППЕ'
+    # key_allmoth = 333  # 'ВСЕГО МЕСЯЦ'
+    # key_allmothgr = 444  # 'ВСЕГО МЕСЯЦ ПО ГРУППЕ'
+    # key_allyear = 555       # 'ВСЕГО ГОД'
+    # key_allyeargr = 777     # 'ВСЕГО ГОД ПО ГРУППЕ'
     key_day = 110           # 'ИТОГО ДЕНЬ'
     key_daygr = 220         # 'ИТОГО ДЕНЬ ПО ГРУППЕ'
-    key_moth = 330          # 'ИТОГО МЕСЯЦ'
-    key_mothgr = 440        # 'ИТОГО МЕСЯЦ ПО ГРУППЕ'
-    key_year = 550          # 'ИТОГО ГОД'
-    key_yeargr = 770        # 'ИТОГО ГОД ПО ГРУППЕ'
-    key_mothgrP = 880       # 'ИТОГО ПО ГРУППЕ ЗА ПЕРИОД'
-
+    key_month = 330          # 'ИТОГО МЕСЯЦ'
+    key_monthgr = 440        # 'ИТОГО МЕСЯЦ ПО ГРУППЕ'
+    # key_year = 550          # 'ИТОГО ГОД'
+    # key_yeargr = 770        # 'ИТОГО ГОД ПО ГРУППЕ'
+    key_groupPeriod = 880       # 'ИТОГО ПО ГРУППЕ ЗА ПЕРИОД'
+    key_counterPeriod = 990       # 'ИТОГО ПО счетчику ЗА ПЕРИОД'
 
     # вычисление в какой столбец поместить Цифру Итого по группе
     # выход - список содержащий индексы столбцов для Итого
@@ -303,212 +338,271 @@ def insert_summ_v2 (arr_data, arr_TimeAxis, period_View:str, arr_summ_Alltime, a
             month_future = arr_TimeAxis[num_time][1]
             year_past = arr_TimeAxis[num_time+1][0]
             year_future = arr_TimeAxis[num_time][0]
-# если период отображения ДЕНЬ - то должны поставить ВСЕГО МЕСЯЦ и ВСЕГО ГОД
+# если период отображения ДЕНЬ - то должны поставить ИТОГО МЕСЯЦ и ИТОГО ГОД
             if period_View == "день":
-                # если меняется месяц - добавим ВСЕГО МЕСЯЦ
+                # если меняется месяц - добавим ИТОГО МЕСЯЦ
                 if month_past != month_future:
                     
-                    arr_data, arr_TimeAxis = insert_row(arr_data, arr_TimeAxis, num_time, key_mothgr)
-                    len_arr +=1
-                    for num_group, item_group in enumerate(cfg.lst_checked_group):
-                        arr_data[num_time+1][mesto[num_group]] = str(arr_summ_time_Group[1][num_month][num_group])
+                    arr_data, arr_TimeAxis, num_time, len_arr = _insert_row_itogo_month_counter(arr_data, arr_TimeAxis, num_time, key_month, len_arr, num_month,arr_summ_time)
+                    # arr_data, arr_TimeAxis = _insert_row(arr_data, arr_TimeAxis, num_time, key_month)
+                    # len_arr +=1
+                    # for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
+                    #     arr_data[num_time+1][num_counter] = str(arr_summ_time[1][num_month][num_counter])
+                    # num_time = num_time+1
 
-                    num_time = num_time+1
-
-                    arr_data, arr_TimeAxis = insert_row(arr_data, arr_TimeAxis, num_time, key_moth)
-                    len_arr +=1
-                    for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
-                        arr_data[num_time+1][num_counter] = str(arr_summ_time[1][num_month][num_counter])
-
+                    arr_data, arr_TimeAxis, num_time, len_arr = _insert_row_itogo_month_group(arr_data, arr_TimeAxis, num_time, key_monthgr, len_arr, mesto, num_month, arr_summ_time_Group)
+                    # arr_data, arr_TimeAxis = insert_row(arr_data, arr_TimeAxis, num_time, key_mothgr)
+                    # len_arr +=1
+                    # for num_group, item_group in enumerate(cfg.lst_checked_group):
+                    #     arr_data[num_time+1][mesto[num_group]] = str(arr_summ_time_Group[1][num_month][num_group])
+                    # num_time = num_time+1
 
                     num_month +=1
-                    num_time = num_time+1
-
-                if year_past != year_future:
-                    arr_data, arr_TimeAxis = insert_row(arr_data, arr_TimeAxis, num_time, key_yeargr)
-                    len_arr +=1
-                    for num_group, item_group in enumerate(cfg.lst_checked_group):
-                        arr_data[num_time+1][mesto[num_group]] = str(arr_summ_time_Group[2][num_year][num_group])
-
-                    num_time = num_time+1
-
-                    arr_data, arr_TimeAxis = insert_row(arr_data, arr_TimeAxis, num_time, key_year)
-                    len_arr +=1
-                    for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
-                        arr_data[num_time+1][num_counter] = str(arr_summ_time[2][num_year][num_counter])
                     
 
-                    num_year +=1
-                    num_time = num_time+1
-# если период отображения ЧАС - то должны поставить ВСЕГО ДЕНЬ и ВСЕГО МЕСЯЦ и ВСЕГО ГОД
+                if year_past != year_future:
+                    pass
+                    # # отключим ИТОГО год по группе
+                    # arr_data, arr_TimeAxis = insert_row(arr_data, arr_TimeAxis, num_time, key_yeargr)
+                    # len_arr +=1
+                    # for num_group, item_group in enumerate(cfg.lst_checked_group):
+                    #     arr_data[num_time+1][mesto[num_group]] = str(arr_summ_time_Group[2][num_year][num_group])
+
+                    # num_time = num_time+1
+
+                    # # отключим ИТОГО год по счетчику
+                    # arr_data, arr_TimeAxis = insert_row(arr_data, arr_TimeAxis, num_time, key_year)
+                    # len_arr +=1
+                    # for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
+                    #     arr_data[num_time+1][num_counter] = str(arr_summ_time[2][num_year][num_counter])
+                    
+
+                    # num_year +=1
+                    # num_time = num_time+1
+# если период отображения ЧАС - то должны поставить ИТОГО ДЕНЬ и ИТОГО МЕСЯЦ и ИТОГО ГОД
             if (period_View == "час") or (period_View == "30 мин"):
-                # если меняется день - добавим ВСЕГО ДЕНЬ
+                # если меняется день - добавим ИТОГО ДЕНЬ
                 if day_past != day_future:
 
-                    arr_data, arr_TimeAxis = insert_row(arr_data, arr_TimeAxis, num_time, key_daygr)
-                    len_arr +=1
-                    for num_group, item_group in enumerate(cfg.lst_checked_group):
-                        arr_data[num_time+1][mesto[num_group]] = str(arr_summ_time_Group[0][num_day][num_group])
+                    arr_data, arr_TimeAxis, num_time, len_arr = _insert_row_itogo_day_counter(arr_data, arr_TimeAxis, num_time, key_day, len_arr, num_day, arr_summ_time)
+                    # arr_data, arr_TimeAxis = _insert_row(arr_data, arr_TimeAxis, num_time, key_day)
+                    # len_arr +=1
+                    # for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
+                    #     arr_data[num_time+1][num_counter] = str(arr_summ_time[0][num_day][num_counter])
+                    # num_time = num_time+1
 
-                    num_time = num_time+1
-
-                    arr_data, arr_TimeAxis = insert_row(arr_data, arr_TimeAxis, num_time, key_day)
-                    len_arr +=1
-                    for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
-                        arr_data[num_time+1][num_counter] = str(arr_summ_time[0][num_day][num_counter])
-
+                    arr_data, arr_TimeAxis, num_time, len_arr = _insert_row_itogo_day_group(arr_data, arr_TimeAxis, num_time, key_daygr, len_arr, mesto, num_day, arr_summ_time_Group)
+                    # arr_data, arr_TimeAxis = _insert_row(arr_data, arr_TimeAxis, num_time, key_daygr)
+                    # len_arr +=1
+                    # for num_group, item_group in enumerate(cfg.lst_checked_group):
+                    #     arr_data[num_time+1][mesto[num_group]] = str(arr_summ_time_Group[0][num_day][num_group])
+                    # num_time = num_time+1
 
                     num_day +=1                    
-                    num_time = num_time+1
+                    
 
                 if month_past != month_future:
 
-                    arr_data, arr_TimeAxis = insert_row(arr_data, arr_TimeAxis, num_time, key_mothgr)
-                    len_arr +=1
-                    for num_group, item_group in enumerate(cfg.lst_checked_group):
-                        arr_data[num_time+1][mesto[num_group]] = str(arr_summ_time_Group[1][num_month][num_group])
+                    arr_data, arr_TimeAxis, num_time, len_arr = _insert_row_itogo_month_counter(arr_data, arr_TimeAxis, num_time, key_month, len_arr, num_month, arr_summ_time)
+                    # arr_data, arr_TimeAxis = _insert_row(arr_data, arr_TimeAxis, num_time, key_month)
+                    # len_arr +=1
+                    # for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
+                    #     arr_data[num_time+1][num_counter] = str(arr_summ_time[1][num_month][num_counter])
+                    # num_time = num_time+1
 
-                    num_time = num_time+1
-
-                    arr_data, arr_TimeAxis = insert_row(arr_data, arr_TimeAxis, num_time, key_moth)
-                    len_arr +=1
-                    for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
-                        arr_data[num_time+1][num_counter] = str(arr_summ_time[1][num_month][num_counter])
-
+                    arr_data, arr_TimeAxis, num_time, len_arr = _insert_row_itogo_month_group(arr_data, arr_TimeAxis, num_time, key_monthgr, len_arr, mesto, num_month,arr_summ_time_Group)
+                    # arr_data, arr_TimeAxis = _insert_row(arr_data, arr_TimeAxis, num_time, key_monthgr)
+                    # len_arr +=1
+                    # for num_group, item_group in enumerate(cfg.lst_checked_group):
+                    #     arr_data[num_time+1][mesto[num_group]] = str(arr_summ_time_Group[1][num_month][num_group])
+                    # num_time = num_time+1
 
                     num_month +=1
-                    num_time = num_time+1
-
-                if year_past != year_future:
-                    arr_data, arr_TimeAxis = insert_row(arr_data, arr_TimeAxis, num_time, key_yeargr)
-                    len_arr +=1
-                    for num_group, item_group in enumerate(cfg.lst_checked_group):
-                        arr_data[num_time+1][mesto[num_group]] = str(arr_summ_time_Group[2][num_year][num_group])
-
-                    num_time = num_time+1
-
-                    arr_data, arr_TimeAxis = insert_row(arr_data, arr_TimeAxis, num_time, key_year)
-                    len_arr +=1
-                    for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
-                        arr_data[num_time+1][num_counter] = str(arr_summ_time[2][num_year][num_counter])
                     
 
-                    num_year +=1
-                    num_time = num_time+1
-# если период отображения МЕСЯЦ - то должны поставить ИТОГО ГОД , ВСЕГО ГОД
+                if year_past != year_future:
+                    pass
+                    # # отключим ИТОГО год по группе
+                    # arr_data, arr_TimeAxis = insert_row(arr_data, arr_TimeAxis, num_time, key_yeargr)
+                    # len_arr +=1
+                    # for num_group, item_group in enumerate(cfg.lst_checked_group):
+                    #     arr_data[num_time+1][mesto[num_group]] = str(arr_summ_time_Group[2][num_year][num_group])
+
+                    # num_time = num_time+1
+
+                    # отключим ИТОГО год по счетчику
+                    # arr_data, arr_TimeAxis = insert_row(arr_data, arr_TimeAxis, num_time, key_year)
+                    # len_arr +=1
+                    # for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
+                    #     arr_data[num_time+1][num_counter] = str(arr_summ_time[2][num_year][num_counter])
+                    
+
+                    # num_year +=1
+                    # num_time = num_time+1
+# если период отображения МЕСЯЦ - то должны поставить ИТОГО ГОД , ИТОГО ГОД
             if period_View == "месяц":
                 if year_past != year_future:
-                    arr_data, arr_TimeAxis = insert_row(arr_data, arr_TimeAxis, num_time, key_yeargr)
-                    len_arr +=1
-                    for num_group, item_group in enumerate(cfg.lst_checked_group):
-                        arr_data[num_time+1][mesto[num_group]] = str(arr_summ_time_Group[2][num_year][num_group])
+                    pass
+                    # # отключим ИТОГО год по группе
+                    # arr_data, arr_TimeAxis = insert_row(arr_data, arr_TimeAxis, num_time, key_yeargr)
+                    # len_arr +=1
+                    # for num_group, item_group in enumerate(cfg.lst_checked_group):
+                    #     arr_data[num_time+1][mesto[num_group]] = str(arr_summ_time_Group[2][num_year][num_group])
 
-                    num_time = num_time+1
+                    # num_time = num_time+1
 
-                    arr_data, arr_TimeAxis = insert_row(arr_data, arr_TimeAxis, num_time, key_year)
-                    len_arr +=1
-                    for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
-                        arr_data[num_time+1][num_counter] = str(arr_summ_time[2][num_year][num_counter])
+                    # # отключим ИТОГО год по счетчику
+                    # arr_data, arr_TimeAxis = insert_row(arr_data, arr_TimeAxis, num_time, key_year)
+                    # len_arr +=1
+                    # for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
+                    #     arr_data[num_time+1][num_counter] = str(arr_summ_time[2][num_year][num_counter])
                     
 
-                    num_year +=1
-                    num_time = num_time+1
+                    # num_year +=1
+                    # num_time = num_time+1
         num_time +=1
-#  если это последняя строка таблицы - сделаем заключительные ВСЕГО для дня, месяца и года
+#  если это последняя строка таблицы - сделаем заключительные ИТОГО для дня, месяца и года
         if num_time == len_arr-1: 
 
             if period_View == "день":
-
-                arr_data, arr_TimeAxis = insert_row(arr_data, arr_TimeAxis, num_time, key_mothgr)
-                for num_group, item_group in enumerate(cfg.lst_checked_group):
-                    arr_data[num_time+1][mesto[num_group]] = str(arr_summ_time_Group[1][num_month][num_group])
                 
+                arr_data, arr_TimeAxis, num_time, len_arr = _insert_row_itogo_month_counter(arr_data, arr_TimeAxis, num_time, key_month, len_arr, num_month, arr_summ_time)
+                # arr_data, arr_TimeAxis = _insert_row(arr_data, arr_TimeAxis, num_time, key_month)
+                # for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
+                #     arr_data[num_time+1][num_counter] = str(arr_summ_time[1][num_month][num_counter])
+                # num_time += 1
+
+                arr_data, arr_TimeAxis, num_time, len_arr = _insert_row_itogo_month_group(arr_data, arr_TimeAxis, num_time, key_monthgr, len_arr, mesto, num_month, arr_summ_time_Group)
+                # arr_data, arr_TimeAxis = _insert_row(arr_data, arr_TimeAxis, num_time, key_monthgr)
+                # for num_group, item_group in enumerate(cfg.lst_checked_group):
+                #     arr_data[num_time+1][mesto[num_group]] = str(arr_summ_time_Group[1][num_month][num_group])
+                # num_time += 1
+
+                # Добавлю пусую строку для наглядности
+                arr_data = np.insert(arr_data, num_time+1, np.nan, axis=0)
+                arr_TimeAxis = np.insert(arr_TimeAxis, num_time+1, 0, axis=0)
                 num_time += 1
 
-                arr_data, arr_TimeAxis = insert_row(arr_data, arr_TimeAxis, num_time, key_mothgrP)
+                arr_data, arr_TimeAxis = _insert_row(arr_data, arr_TimeAxis, num_time, key_counterPeriod)
+                for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
+                    arr_data[num_time+1][num_counter] = str(arr_summ_time[2][num_year][num_counter])       # ПЕРЕДЕЛАТЬ!!!
+                num_time += 1
+
+                arr_data, arr_TimeAxis = _insert_row(arr_data, arr_TimeAxis, num_time, key_groupPeriod)
                 for num_group, item_group in enumerate(cfg.lst_checked_group):
                     # arr_data[num_time+1][mesto[num_group]] = str(arr_symm_GroupPeriod[num_group])
                     arr_data[num_time+1][mesto[num_group]] = str(arr_summ_time_Group[2][num_year][num_group])       # ПЕРЕДЕЛАТЬ!!!
-
                 num_time += 1
-
-                arr_data, arr_TimeAxis = insert_row(arr_data, arr_TimeAxis, num_time, key_moth)
-                for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
-                    arr_data[num_time+1][num_counter] = str(arr_summ_time[1][num_month][num_counter])
 
                 
+                
                 num_month +=1
-                num_time += 1
+                
 
+                # # отключим ИТОГО год по группе
+                # arr_data, arr_TimeAxis = insert_row(arr_data, arr_TimeAxis, num_time, key_yeargr)
+                # for num_group, item_group in enumerate(cfg.lst_checked_group):
+                #         arr_data[num_time+1][mesto[num_group]] = str(arr_summ_time_Group[2][num_year][num_group])
 
-                arr_data, arr_TimeAxis = insert_row(arr_data, arr_TimeAxis, num_time, key_yeargr)
-                for num_group, item_group in enumerate(cfg.lst_checked_group):
-                        arr_data[num_time+1][mesto[num_group]] = str(arr_summ_time_Group[2][num_year][num_group])
+                # num_time += 1
 
-                num_time += 1
-
-                arr_data, arr_TimeAxis = insert_row(arr_data, arr_TimeAxis, num_time, key_year)
-                for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
-                    arr_data[num_time+1][num_counter] = str(arr_summ_time[2][num_year][num_counter])
+                # # отключим ИТОГО год по счетчику
+                # arr_data, arr_TimeAxis = insert_row(arr_data, arr_TimeAxis, num_time, key_year)
+                # for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
+                #     arr_data[num_time+1][num_counter] = str(arr_summ_time[2][num_year][num_counter])
 
 
                 break
 
             if period_View == "месяц":
+                # # отключим ИТОГО год по группе
+                # arr_data, arr_TimeAxis = insert_row(arr_data, arr_TimeAxis, num_time, key_yeargr)
+                # for num_group, item_group in enumerate(cfg.lst_checked_group):
+                #     arr_data[num_time+1][mesto[num_group]] = str(arr_summ_time_Group[2][num_year][num_group])
 
-                arr_data, arr_TimeAxis = insert_row(arr_data, arr_TimeAxis, num_time, key_yeargr)
-                for num_group, item_group in enumerate(cfg.lst_checked_group):
-                    arr_data[num_time+1][mesto[num_group]] = str(arr_summ_time_Group[2][num_year][num_group])
+                # num_time += 1
 
+                # # отключим ИТОГО год по счетчику
+                # arr_data, arr_TimeAxis = insert_row(arr_data, arr_TimeAxis, num_time, key_year)
+                # for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
+                #     arr_data[num_time+1][num_counter] = str(arr_summ_time[2][num_year][num_counter])
+
+                # Добавлю пусую строку для наглядности
+                arr_data = np.insert(arr_data, num_time+1, np.nan, axis=0)
+                arr_TimeAxis = np.insert(arr_TimeAxis, num_time+1, 0, axis=0)
                 num_time += 1
 
-                arr_data, arr_TimeAxis = insert_row(arr_data, arr_TimeAxis, num_time, key_year)
+                arr_data, arr_TimeAxis = _insert_row(arr_data, arr_TimeAxis, num_time, key_counterPeriod)
                 for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
-                    arr_data[num_time+1][num_counter] = str(arr_summ_time[2][num_year][num_counter])
+                    arr_data[num_time+1][num_counter] = str(arr_summ_time[2][num_year][num_counter])       # ПЕРЕДЕЛАТЬ!!!
+                num_time += 1
+                
+                arr_data, arr_TimeAxis = _insert_row(arr_data, arr_TimeAxis, num_time, key_groupPeriod)
+                for num_group, item_group in enumerate(cfg.lst_checked_group):
+                    arr_data[num_time+1][mesto[num_group]] = str(arr_summ_time_Group[2][num_year][num_group])       # ПЕРЕДЕЛАТЬ!!!
+                num_time += 1
 
                 break
 
             if (period_View == "час") or (period_View == "30 мин"):
 
-                arr_data, arr_TimeAxis = insert_row(arr_data, arr_TimeAxis, num_time, key_daygr)
-                for num_group, item_group in enumerate(cfg.lst_checked_group):
-                        arr_data[num_time+1][mesto[num_group]] = str(arr_summ_time_Group[0][num_day][num_group])
-
-                num_time = num_time+1
-
-                arr_data, arr_TimeAxis = insert_row(arr_data, arr_TimeAxis, num_time, key_day)
+                arr_data, arr_TimeAxis = _insert_row(arr_data, arr_TimeAxis, num_time, key_day)
                 arr_data[num_time+1][0] = key_allday
                 for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
                     arr_data[num_time+1][num_counter] = str(arr_summ_time[0][num_day][num_counter])
-
                 num_time = num_time+1
 
+                arr_data, arr_TimeAxis, num_time, len_arr = _insert_row_itogo_day_group(arr_data, arr_TimeAxis, num_time, key_daygr, len_arr, mesto, num_day, arr_summ_time_Group)
+                # arr_data, arr_TimeAxis = _insert_row(arr_data, arr_TimeAxis, num_time, key_daygr)
+                # for num_group, item_group in enumerate(cfg.lst_checked_group):
+                #         arr_data[num_time+1][mesto[num_group]] = str(arr_summ_time_Group[0][num_day][num_group])
+                # num_time = num_time+1
 
 
-                arr_data, arr_TimeAxis = insert_row(arr_data, arr_TimeAxis, num_time, key_mothgr)
-                for num_group, item_group in enumerate(cfg.lst_checked_group):
-                    arr_data[num_time+1][mesto[num_group]] = str(arr_summ_time_Group[1][num_month][num_group])
+                
+                arr_data, arr_TimeAxis, num_time, len_arr = _insert_row_itogo_month_counter(arr_data, arr_TimeAxis, num_time, key_month, len_arr, num_month, arr_summ_time)
+                # arr_data, arr_TimeAxis = _insert_row(arr_data, arr_TimeAxis, num_time, key_month)
+                # for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
+                #     arr_data[num_time+1][num_counter] = str(arr_summ_time[1][num_month][num_counter])
+                # num_time = num_time+1
 
-                num_time = num_time+1
+                arr_data, arr_TimeAxis, num_time, len_arr = _insert_row_itogo_month_group(arr_data, arr_TimeAxis, num_time, key_monthgr, len_arr, mesto, num_month, arr_summ_time_Group)
+                # arr_data, arr_TimeAxis = _insert_row(arr_data, arr_TimeAxis, num_time, key_monthgr)
+                # for num_group, item_group in enumerate(cfg.lst_checked_group):
+                #     arr_data[num_time+1][mesto[num_group]] = str(arr_summ_time_Group[1][num_month][num_group])
+                # num_time = num_time+1
 
-                arr_data, arr_TimeAxis = insert_row(arr_data, arr_TimeAxis, num_time, key_moth)
+                
+
+                # Добавлю пусую строку для наглядности
+                arr_data = np.insert(arr_data, num_time+1, np.nan, axis=0)
+                arr_TimeAxis = np.insert(arr_TimeAxis, num_time+1, 0, axis=0)
+                num_time += 1
+
+                arr_data, arr_TimeAxis = _insert_row(arr_data, arr_TimeAxis, num_time, key_counterPeriod)
                 for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
-                    arr_data[num_time+1][num_counter] = str(arr_summ_time[1][num_month][num_counter])
-
-
+                    arr_data[num_time+1][num_counter] = str(arr_summ_time[2][num_year][num_counter])       # ПЕРЕДЕЛАТЬ!!!
+                num_time += 1
+                
+                arr_data, arr_TimeAxis = _insert_row(arr_data, arr_TimeAxis, num_time, key_groupPeriod)
+                for num_group, item_group in enumerate(cfg.lst_checked_group):
+                    arr_data[num_time+1][mesto[num_group]] = str(arr_summ_time_Group[2][num_year][num_group])       # ПЕРЕДЕЛАТЬ!!!
+                num_time += 1
 
                 num_month +=1
-                num_time = num_time+1
+                
 
-                arr_data, arr_TimeAxis = insert_row(arr_data, arr_TimeAxis, num_time, key_yeargr)
-                for num_group, item_group in enumerate(cfg.lst_checked_group):
-                    arr_data[num_time+1][mesto[num_group]] = str(arr_summ_time_Group[2][num_year][num_group])
+                # # отключим ИТОГО год по группе
+                # arr_data, arr_TimeAxis = insert_row(arr_data, arr_TimeAxis, num_time, key_yeargr)
+                # for num_group, item_group in enumerate(cfg.lst_checked_group):
+                #     arr_data[num_time+1][mesto[num_group]] = str(arr_summ_time_Group[2][num_year][num_group])
 
-                num_time = num_time+1
+                # num_time = num_time+1
 
-                arr_data, arr_TimeAxis = insert_row(arr_data, arr_TimeAxis, num_time, key_year)
-                for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
-                    arr_data[num_time+1][num_counter] = str(arr_summ_time[2][num_year][num_counter])
+                # # отключим ИТОГО год по счетчику
+                # arr_data, arr_TimeAxis = insert_row(arr_data, arr_TimeAxis, num_time, key_year)
+                # for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
+                #     arr_data[num_time+1][num_counter] = str(arr_summ_time[2][num_year][num_counter])
 
                 break
     return arr_data, arr_TimeAxis, mesto
@@ -537,13 +631,15 @@ def kWT(arr_data, arr_axisTime, lst_checked_group_and_conters):
             # ищем конкретный счетчик
             for itemCounter in lst_counterDB:
                 if itemCounter['id'] == item_counter:
-                    # делим на постоянную счетчика A
+                    # применим постоянную счетчика A и коэфф ku,ki
                     koefA = itemCounter['koefA']
+                    ki = float(itemCounter['ki'])
+                    ku = float(itemCounter['ku'])
                     if (koefA == 0) or (koefA == ''): 
                         koefA = 1.0     # защита от дел на ноль ели в базе каким-то образом не оказалось этого коэффициента
                     # по всем временным меткам
                     for num, val in enumerate(arr_axisTime):
-                        arr_data[num][num_counter] = arr_data[num][num_counter]/koefA
+                        arr_data[num][num_counter] = (arr_data[num][num_counter]*ki*ku)/koefA
 
 
     return arr_data

@@ -576,8 +576,9 @@ def fn_ReadParam_KoefUI(numberNetAdress: int, dic_counter)-> bool:
                     packetKI = parsed_packet[2:]        # вырезаем  KI
                     kU = str((packetKU[0]<<8) + packetKU[1])
                     kI = str((packetKI[0]<<8) + packetKI[1])
-                    dic_counter['ku'] = kU
-                    dic_counter['ki'] = kI
+                    # не будем записывать в БД коэффициенты kU, kI, т.к. в самих счетчиках они могут быть неверными
+                    # dic_counter['ku'] = kU
+                    # dic_counter['ki'] = kI
                     ml.logger.debug(f"KU: {kU}, KI: {kI}")
                     rezult = True
                 else:
