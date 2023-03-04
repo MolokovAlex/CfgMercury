@@ -31,7 +31,7 @@ class EditGroupsCounterDialog (QDialog):
             | Qt.WindowMinimizeButtonHint
             | Qt.WindowMaximizeButtonHint
             )
-        self.setMinimumSize(QSize(800, 800))         # Устанавливаем размеры
+        self.setMinimumSize(QSize(800, 600))         # Устанавливаем размеры
         self.setWindowTitle("Редактирование групп и счетчиков") # Устанавливаем заголовок окна
         
         # layout = QHBoxLayout()

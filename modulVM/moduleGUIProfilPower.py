@@ -107,15 +107,15 @@ class TableProfilePowerDialog(QDialog):
                 self.btnImportTableProfilePowerCounts.setEnabled(True)    
         
             #
-            self.model2 = NpModel2()
-            self.tableProfilePowerCounts2 = QTableView()
-            self.tableProfilePowerCounts2.setModel(self.model2)
-            self.tableProfilePowerCounts2.horizontalHeader().setSectionResizeMode(0)
-            # self.tableProfilePowerCounts.horizontalHeader().setSectionResizeMode(1)#,QHeaderView.ResizeToContents)
-            # self.tableProfilePowerCounts.horizontalHeader().hide()
-            self.tableProfilePowerCounts2.verticalHeader().hide()
-            # self.tableProfilePowerCounts2.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
-            layout.addWidget(self.tableProfilePowerCounts2, 1, 0, 1, 13, alignment=Qt.AlignmentFlag.AlignBottom)
+            # self.model2 = NpModel2()
+            # self.tableProfilePowerCounts2 = QTableView()
+            # self.tableProfilePowerCounts2.setModel(self.model2)
+            # self.tableProfilePowerCounts2.horizontalHeader().setSectionResizeMode(0)
+            # # self.tableProfilePowerCounts.horizontalHeader().setSectionResizeMode(1)#,QHeaderView.ResizeToContents)
+            # # self.tableProfilePowerCounts.horizontalHeader().hide()
+            # self.tableProfilePowerCounts2.verticalHeader().hide()
+            # # self.tableProfilePowerCounts2.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
+            # layout.addWidget(self.tableProfilePowerCounts2, 1, 0, 1, 13, alignment=Qt.AlignmentFlag.AlignBottom)
             
             #
             self.model = NpModel()
@@ -320,7 +320,7 @@ class TableProfilePowerDialog(QDialog):
                 # преобразуем и дату и загоовок, а потом склеим
                 arr_data_custom = np.array(arr_data_custom, dtype=str)
                 #
-                arr_TimeAxis_custom = np.array(arr_TimeAxis_custom, dtype='<U25')
+                arr_TimeAxis_custom = np.array(arr_TimeAxis_custom, dtype='<U45')
                 # добавим для временных ячеек дополнительный 0 к одиночным цифрам и подготовим дату и время к виду DD.MM.YYYY  и  HH:MM
                 # по всем временным меткам
                 for num_time, val in enumerate(arr_TimeAxis_custom):
@@ -366,10 +366,12 @@ class TableProfilePowerDialog(QDialog):
                         arr_TimeAxis_custom[num_time][0] = 'ИТОГО ГОД по группе'
                         arr_TimeAxis_custom[num_time][3] = ''
                     elif arr_TimeAxis_custom[num_time][0] == '880': 
-                        arr_TimeAxis_custom[num_time][0] = 'ИТОГО по группе ЗА ПЕРИОД'
+                        # arr_TimeAxis_custom[num_time][0] = 'ИТОГО по группе \nЗА ПЕРИОД'
+                        arr_TimeAxis_custom[num_time][0] = 'ИТОГО по группе \nза запрошенный ИНТЕРВАЛ'
                         arr_TimeAxis_custom[num_time][3] = ''    
                     elif arr_TimeAxis_custom[num_time][0] == '990': 
-                        arr_TimeAxis_custom[num_time][0] = 'ИТОГО по счетчику ЗА ПЕРИОД'
+                        # arr_TimeAxis_custom[num_time][0] = 'ИТОГО по счетчику \nЗА ПЕРИОД'
+                        arr_TimeAxis_custom[num_time][0] = 'ИТОГО по счетчику \nза запрошенный ИНТЕРВАЛ'
                         arr_TimeAxis_custom[num_time][3] = ''
                     else:
                         arr_TimeAxis_custom[num_time][0] = mg.appendZero(arr_TimeAxis_custom[num_time][2])+'/'+mg.appendZero(arr_TimeAxis_custom[num_time][1])+'/'+arr_TimeAxis_custom[num_time][0]
@@ -378,38 +380,38 @@ class TableProfilePowerDialog(QDialog):
                 #
                 arr_Table = np.hstack((arr_TimeAxis_custom, arr_data_custom))
                 #
-                # добавим в конец таблицы еще пустых строк (нужно для визуализации первой таблицы групп заголовков)
-                leng = np.shape(arr_Table)[0]
-                for i in range (0,30,1):
-                    arr_Table = np.insert(arr_Table, leng+i, "", axis=0)
+                # # добавим в конец таблицы еще пустых строк (нужно для визуализации первой таблицы групп заголовков)
+                # leng = np.shape(arr_Table)[0]
+                # for i in range (0,30,1):
+                #     arr_Table = np.insert(arr_Table, leng+i, "", axis=0)
                 # дополним списко заголовки шапки таблицы на экране названиями выбранных счетчиков
-                self.model.lst_header_table = mg.create_header_table(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter)
+                self.model.lst_header_table, self.model.lst_backgroundcolor_group = mg.create_header_table(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter)
                 #
                 self.data = arr_Table
                 self.model.set(self.data.copy())
                 self.tableProfilePowerCounts.resizeColumnsToContents()
+                
 
-                # сделаем вторую таблицу, которая будет прсто шапкой над первой
-                self.model2.lst_header_table = mg.create_header_table2(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter)
-                self.data2 = arr_Table
-                self.model2.set(self.data2.copy())
-                self.tableProfilePowerCounts2.resizeColumnsToContents()
-                for num_time, val in enumerate(arr_Table):
-                    self.tableProfilePowerCounts2.setRowHeight(num_time, 1)
-                    # self.tableProfilePowerCounts2.hideRow(num_time)
-                    self.tableProfilePowerCounts2.setRowHidden(num_time, True)
+                # # сделаем вторую таблицу, которая будет прсто шапкой над первой
+                # self.model2.lst_header_table = mg.create_header_table2(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter)
+                # self.data2 = arr_Table
+                # self.model2.set(self.data2.copy())
+                # self.tableProfilePowerCounts2.resizeColumnsToContents()
+                # for num_time, val in enumerate(arr_Table):
+                #     self.tableProfilePowerCounts2.setRowHeight(num_time, 1)
+                #     # self.tableProfilePowerCounts2.hideRow(num_time)
+                #     self.tableProfilePowerCounts2.setRowHidden(num_time, True)
                     
+                # # выравниваем ширину столбцов у двух таблиц исходя из максимальной ширины
+                # for num_colunm in range (0,np.shape(arr_Table)[1],1):
+                #     if self.tableProfilePowerCounts.columnWidth(num_colunm) >= self.tableProfilePowerCounts2.columnWidth(num_colunm):
+                #         self.tableProfilePowerCounts2.setColumnWidth(num_colunm, self.tableProfilePowerCounts.columnWidth(num_colunm))
+                #     else:
+                #         self.tableProfilePowerCounts.setColumnWidth(num_colunm, self.tableProfilePowerCounts2.columnWidth(num_colunm))
 
-                # выравниваем ширину столбцов у двух таблиц исходя из максимальной ширины
-                for num_colunm in range (0,np.shape(arr_Table)[1],1):
-                    if self.tableProfilePowerCounts.columnWidth(num_colunm) >= self.tableProfilePowerCounts2.columnWidth(num_colunm):
-                        self.tableProfilePowerCounts2.setColumnWidth(num_colunm, self.tableProfilePowerCounts.columnWidth(num_colunm))
-                    else:
-                        self.tableProfilePowerCounts.setColumnWidth(num_colunm, self.tableProfilePowerCounts2.columnWidth(num_colunm))
-
-                #  запретим пользователю изменять ширину столбцов
-                self.tableProfilePowerCounts.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)#,QHeaderView.ResizeToContents)
-                self.tableProfilePowerCounts2.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)#,QHeaderView.ResizeToContents)
+                # #  запретим пользователю изменять ширину столбцов
+                # self.tableProfilePowerCounts.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)#,QHeaderView.ResizeToContents)
+                # self.tableProfilePowerCounts2.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)#,QHeaderView.ResizeToContents)
 
                 #
                 cfg.running_thread1 = True
@@ -420,14 +422,22 @@ class TableProfilePowerDialog(QDialog):
                 font = QFont()
                 font.setBold(True)
                 for num_time, val in enumerate(arr_Table):
-                    if ('ИТОГО' in arr_Table[num_time][0].upper()) and ('ГРУПП' in arr_Table[num_time][0].upper()):
+                    if ('итого' in arr_Table[num_time][0].lower()) and ('счетчик' in arr_Table[num_time][0].lower()):
+                        # setSpan(row, column, rowSpan, columnSpan)
                         self.tableProfilePowerCounts.setSpan(num_time, 0, 1, 2)
+                        # setRowHeight(row, height)
+                        # self.tableProfilePowerCounts.setRowHeight(num_time, 50)
+                for num_time, val in enumerate(arr_Table):
+                    if ('ИТОГО' in arr_Table[num_time][0].upper()) and ('ГРУПП' in arr_Table[num_time][0].upper()):
+                        # setSpan(row, column, rowSpan, columnSpan)
+                        self.tableProfilePowerCounts.setSpan(num_time, 0, 1, 2)
+                        # self.tableProfilePowerCounts.setRowHeight(num_time, 50)
                         for num_group, itemGroup in enumerate(cfg.lst_checked_group):
                             list_counter_in_group, rezult_get = msql.get_list_counter_in_group_DBGC(itemGroup)
                             from_mesto = mesto[num_group]+2
                             span_row = len(list_counter_in_group)
                             self.tableProfilePowerCounts.setSpan(num_time, from_mesto, 1, span_row)
-
+                self.tableProfilePowerCounts.resizeRowsToContents()
 
             else:
                 button = QMessageBox.critical(self,
@@ -454,9 +464,9 @@ class TableProfilePowerDialog(QDialog):
                 model = self.tableProfilePowerCounts.model()
 
                 # дополним списк заголовки шапки таблицы
-                lst_header_table2 = mg.create_header_table2(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter)
-                lst_header_table = mg.create_header_table(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter)
-                _list.append(lst_header_table2)
+                # lst_header_table2 = mg.create_header_table2(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter)
+                lst_header_table,lst_backgroundcolor_group = mg.create_header_table(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter)
+                # _list.append(lst_header_table2)
                 _list.append(lst_header_table)
 
                 for row in range(model.rowCount()):
@@ -560,6 +570,9 @@ class NpModel(QAbstractTableModel):
         super().__init__()
         self.npdata = data
         self.lst_header_table = []
+        # self.lst_Qt_color = [Qt.white, Qt.gray, Qt.lightGray, Qt.yellow, Qt.red,  Qt.green, Qt.blue, Qt.magenta, Qt.cyan]
+        self.lst_Qt_color = [Qt.white, Qt.yellow, Qt.green, Qt.blue, Qt.red, Qt.magenta, Qt.cyan]
+        self.lst_backgroundcolor_group = []
         
     def rowCount(self,index=QModelIndex()):
         return len(self.npdata)
@@ -581,6 +594,7 @@ class NpModel(QAbstractTableModel):
             else:
                 val = self.npdata[index.row()][index.column()]
                 return str(val)
+
         if role == Qt.FontRole: 
             if (index.column() == 0 or index.column() == 1):
                 font = QFont() 
@@ -616,6 +630,12 @@ class NpModel(QAbstractTableModel):
             font.setBold(True)
             # font.setPointSize(10)
             return font
+        if role == Qt.BackgroundRole:
+            index_background_color = self.lst_backgroundcolor_group[section]
+            # background_color = QVariant(QColor(Qt.green))
+            if index_background_color >= len(self.lst_Qt_color)-1: index_background_color = index_background_color - (len(self.lst_Qt_color)-2) 
+            background_color = self.lst_Qt_color[index_background_color]
+            return QVariant(QColor(background_color))
  
     def set(self,arr=np.array([[]])):
         self.beginResetModel()

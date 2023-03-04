@@ -479,9 +479,9 @@ def insert_summ_v2 (arr_data, arr_TimeAxis, period_View:str, arr_summ_Alltime, a
                 # num_time += 1
 
                 # Добавлю пусую строку для наглядности
-                arr_data = np.insert(arr_data, num_time+1, np.nan, axis=0)
-                arr_TimeAxis = np.insert(arr_TimeAxis, num_time+1, 0, axis=0)
-                num_time += 1
+                # arr_data = np.insert(arr_data, num_time+1, np.nan, axis=0)
+                # arr_TimeAxis = np.insert(arr_TimeAxis, num_time+1, 0, axis=0)
+                # num_time += 1
 
                 arr_data, arr_TimeAxis = _insert_row(arr_data, arr_TimeAxis, num_time, key_counterPeriod)
                 for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
@@ -528,9 +528,9 @@ def insert_summ_v2 (arr_data, arr_TimeAxis, period_View:str, arr_summ_Alltime, a
                 #     arr_data[num_time+1][num_counter] = str(arr_summ_time[2][num_year][num_counter])
 
                 # Добавлю пусую строку для наглядности
-                arr_data = np.insert(arr_data, num_time+1, np.nan, axis=0)
-                arr_TimeAxis = np.insert(arr_TimeAxis, num_time+1, 0, axis=0)
-                num_time += 1
+                # arr_data = np.insert(arr_data, num_time+1, np.nan, axis=0)
+                # arr_TimeAxis = np.insert(arr_TimeAxis, num_time+1, 0, axis=0)
+                # num_time += 1
 
                 arr_data, arr_TimeAxis = _insert_row(arr_data, arr_TimeAxis, num_time, key_counterPeriod)
                 for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
@@ -575,9 +575,9 @@ def insert_summ_v2 (arr_data, arr_TimeAxis, period_View:str, arr_summ_Alltime, a
                 
 
                 # Добавлю пусую строку для наглядности
-                arr_data = np.insert(arr_data, num_time+1, np.nan, axis=0)
-                arr_TimeAxis = np.insert(arr_TimeAxis, num_time+1, 0, axis=0)
-                num_time += 1
+                # arr_data = np.insert(arr_data, num_time+1, np.nan, axis=0)
+                # arr_TimeAxis = np.insert(arr_TimeAxis, num_time+1, 0, axis=0)
+                # num_time += 1
 
                 arr_data, arr_TimeAxis = _insert_row(arr_data, arr_TimeAxis, num_time, key_counterPeriod)
                 for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
@@ -778,9 +778,12 @@ def summ_per_day_and_month_and_year_v2(arr_data, arr_TimeAxis, lst_checked_group
 def create_header_table(lst_checked_counter):
     """сделаем список для заголовки шапки таблицы на экране названиями выбранных счетчиков
     """
-
-    # lst_header_table = ['Дата', 'Время']
-    lst_header_table = ["",""]
+    lst_index_backgroundcolor_group = []
+    index_color = 0
+    lst_header_table = ['Дата', 'Время']
+    # lst_header_table = ["",""]
+    lst_index_backgroundcolor_group.append(index_color)
+    lst_index_backgroundcolor_group.append(index_color)
     list_GroupDB, rezult_getListOfGroupDB = msql.getListGroupDB()
         # узнаем полное наименование счетчика через id  и добавим его в первую строку массива
     list_counterDB, rezult_getListOfCounterDB = msql.getListCounterDB()
@@ -789,9 +792,12 @@ def create_header_table(lst_checked_counter):
         num_counters_in_groups = 0  # посчитаем общее количество счетчиков в выбранных группах
         # пройдемся по спску выбранных пльзователем групп
         for itemGroup in cfg.lst_checked_group:
+            
+            
             # узнаем какие счетчики содержит группа
             list_counter_in_group, rezult_get = msql.get_list_counter_in_group_DBGC(itemGroup)
             for item_counter in list_counter_in_group:
+                lst_index_backgroundcolor_group.append(index_color)
                 # узнаю имя счетчика
                 for item in list_counterDB:
                     if item['id'] == item_counter:
@@ -801,9 +807,10 @@ def create_header_table(lst_checked_counter):
                     if item['id'] == itemGroup:
                         name_group = item["name_group_full"]
                 #
-                # lst_header_table.append("Группа:" + name_group +"\n"+name_counter)
-                lst_header_table.append(name_counter)
+                lst_header_table.append("Группа:" + name_group +"\n"+"\n"+name_counter)
+                # lst_header_table.append(name_counter)
                 num_counters_in_groups +=1
+            index_color +=1
 
 # после выходной список дополним одиночными счетчиками
         #  для начала выделим из списка только одиночные счетчики         
@@ -813,8 +820,10 @@ def create_header_table(lst_checked_counter):
             for item in list_counterDB:
                 if item['id'] == item_checked:
                     lst_header_table.append(item["name_counter_full"])
+                    lst_index_backgroundcolor_group.append(index_color)
+                    index_color +=1
 
-    return lst_header_table
+    return lst_header_table, lst_index_backgroundcolor_group
 
 
 def create_header_table2(lst_checked_counter):
