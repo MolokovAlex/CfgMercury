@@ -55,7 +55,7 @@ class CommunicationCounterThread(QThread):
                             lst_counters, rezult_getList = msql.getListCounterDB() 
                             if rezult_getList:
                                 # если связь с БД есть
-                                ml.logger.debug('поток - доступ к БД есть')
+                                ml.logger.info('поток - доступ к БД есть')
                                 for itemCounter in lst_counters:
                                     ml.logger.info(f"---------------Опрос счетчика с NetAdress= {int(itemCounter['net_adress'])}-----------------")
                                     #  сделаем 3 иттераций-попыток достучаться до счетчика
@@ -129,16 +129,16 @@ def read_ReadParam(net_adress_count, itemCounter):
         if rezult_ReadParam_KoefUI:
             dic_data, rezult_ReadParam_Variant = mpm.fn_ReadParam_VariantNew(net_adress_count, dic_data)
             if rezult_ReadParam_Variant:
-                ml.logger.info('запись в таблицу DBC')
+                ml.logger.info('запись в таблицу данных счетчиков DBC_new protocol')
                 msql.editCounterDB(dic_data)    # дополнение параметров счетчика из БД считанными параметрами из счетчика
             else:
-                ml.logger.error("не удалось получить параметры: коэфициент А счетчика по новому протоколу")
+                ml.logger.debug("не удалось получить параметры: коэфициент А счетчика по новому протоколу")
                 dic_data, rezult_ReadParam_Variant = mpm.fn_ReadParam_VariantOld(net_adress_count, dic_data)
                 if rezult_ReadParam_Variant:
-                    ml.logger.info('запись в таблицу DBC')
+                    ml.logger.info('запись в таблицу данных счетчиков DBC_old protocol')
                     msql.editCounterDB(dic_data)
                 else:
-                    ml.logger.error("не удалось получить параметры: коэфициент А счетчика и по старому протоколу")
+                    ml.logger.error("не удалось получить параметры: коэфициент А счетчика ни по старому, ни по новому протоколу")
         else:
             ml.logger.error("не удалось получить параметры: коэфициенты KU и KI счетчика")
     else:
