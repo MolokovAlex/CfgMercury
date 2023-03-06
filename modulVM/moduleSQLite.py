@@ -405,7 +405,7 @@ def insert_kU_kI_in_DBC():
         {'id':"",   'name_counter_full': 'ФРЗВ',                                                 'net_adress': '190', 'ku': '1',  'ki': '60'},
         {'id':"",   'name_counter_full': 'Строительная сепарированная РП2',                      'net_adress': '81',  'ku': '1',  'ki': '60'},
         {'id':"",   'name_counter_full': 'РП 18 - Дымосос сепарированной линии',                 'net_adress': '1',   'ku': '1',  'ki': '60'},
-        {'id':"",   'name_counter_full': 'Дисмембратор',                                         'net_adress': '18',  'ku': '1',  'ki': '60'},
+        {'id':"",   'name_counter_full': 'Дисмембратор',                                         'net_adress': '18',  'ku': '1',  'ki': '200'},
         {'id':"",   'name_counter_full': 'Европлиты упаковка',                                   'net_adress': '79',  'ku': '1',  'ki': '60'},
         {'id':"",   'name_counter_full': 'Европлиты формовка РП4',                               'net_adress': '146', 'ku': '1',  'ki': '160'},
         {'id':"",   'name_counter_full': 'Выбросная вентиляция компрессорной',                   'net_adress': '37',  'ku': '1',  'ki': '30'},

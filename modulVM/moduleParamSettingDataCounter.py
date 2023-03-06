@@ -42,18 +42,21 @@ class ParamAndSettingDataCountersDialog (QDialog):
         layout = QGridLayout()
         self.selectedCount = ''
 
-        cursorDB = cfg.sql_base_conn.cursor()
-        with cfg.sql_base_conn:
-            cursorDB.execute("""SELECT name_counter_full FROM DBC""")
-            b = cursorDB.fetchall()
-            d = []
-            for item in b:
-                d.append(item[0])
+        # cursorDB = cfg.sql_base_conn.cursor()
+        # with cfg.sql_base_conn:
+        #     cursorDB.execute("""SELECT name_counter_full FROM DBC""")
+        #     b = cursorDB.fetchall()
+        #     d = []
+        #     for item in b:
+        #         d.append(item[0])
 
         lbl_empty1 = QLabel("Счетчик:")
         layout.addWidget(lbl_empty1, 0, 0)
         self.cb_InstCounter = QComboBox()
-        self.cb_InstCounter.addItems(d)
+        list_CounterDB, rezult_getListOfCounterDB = msql.getListCounterDB()
+        for item in list_CounterDB:
+            self.cb_InstCounter.addItem(item['name_counter_full'])
+        # self.cb_InstCounter.addItems(d)
         self.cb_InstCounter.currentIndexChanged.connect(self.onSelectedCount)
         layout.addWidget(self.cb_InstCounter, 0, 1)
         if self.cb_InstCounter.currentText(): self.selectedCount = self.cb_InstCounter.currentText()
@@ -64,6 +67,11 @@ class ParamAndSettingDataCountersDialog (QDialog):
 
         lbl_empty3 = QLabel("    ")
         layout.addWidget(lbl_empty3, 0, 4)
+
+        self.btn_save_data_in_DBC = QPushButton("Записать в БД")
+        self.btn_save_data_in_DBC.clicked.connect(self.click_btn_save_data_in_DBC)
+        layout.addWidget(self.btn_save_data_in_DBC, 0, 4)
+
         self.btnRefreshTableCounters = QPushButton("Обновить")
         self.btnRefreshTableCounters.clicked.connect(self.click_but_reviewTableParamAndSettingData)
         layout.addWidget(self.btnRefreshTableCounters, 0, 5)
@@ -85,6 +93,8 @@ class ParamAndSettingDataCountersDialog (QDialog):
         # self.tableProfilePowerCounts.horizontalHeader().hide()
         self.tableParamAndSettingCounts.verticalHeader().hide()
         self.tableParamAndSettingCounts.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
+        # self.tableParamAndSettingCounts.setEditTriggers(QAbstractItemView.NoEditTriggers |
+        #                      QAbstractItemView.DoubleClicked)
         layout.addWidget(self.tableParamAndSettingCounts,2,0, 10, 9)
         self.setLayout(layout)
         # self.load()
@@ -100,6 +110,14 @@ class ParamAndSettingDataCountersDialog (QDialog):
         
         return None
 
+    def click_btn_save_data_in_DBC(self):
+        pass
+        # self.tableParamAndSettingCounts.setModel(self.model)
+        model_for_save = self.tableParamAndSettingCounts.model()
+        # dic_counter['ku'] = data['ku']
+        #             dic_counter['ki'] = data['ki']
+        #             rezult_EditCounterDB = editCounterDB(dic_counter)
+        return None
     
     def click_but_reviewTableParamAndSettingData(self):
         numCount = self.selectedCount
@@ -154,7 +172,7 @@ class PSDCModel(QAbstractTableModel):
     def data(self,index,role):
         if not index.isValid():# or role != Qt.DisplayRole: 
             return None
-        if role == Qt.DisplayRole:
+        if role == Qt.DisplayRole or role == Qt.EditRole:
             val = self.npdata[index.row()][index.column()]
             return str(val)
         # if role == Qt.FontRole and (index.column() == 0 or index.column() == 1):
@@ -162,8 +180,13 @@ class PSDCModel(QAbstractTableModel):
         #     font.setBold(True)
         #     return font
     
+    def setData(self, index, value, role):
+        if role == Qt.EditRole:
+            self.npdata[index.row(), index.column()] = value
+            return True
 
-
+    def flags(self, index):
+        return Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.ItemIsEditable
     
     def headerData(self,section,orientation,role):
         # if role != Qt.DisplayRole: 

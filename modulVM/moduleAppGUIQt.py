@@ -25,6 +25,7 @@ import modulVM.moduleSQLite as msql
 import modulVM.moduleEditGroupAndCounter as megc
 import modulVM.moduleLogging as ml
 import modulVM.moduleParamSettingDataCounter as mpsdc
+import modulVM.moduleUpdate as mudp
 
 
 # Подкласс QMainWindow для настройки главного окна приложения
@@ -67,9 +68,9 @@ class MainWindow(QMainWindow):
             ml.logger.error("Ошибка в подключении БД - Exception occurred", exc_info=True)
             # sql3.viewCodeError (error_sql)
 
-        # запись в БД кофф KU kI
-        # отключить эти сроки на последющем update
-        msql.insert_kU_kI_in_DBC()
+        # вызовем функцию Update программы
+        mudp.createUpdate()
+
 
         # включение потока
         # if not self.thread:

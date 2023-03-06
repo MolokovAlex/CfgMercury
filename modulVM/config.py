@@ -13,7 +13,7 @@ from pathlib import Path
 # ------------------------------------------------------------------
 
 #  версия программы
-VERSION = '1.050323'
+VERSION = '1.060323'
 
 # коды ошибок из потока связи со счетчиками
 # 0 = None error
@@ -181,7 +181,7 @@ data_list_demo_DBG = [
 # --------------- БД счетчиков --------------------------
 # ----------------------------------------------------------------------------
 lst_name_poles_DBC = ['id', 'schem', 'name_counter_full', 'net_adress', 'manuf_number', 'manuf_data', 'klass_react', 'klass_act', 'nom_u', 'ku', 'ki', 'koefA', 'comment']
-lst_readOnly_poles_DBC = [True, False, False, False, True, True, True, True, True, True, True, True, False]
+lst_readOnly_poles_DBC = [True, False, False, False, True, True, True, True, True, False, False, True, False]
 lst_rusname_poles_DBC =  ['id', 'Обозн на схеме', 'Имя счетчика полное', 'Сетевой адрес', 'Зав.номер', 'Дата изготовл.', 'Класс реакт.', 'Класс акт.', 'Номинальное напряжение', 'Коэфф.трансф. по напряжению', 'Коэфф.трансф. по току', 'Постоянная счетчика', 'Комментарии']
 dic_template_DBC = {
         'id': 500,

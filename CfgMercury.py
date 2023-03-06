@@ -10,7 +10,7 @@ from PyQt5.QtWidgets import *
 # from time import sleep
 import modulVM.moduleAppGUIQt as magqt
 import modulVM.config as cfg
-import modulVM.moduleSQLite as msql
+# import modulVM.moduleSQLite as msql
 # import modulVM.moduleProtocolMercury as mpm
 # import modulVM.moduleComThread as mct
 import modulVM.moduleLogging as ml
