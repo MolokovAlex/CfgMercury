@@ -29,8 +29,8 @@ def createUpdate():
     # update06032013
     sql_create_table_SERVICE = """ CREATE TABLE IF NOT EXISTS SERVICE (
         id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
-        update TEXT,
-        version TEXT
+        updateVM TEXT,
+        versionVM TEXT
         );
         """
     # создание служебной таблицы в БД
@@ -50,7 +50,7 @@ def createUpdate():
         cursorDB = cfg.sql_base_conn.cursor()
         with cfg.sql_base_conn:
             # запись в таблицу номера текущего апдейта
-            cursorDB.execute("""INSERT INTO SERVICE (update, version)  VALUES ('060323', '1.060323');""")
+            cursorDB.execute("""INSERT INTO SERVICE (updateVM, versionVM)  VALUES ('060323', '1.060323');""")
             cfg.sql_base_conn.commit()  
     except sql3.Error as error_sql:
         ml.logger.error("Exception occurred", exc_info=True)
