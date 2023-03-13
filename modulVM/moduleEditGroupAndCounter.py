@@ -8,6 +8,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from time import sleep
+import re
 
 # import modulVM.moduleConfigApp as mca
 import modulVM.config as cfg
@@ -112,21 +113,52 @@ class EditGroupsCounterDialog (QDialog):
     def acceptBtnDialogNewGroup(self):
         # oldNameGroup = self.currentItemTree
         newNameGroup = self.newName.text()
-        
         list_GroupDB, rezult_getListOfGroupDB = msql.getListGroupDB()
-        error = False
-        for item in list_GroupDB:
-            if (item['name_group_full'] == newNameGroup):
-                button = QMessageBox.critical(
-                        self,
-                        "Ошибка ввода",
-                        "Группа с такими параметрами уже существует",
-                        buttons=QMessageBox.StandardButton.Ok ,
-                        defaultButton=QMessageBox.StandardButton.Ok,)
-                error = True
-                break
+
+        error_name = False
+        # проверка на валидность поля полнго наименования
+        flag_symbol_valid, newNameGroup = self.valid_symbol_pole(newNameGroup)
+        if not(flag_symbol_valid):
+            # проверка на пустоту поля нового названия 
+            flag_empty_valid = self.valid_empty_pole(newNameGroup)
+            if not(flag_empty_valid):
+                error_name = False
             else:
-                error = False
+                error_name = True
+                newNameGroup = "Новая группа"
+        else:
+            error_name = True
+            newNameGroup = "Новая группа"
+
+        error = True
+        if not error_name:
+            #  проверка на совпадение плного названия с другими группами
+            error = False
+            for item in list_GroupDB:
+                flag_odinak_valid = self.valid_odinak_pole(item['name_group_full'], newNameGroup)
+                if not(flag_odinak_valid):
+                    error = False
+                else:
+                    error = True
+                    newNameGroup = "Новая группа"
+                    break
+
+
+
+
+        # error = False
+        # for item in list_GroupDB:
+        #     if (item['name_group_full'] == newNameGroup):
+        #         button = QMessageBox.critical(
+        #                 self,
+        #                 "Ошибка ввода",
+        #                 "Группа с такими параметрами уже существует",
+        #                 buttons=QMessageBox.StandardButton.Ok ,
+        #                 defaultButton=QMessageBox.StandardButton.Ok,)
+        #         error = True
+        #         break
+        #     else:
+        #         error = False
         if not error:
             msql.addNewGroupDB(newNameGroup)
             self.DialogNewGroup.hide()
@@ -174,19 +206,64 @@ class EditGroupsCounterDialog (QDialog):
         
         # list_counterDB, rezult_getListOfCounterDB = msql.getListCounterDB(self)
         list_GroupDB, rezult_getListOfGroupDB = msql.getListGroupDB()
-        error = False
-        for item in list_GroupDB:
-            if (item['name_group_full'] == newNameGroup):
-                button = QMessageBox.critical(
-                        self,
-                        "Ошибка ввода",
-                        "Группа с такими параметрами уже существует",
-                        buttons=QMessageBox.StandardButton.Ok ,
-                        defaultButton=QMessageBox.StandardButton.Ok,)
-                error = True
-                break
+
+        error_name = False
+        # проверка на валидность поля полнго наименования
+        flag_symbol_valid, newNameGroup = self.valid_symbol_pole(newNameGroup)
+        if not(flag_symbol_valid):
+            # проверка на пустоту поля нового названия 
+            flag_empty_valid = self.valid_empty_pole(newNameGroup)
+            if not(flag_empty_valid):
+                error_name = False
             else:
-                error = False
+                error_name = True
+                newNameGroup = self.currentItemTree
+        else:
+            error_name = True
+            newNameGroup = self.currentItemTree
+
+        error = True
+        if not error_name:
+            #  проверка на совпадение плного названия с другими группами
+            error = False
+            for item in list_GroupDB:
+                flag_odinak_valid = self.valid_odinak_pole(item['name_group_full'], newNameGroup)
+                if not(flag_odinak_valid):
+                    error = False
+                else:
+                    error = True
+                    newNameGroup = "Новая группа"
+                    break
+
+
+
+
+        # error = False
+        # # проверка на пустоту поля нового названия группы
+        # if (newNameGroup == ""):
+        #     button = QMessageBox.critical(
+        #             self,
+        #             "Ошибка ввода",
+        #             "Поле ввода наименования группы пусто",
+        #             buttons=QMessageBox.StandardButton.Ok ,
+        #             defaultButton=QMessageBox.StandardButton.Ok,)
+        #     error = True
+        # else:
+        #     # error = False
+        #     # проверка на совпадение нового названия группы с существующими
+        #     for item in list_GroupDB:
+        #         if (item['name_group_full'] == newNameGroup):
+        #             button = QMessageBox.critical(
+        #                     self,
+        #                     "Ошибка ввода",
+        #                     "Группа с такими параметрами уже существует",
+        #                     buttons=QMessageBox.StandardButton.Ok ,
+        #                     defaultButton=QMessageBox.StandardButton.Ok,)
+        #             error = True
+        #             break
+        #         else:
+        #             error = False
+                
         if not error:
             rezult_getListOfGroupDB = msql.editGroupDB(oldNameGroup,newNameGroup)
             self.DialogEditGroup.hide()
@@ -259,28 +336,62 @@ class EditGroupsCounterDialog (QDialog):
         """ оработка нажатия на кнопку ОК при создании нового счетчика
         """
         row=0
-        dict_newNameCounter={}
+        dict_newCounter={}
         for item5 in cfg.lst_name_poles_DBC:                
                 cell  = self.tableNewCounter.item(row, 1).text()
-                dict_newNameCounter[item5]=cell
+                dict_newCounter[item5]=cell
                 row = row+1
         list_counterDB, rezult_getListOfCounterDB = msql.getListCounterDB()
-        error = False
-        for item in list_counterDB:
-            if (item['name_counter_full'] == dict_newNameCounter['name_counter_full']) and (item['net_adress'] == dict_newNameCounter['net_adress']):
-                button = QMessageBox.critical(
-                        self,
-                        "Ошибка ввода",
-                        "Счетчик с такими параметрами уже существует",
-                        buttons=QMessageBox.StandardButton.Ok ,
-                        defaultButton=QMessageBox.StandardButton.Ok,)
-                error = True
-                break
+
+
+        error_name = False
+        # проверка на валидность поля полнго наименования
+        flag_symbol_valid, dict_newCounter['name_counter_full'] = self.valid_symbol_pole(dict_newCounter['name_counter_full'])
+        if not(flag_symbol_valid):
+            # проверка на пустоту поля нового названия 
+            flag_empty_valid = self.valid_empty_pole(dict_newCounter['name_counter_full'])
+            if not(flag_empty_valid):
+                error_name = False
             else:
-                error = False
+                error_name = True
+                dict_newCounter['name_counter_full'] = "Новый счетчик"#self.dict_one_OldCounter['name_counter_full']
+        else:
+            error_name = True
+            dict_newCounter['name_counter_full'] = "Новый счетчик"#self.dict_one_OldCounter['name_counter_full']
+
+        #  проверка на валидность сетевого адреса
+        error_net_adr  = self.valid_number_adr_pole(str(dict_newCounter['net_adress']))
+        if error_net_adr:
+            dict_newCounter['net_adress'] = 255 #int(self.dict_one_OldCounter['net_adress'])
+            
+        error = True
+        if (not error_name) and (not error_net_adr):
+            #  проверка на совпадение плного названия и сетевого адреса с другими счетчиками
+            error = False
+            for item in list_counterDB:
+                # dic_counter = msql.getCounterDB(dict_newNameCounter['id'])
+                # if item['id'] != int(dict_newCounter['id']):
+                flag_odinak_valid = self.valid_odinak_pole(item['name_counter_full'], dict_newCounter['name_counter_full'])
+                if not(flag_odinak_valid):
+                    error = False
+                else:
+                    error = True
+                    dict_newCounter['name_counter_full'] =  "Новый счетчик"#self.dict_one_OldCounter['name_counter_full']
+                    break
+                #  проверка на совпадение сетевого адреса с аналогичными
+                flag_odinak_number_valid = self.valid_odinak_net_pole(int(item['net_adress']), int(dict_newCounter['net_adress']))
+                if not(flag_odinak_number_valid):
+                    error = False
+                else:
+                    error = True
+                    dict_newCounter['net_adress'] = 255 #int(self.dict_one_OldCounter['net_adress'])
+                    break
+
         if not error:
-            rezult_EditCounterDB = msql.addNewCounterDB(dict_newNameCounter)
+            rezult_EditCounterDB = msql.addNewCounterDB(dict_newCounter)
+            self.renderTreePanel2()
             self.DialogNewCounter.hide()
+        self.rendertableNewCounter(dict_newCounter)
         self.renderTreePanel2()
         return None
     
@@ -289,6 +400,39 @@ class EditGroupsCounterDialog (QDialog):
         self.DialogNewCounter.hide()
         return None
     
+    def rendertableNewCounter(self, dict_counter):
+        #  запонлим значениями вторую колонку таблицы и сразу
+        #  разрешим только конктерные ячейки для редактирования, которые определены в cfg.lst_readOnly_poles_DBC
+        # row=0
+        for row, value_lst in enumerate(cfg.lst_name_poles_DBC):
+            # rows = self.tableEditCounter.rowCount()
+            tableWItem = QTableWidgetItem()
+            if row != 0:        #  избавляемся от отображения поля id
+                valueInTable = str(dict_counter[cfg.lst_name_poles_DBC[row]])
+                tableWItem.setText(valueInTable)
+                if cfg.lst_readOnly_poles_DBC[row]:
+                    tableWItem.setFlags(tableWItem.flags() ^ Qt.ItemIsEditable)
+                    tableWItem.setBackground(QColor(100,100,150))
+                else:
+                    tableWItem.setFlags(tableWItem.flags() | Qt.ItemIsEditable)
+                self.tableNewCounter.setItem(row, 1, tableWItem)
+            # self.tableEditCounter.setItem(row, 1, QTableWidgetItem(valueInTable))
+            # row += 1
+        # заполним первую колонку названиями парамтров
+        # row = 0
+        for row, value_lst in enumerate(cfg.lst_rusname_poles_DBC):
+            tableWItem = QTableWidgetItem()
+            tableWItem.setText(value_lst)
+            font = QFont()
+            font.setBold(True)
+            tableWItem.setFont(font)
+            self.tableNewCounter.setItem(row, 0, tableWItem)
+            # row = row +1
+
+        return None
+
+
+
     #------------------------------------------------------------------------------------------------------
     #------------------------------------------------------------------------------------------------------
     def windowDialogEditCounter(self):
@@ -309,10 +453,10 @@ class EditGroupsCounterDialog (QDialog):
             self.tableEditCounter.horizontalHeaderItem(1).setTextAlignment(Qt.AlignHCenter)
             self.tableEditCounter.setRowCount(0) 
             # найдем в старом(не измененном еще) списке счетчиков словарь того счетчика который был выбран в дереве
-            dict_one_OldCounter ={}
+            self.dict_one_OldCounter ={}
             for itemOldCounter in self.old_list_counterDB:
                 if itemOldCounter['name_counter_full'] == self.currentItemTree:
-                    dict_one_OldCounter = itemOldCounter.copy()
+                    self.dict_one_OldCounter = itemOldCounter.copy()
                     break
             #  запонлим значениями вторую колонку таблицы и сразу
             #  разрешим только конктерные ячейки для редактирования, которые определены в cfg.lst_readOnly_poles_DBC
@@ -320,7 +464,7 @@ class EditGroupsCounterDialog (QDialog):
             for item5 in cfg.lst_name_poles_DBC:
                 rows = self.tableEditCounter.rowCount()
                 self.tableEditCounter.setRowCount(rows + 1)
-                valueInTable = str(dict_one_OldCounter[cfg.lst_name_poles_DBC[rows]])
+                valueInTable = str(self.dict_one_OldCounter[cfg.lst_name_poles_DBC[rows]])
                 tableWItem = QTableWidgetItem()
                 tableWItem.setText(valueInTable)
                 if cfg.lst_readOnly_poles_DBC[i]:
@@ -361,33 +505,61 @@ class EditGroupsCounterDialog (QDialog):
             defaultButton=QMessageBox.StandardButton.Ok)
         
     def acceptBtnDialogEditCounter(self):
-        dict_oldNameCounter = self.old_list_counterDB
-        # newNameCounter = self.newName.text()
-        row=0
-        dict_newNameCounter={}
-        for item5 in cfg.lst_name_poles_DBC:                
+        # dict_oldNameCounter = self.old_list_counterDB
+
+        dict_editCounter={}
+        for row, value_lst in enumerate(cfg.lst_name_poles_DBC):                
                 cell  = self.tableEditCounter.item(row, 1).text()
-                dict_newNameCounter[item5]=cell
-                row = row+1
+                dict_editCounter[value_lst]=cell
         list_counterDB, rezult_getListOfCounterDB = msql.getListCounterDB()
-        # list_GroupDB, rezult_getListOfGroupDB = msql.getListGroupDB(self)
+        
+        error_name = False
+        # проверка на валидность поля полнго наименования
+        flag_symbol_valid, dict_editCounter['name_counter_full'] = self.valid_symbol_pole(dict_editCounter['name_counter_full'])
+        if not(flag_symbol_valid):
+            # проверка на пустоту поля нового названия 
+            flag_empty_valid = self.valid_empty_pole(dict_editCounter['name_counter_full'])
+            if not(flag_empty_valid):
+                error_name = False
+            else:
+                error_name = True
+                dict_editCounter['name_counter_full'] = self.dict_one_OldCounter['name_counter_full']
+        else:
+            error_name = True
+            dict_editCounter['name_counter_full'] = self.dict_one_OldCounter['name_counter_full']
+
+        #  проверка на валидность сетевого адреса
+        error_net_adr  = self.valid_number_adr_pole(str(dict_editCounter['net_adress']))
+        if error_net_adr:
+            dict_editCounter['net_adress'] = int(self.dict_one_OldCounter['net_adress'])
+            
         error = False
-        for item in list_counterDB:
-            if item['id'] != int(dict_newNameCounter['id']):
-                if (item['name_counter_full'] == dict_newNameCounter['name_counter_full']) or (item['net_adress'] == dict_newNameCounter['net_adress']) :
-                    button = QMessageBox.critical(
-                            self,
-                            "Ошибка ввода",
-                            "Счетчик с такими параметрами уже существует",
-                            buttons=QMessageBox.StandardButton.Ok ,
-                            defaultButton=QMessageBox.StandardButton.Ok,)
-                    error = True
-                    break
-                else:
-                    error = False
-        if not error:
-            rezult_EditCounterDB = msql.editCounterDB(dict_newNameCounter)
-            self.DialogEditCounter.hide()
+        if (not error_name) and (not error_net_adr):
+            #  проверка на совпадение плного названия и сетевого адреса с другими счетчиками
+            error = False
+            for item in list_counterDB:
+                # dic_counter = msql.getCounterDB(dict_newNameCounter['id'])
+                if item['id'] != int(dict_editCounter['id']):
+                    flag_odinak_valid = self.valid_odinak_pole(item['name_counter_full'], dict_editCounter['name_counter_full'])
+                    if not(flag_odinak_valid):
+                        error = False
+                    else:
+                        error = True
+                        dict_editCounter['name_counter_full'] = self.dict_one_OldCounter['name_counter_full']
+                        break
+                    #  проверка на совпадение сетевого адреса с аналогичными
+                    flag_odinak_number_valid = self.valid_odinak_net_pole(int(item['net_adress']), int(dict_editCounter['net_adress']))
+                    if not(flag_odinak_number_valid):
+                        error = False
+                    else:
+                        error = True
+                        dict_editCounter['net_adress'] = int(self.dict_one_OldCounter['net_adress'])
+                        break
+            
+            if not error:
+                rezult_EditCounterDB = msql.editCounterDB(dict_editCounter)
+                self.DialogEditCounter.hide()
+        self.rendertableEditCounter()
         self.renderTreePanel2()
         return None
     
@@ -396,6 +568,135 @@ class EditGroupsCounterDialog (QDialog):
         self.DialogEditCounter.hide()
         return None
     
+    def rendertableEditCounter(self):
+        #  запонлим значениями вторую колонку таблицы и сразу
+        #  разрешим только конктерные ячейки для редактирования, которые определены в cfg.lst_readOnly_poles_DBC
+        # row=0
+        for row, value_lst in enumerate(cfg.lst_name_poles_DBC):
+            # rows = self.tableEditCounter.rowCount()
+            tableWItem = QTableWidgetItem()
+            valueInTable = str(self.dict_one_OldCounter[cfg.lst_name_poles_DBC[row]])
+            tableWItem.setText(valueInTable)
+            if cfg.lst_readOnly_poles_DBC[row]:
+                tableWItem.setFlags(tableWItem.flags() ^ Qt.ItemIsEditable)
+                tableWItem.setBackground(QColor(100,100,150))
+            else:
+                tableWItem.setFlags(tableWItem.flags() | Qt.ItemIsEditable)
+            self.tableEditCounter.setItem(row, 1, tableWItem)
+            # self.tableEditCounter.setItem(row, 1, QTableWidgetItem(valueInTable))
+            # row += 1
+        # заполним первую колонку названиями парамтров
+        # row = 0
+        for row, value_lst in enumerate(cfg.lst_rusname_poles_DBC):
+            tableWItem = QTableWidgetItem()
+            tableWItem.setText(value_lst)
+            font = QFont()
+            font.setBold(True)
+            tableWItem.setFont(font)
+            self.tableEditCounter.setItem(row, 0, tableWItem)
+            # row = row +1
+
+        return None
+
+    def valid_symbol_pole(self, strg):
+        flag_notValid = True
+        try:
+            # value_str = "".join(re.findall(r'[ 0-9A-Za-zА-Яа-я+-/`")(.,#№ ]*',  strg))
+            value_str = "".join(re.findall(r'[ 0-9A-Za-zА-Яа-я+-`")(.,#№ ]*',  strg))
+            flag_notValid = False
+        except:
+            flag_notValid = True
+            value_str = ' '
+        if flag_notValid == True:
+            button = QMessageBox.critical(
+                                    self,
+                                    "Ошибка ввода",
+                                    "Недопустимые символы в наименовании",
+                                    buttons=QMessageBox.StandardButton.Ok ,
+                                    defaultButton=QMessageBox.StandardButton.Ok,)
+        return flag_notValid, value_str
+
+    # def valid_number_adr_pole(self, num):
+    #     flag_notValid = True
+    #     try:
+    #         value_num = "".join(re.findall(r'[0-9]*',  num))
+    #         flag_notValid = False
+    #     except:
+    #         flag_notValid = True
+    #         value_num = 254
+    #     if flag_notValid == True:
+    #         button = QMessageBox.critical(
+    #                                 self,
+    #                                 "Ошибка ввода",
+    #                                 "Недопустимый сетевой адрес",
+    #                                 buttons=QMessageBox.StandardButton.Ok ,
+    #                                 defaultButton=QMessageBox.StandardButton.Ok,)
+    #     return flag_notValid, value_num
+
+    def valid_empty_pole(self, strg):
+        flag_notValid = True
+        if (strg == ""):
+                button = QMessageBox.critical(
+                        self,
+                        "Ошибка ввода",
+                        "Поле ввода наименования пусто",
+                        buttons=QMessageBox.StandardButton.Ok ,
+                        defaultButton=QMessageBox.StandardButton.Ok,)
+                flag_notValid = True
+        else:
+            flag_notValid = False
+        return flag_notValid
+    
+    def valid_number_adr_pole(self, number_adr):
+        error_valid = True
+        # убедимся что адрес сосотит из цифр
+        try:
+            value_num = "".join(re.findall(r'[0-9]*',  number_adr))
+            # error_valid = False
+        except:
+            error_valid = True
+            value_num = '2540'
+        if (str(value_num) != number_adr) or (int(value_num) <= 0) or (int(value_num) >=256):
+                button = QMessageBox.critical(
+                        self,
+                        "Ошибка ввода",
+                        "Недопустимый сетевой адрес",
+                        buttons=QMessageBox.StandardButton.Ok ,
+                        defaultButton=QMessageBox.StandardButton.Ok,)
+                error_valid = True
+                
+        else:
+            error_valid = False
+        return error_valid#, int(value_num)
+
+    def valid_odinak_pole(self, strg1, strg2):
+        flag_notValid = True
+        if (strg1 == strg2):
+                button = QMessageBox.critical(
+                        self,
+                        "Ошибка ввода",
+                        "Такое наименование уже существует",
+                        buttons=QMessageBox.StandardButton.Ok ,
+                        defaultButton=QMessageBox.StandardButton.Ok,)
+                flag_notValid = True
+        else:
+            flag_notValid = False
+        return flag_notValid
+    
+    def valid_odinak_net_pole(self, adr1, adr2):
+        flag_notValid = True
+        if (adr1 == adr2):
+                button = QMessageBox.critical(
+                        self,
+                        "Ошибка ввода",
+                        "Такой сетевой адрес уже существует",
+                        buttons=QMessageBox.StandardButton.Ok ,
+                        defaultButton=QMessageBox.StandardButton.Ok,)
+                flag_notValid = True
+        else:
+            flag_notValid = False
+        return flag_notValid
+
     #------------------------------------------------------------------------------------------------------
     #------------------------------------------------------------------------------------------------------
     def windowDialogDeleteGroup(self):

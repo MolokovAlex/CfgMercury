@@ -68,9 +68,9 @@ class ParamAndSettingDataCountersDialog (QDialog):
         lbl_empty3 = QLabel("    ")
         layout.addWidget(lbl_empty3, 0, 4)
 
-        self.btn_save_data_in_DBC = QPushButton("Записать в БД")
-        self.btn_save_data_in_DBC.clicked.connect(self.click_btn_save_data_in_DBC)
-        layout.addWidget(self.btn_save_data_in_DBC, 0, 4)
+        # self.btn_save_data_in_DBC = QPushButton("Записать в БД")
+        # self.btn_save_data_in_DBC.clicked.connect(self.click_btn_save_data_in_DBC)
+        # layout.addWidget(self.btn_save_data_in_DBC, 0, 4)
 
         self.btnRefreshTableCounters = QPushButton("Обновить")
         self.btnRefreshTableCounters.clicked.connect(self.click_but_reviewTableParamAndSettingData)

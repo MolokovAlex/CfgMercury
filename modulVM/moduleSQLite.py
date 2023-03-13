@@ -168,6 +168,16 @@ def createTableDBFile(nameFileDB:str)->bool:
             # print ("create_table_DBIE")
             # cursorDB.execute(cfg.sql_create_table_DBIE)
             connectionDBFile.commit()
+
+            cursorDB.execute(""" CREATE TABLE IF NOT EXISTS SERVICE (
+                                    id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
+                                    updateVM TEXT,
+                                    versionVM TEXT
+                                    );
+                                    """)
+            connectionDBFile.commit()
+ 
+            ml.logger.info("create_table_SERVICE")
             FlagCreateTableDBf = True
     except sql3.Error as error_sql:
         ml.logger.error("Exception occurred", exc_info=True)
@@ -330,6 +340,26 @@ def getListCounterDB():
                     dict_counter=dict(zip(cfg.lst_name_poles_DBC, item))
                     lst_counterDB.append(dict_counter)
                     dict_counter = {}
+                rezult_get = True
+            else:
+                rezult_get = False
+        return lst_counterDB, rezult_get
+
+def getCounterDB(number_id):
+        rezult_get = False
+        lst_counterDB = []       
+        cursorDB = cfg.sql_base_conn.cursor()
+        with cfg.sql_base_conn:
+            cursorDB.execute("""SELECT id, schem, name_counter_full, net_adress, manuf_number, manuf_data, klass_react, klass_act, nom_u, ku, ki, koefA, comment FROM DBC WHERE id = ?;""", (number_id,))
+            data = cursorDB.fetchall()
+            if data:
+                dict_counter=dict(zip(cfg.lst_name_poles_DBC, data[0]))
+                # lst_counterDB = []
+                # dict_counter = {}
+                # for item in data:
+                #     dict_counter=dict(zip(cfg.lst_name_poles_DBC, item))
+                #     # lst_counterDB.append(dict_counter)
+                #     dict_counter = {}
                 rezult_get = True
             else:
                 rezult_get = False
