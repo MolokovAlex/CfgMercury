@@ -816,7 +816,7 @@ def fill_TableDBIC_demo_value(nameFileDB:str):
     """
     заполнение таблицы DBIC демо-значениями      
     """
-    ml.logger.info("Заполнение таблицы DBIC демо-значениями...")
+    ml.logger.debug("Заполнение таблицы DBIC демо-значениями...")
     flag_rezult = False
     # nameFile_DBf = cfg.absDB_FILE
     with open(cfg.absTEST_DATA_IC_FILE, "r") as file:

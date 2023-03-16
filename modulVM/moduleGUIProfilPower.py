@@ -313,7 +313,7 @@ class TableProfilePowerDialog(QDialog):
                 # вставка строк/столбцов суммы как итого
                 arr_data_custom, arr_TimeAxis_custom, mesto = mg.insert_summ_v2(arr_data_custom, arr_TimeAxis_custom, self.period_integr, arr_summ_Alltime, arr_summ_Alltime_Group, arr_summ_Alltime_custom, arr_summ_Alltime_Group_custom, summGroupPeriod)
                 # округлим все  float в массиве до трех знаков после запятой
-                arr_data_custom = np.around(arr_data_custom, 3)
+                arr_data_custom = np.around(arr_data_custom, 4)
                 #
                 
                 # перобразовать массив из  int в str чтобы добавлять текст "итого"
@@ -510,7 +510,7 @@ class TableProfilePowerDialog(QDialog):
                 cell_format.set_align('center')
                 cell_format.set_align('vcenter')
                 worksheet.set_row(0, 18, cell_format) # Установка стиля для строки 
-                worksheet.set_row(1, 18, cell_format) # Установка стиля для строки 
+                #worksheet.set_row(1, 18, cell_format) # Установка стиля для строки 
                 for r in bold_row:
                     worksheet.set_row(r, 18, cell_format)
                 workbook.close()  

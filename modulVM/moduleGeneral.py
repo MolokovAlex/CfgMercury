@@ -221,10 +221,10 @@ def list_of_serial_ports():
 def createView_periodView(arr_data, arr_TimeAxis, periodIntegr:str):
     """ приведение к виду периода отображения
     """
-    num_period_integr = 3       # номер колонки в numpy array
+    num_period_integr = 3       # номер колонки в numpy array для отслеживания что будет меняться
     if periodIntegr != "30 мин":
         if periodIntegr == "час":
-            num_period_integr = 3
+            num_period_integr = 3   # оттслеживаем изменение цифры часа - а это столбец 3
         elif periodIntegr == "день":
             num_period_integr = 2
         elif periodIntegr == "месяц":
@@ -233,13 +233,21 @@ def createView_periodView(arr_data, arr_TimeAxis, periodIntegr:str):
         for num, item_time in enumerate(arr_data):
             if (num+1) >= arr_data.shape[0]:
                 break
-            while arr_TimeAxis[num][num_period_integr] == arr_TimeAxis[num+1][num_period_integr]:
-                if arr_TimeAxis[num][num_period_integr] == arr_TimeAxis[num+1][num_period_integr]:
-                    for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
-                        arr_data[num][num_counter] = arr_data[num][num_counter] + arr_data[num+1][num_counter]
-                    arr_data = np.delete(arr_data, num+1 , axis = 0)
-                    arr_TimeAxis = np.delete(arr_TimeAxis, num+1 , axis = 0)
-                if (num+1) >= arr_data.shape[0]: break
+            if arr_TimeAxis[num][num_period_integr] != arr_TimeAxis[num+1][num_period_integr]:
+                time_cur = arr_TimeAxis[num][num_period_integr]
+                for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
+                    arr_data[num+1][num_counter] = (arr_data[num][num_counter] + arr_data[num+1][num_counter])/2 # вычисляем среднее арифметическое
+                arr_data = np.delete(arr_data, num , axis = 0)
+                arr_TimeAxis = np.delete(arr_TimeAxis, num , axis = 0)
+            
+            
+            # while arr_TimeAxis[num][num_period_integr] == arr_TimeAxis[num+1][num_period_integr]:
+            #     if arr_TimeAxis[num][num_period_integr] == arr_TimeAxis[num+1][num_period_integr]:
+            #         for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
+            #             arr_data[num][num_counter] = (arr_data[num][num_counter] + arr_data[num+1][num_counter])/2 # вычисляем среднее арифметическое
+            #         arr_data = np.delete(arr_data, num+1 , axis = 0)
+            #         arr_TimeAxis = np.delete(arr_TimeAxis, num+1 , axis = 0)
+            #     if (num+1) >= arr_data.shape[0]: break
     return arr_data, arr_TimeAxis
 
 
@@ -633,8 +641,8 @@ def kWT(arr_data, arr_axisTime, lst_checked_group_and_conters):
                 if itemCounter['id'] == item_counter:
                     # применим постоянную счетчика A и коэфф ku,ki
                     koefA = itemCounter['koefA']
-                    ki = float(itemCounter['ki'])
-                    ku = float(itemCounter['ku'])
+                    ki = 1 #float(itemCounter['ki'])
+                    ku = 1 #float(itemCounter['ku'])
                     if (koefA == 0) or (koefA == ''): 
                         koefA = 1.0     # защита от дел на ноль ели в базе каким-то образом не оказалось этого коэффициента
                     # по всем временным меткам
@@ -923,6 +931,7 @@ def cut_arr_custom_time(arr_data, arr_TimeAxis_full, dateFrom, dateTo):
     num_dateTo = 0
     stop_from = False
     stop_to = False
+    dateFrom = dateFrom.replace(hour=0,  minute = 30)
     for num_arrTimeAxis, val_arrTimeAxis in enumerate(arr_TimeAxis_full):
         dt_arrTimeAxis = datetime(val_arrTimeAxis[0], val_arrTimeAxis[1], val_arrTimeAxis[2], val_arrTimeAxis[3], val_arrTimeAxis[4])
         if (dateFrom <= dt_arrTimeAxis) and not(stop_from):
