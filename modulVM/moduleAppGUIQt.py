@@ -71,6 +71,9 @@ class MainWindow(QMainWindow):
         # вызовем функцию Update программы
         mudp.createUpdate()
 
+        #  создание  watchdog  сторожевого таймера для потока
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.on_watchdog_timeout)
 
         # включение потока
         # if not self.thread:
@@ -79,8 +82,11 @@ class MainWindow(QMainWindow):
         self.thread.signal_progressRS.connect(self.onChangeProgressRS)
         self.thread.signal_error_open_connect_port.connect(self.openWindows_error_open_connect_port)
         self.thread.signal_error_connect_to_DB.connect(self.openWindows_error_connect_to_DB)
-        self.thread.finished.connect(self.on_finished)
+        self.thread.signal_watchdog_thread.connect(self.on_change_watchdog_timer)
+        self.thread.finished.connect(self.on_finished_thread)
         self.thread.start()
+        ml.logger.debug('включение watchdog')
+        self.timer.start(cfg.time_watchdog_thread)
 
         # self.connect(self.thread, SIGNAL("mysignal(QString"), self.onChangeProgressRS, Qt.QueuedConnection)
         return None
@@ -130,7 +136,7 @@ class MainWindow(QMainWindow):
                 QMessageBox.No)
         if result == QMessageBox.Yes:
             ml.logger.debug('закрытие главного окна')
-            self.on_finished()
+            self.on_finished_thread()
 
             event.accept()
             # если открыта БД - закрыть
@@ -139,7 +145,49 @@ class MainWindow(QMainWindow):
             QWidget.closeEvent(self, event)
         else:
             event.ignore()
-     
+    
+    def on_watchdog_timeout(self):
+        """
+        функция обработки срабатывания watchdog сторожевого таймера
+        """
+        ml.logger.error('срабатывание watchdog потока')
+        # остановим таймер
+        self.timer.stop()
+
+        # перезапустим поток опроса счетчиков
+        # 1.закроем/финишируем поток 
+        self.on_finished_thread()
+        mpm.close_connection_to_port()
+        # 2.заново запустим поток
+        cfg.ON_TRANSFER_DATA_COUNTER = True
+        ml.logger.debug('старт потока')
+        self.thread = mct.CommunicationCounterThread()
+        self.thread.signal_progressRS.connect(self.onChangeProgressRS)
+        self.thread.signal_error_open_connect_port.connect(self.openWindows_error_open_connect_port)
+        self.thread.signal_error_connect_to_DB.connect(self.openWindows_error_connect_to_DB)
+        self.thread.signal_watchdog_thread.connect(self.on_change_watchdog_timer)
+        self.thread.finished.connect(self.on_finished_thread)
+        self.thread.start()
+        # 3.и запустим таймер снова
+        ml.logger.debug('включение watchdog')
+        self.timer.start(cfg.time_watchdog_thread)
+
+        return None
+
+    def on_change_watchdog_timer(self):
+        """
+        Обработка прихода сигнала signal_watchdog_thread из потока опроса счетчиков
+        приход сигнала означает что закончился 3-минутный цикл опроса счетчиков и поток жив
+        """
+        ml.logger.debug('приход из потока сигнала signal_watchdog_thread')
+        # остановим таймер
+        ml.logger.debug('остановка watchdog')
+        self.timer.stop()
+        # и запустим его снова
+        ml.logger.debug('включение watchdog')
+        self.timer.start(cfg.time_watchdog_thread)
+        return None
+
     def onChangeProgressDB(self, value):
         self.progressDB.setValue(value)
         return None
@@ -154,10 +202,10 @@ class MainWindow(QMainWindow):
         self.statusbar.showMessage(strng, msecs=6000)
         return None
                 
-    def on_finished(self):
+    def on_finished_thread(self):
         ml.logger.debug('закрытие потока...')
         self.thread.signal_progressRS.disconnect(self.onChangeProgressRS)
-        self.thread.finished.disconnect(self.on_finished)
+        self.thread.finished.disconnect(self.on_finished_thread)
         self.thread = None
         ml.logger.debug('закрытие потока...ОК')
 

@@ -139,7 +139,7 @@ class ParamAndSettingDataCountersDialog (QDialog):
                     if name_full_count == itemCounter['name_counter_full']:
                         result = itemCounter.items()
                         data = list(result)
-                        arr_data = np.array(data)
+                        arr_data = np.array(data, dtype='<U45')
                         arr_data = np.insert(arr_data, 0, arr_vert_header, axis=1) 
                         arr_data = np.delete(arr_data,1,axis=1)   
             self.data = arr_data

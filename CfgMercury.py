@@ -4,6 +4,7 @@
 # coding: utf-8
 
 import sys
+import os
 
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtWidgets import *
@@ -33,6 +34,10 @@ def main():
     return None
 
 if __name__ == "__main__": 
+    if not os.path.isdir(cfg.absLOG_DIR): 
+        os.mkdir(cfg.absLOG_DIR)
+    if not os.path.isdir(cfg.absDB_DIR): 
+        os.mkdir(cfg.absDB_DIR)
     ml.setup_logging(cfg.absLOG_FILE)
     main()
 

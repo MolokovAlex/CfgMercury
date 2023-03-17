@@ -162,11 +162,13 @@ class TableProfilePowerDialog(QDialog):
             self.DialogCaseCounterAndGroups = QDialog()
             self.DialogCaseCounterAndGroups.setWindowTitle("Выбор счетчиков и групп")
             self.DialogCaseCounterAndGroups.setWindowModality(Qt.ApplicationModal)
-            self.DialogCaseCounterAndGroups.resize(400, 600)
+            self.DialogCaseCounterAndGroups.resize(500, 800)
         
             layout = QGridLayout()
             self.DialogCaseCounterAndGroups.setLayout(layout)
             self.tree = QTreeWidget()
+            self.tree.setColumnCount(2)
+            self.tree.setHeaderLabels(['Наименование', 'Сетевой адрес'])
             self.renderTreePanel_for_ProfilPower()
             # self.tree.clicked.connect(self.click_onClickedOnItemTree)
             layout.addWidget(self.tree,0,0,2,2)
@@ -548,20 +550,26 @@ class TableProfilePowerDialog(QDialog):
                         break
                 for item in list_DictGroupWithCounterDB:
                     child = QTreeWidgetItem(parent)
-                    child.setText(0, item['name_counter_full'])
+                    child.setForeground(0, Qt.darkBlue)
+                    child.setText(0, "    " + item['name_counter_full'])
+                    child.setText(1, item['net_adress'])
             parent = QTreeWidgetItem(self.tree)
             parent.setText(0, "Все счетчики")
             for item_Counter in list_counterDB:
                     child = QTreeWidgetItem(parent)
                     child.setFlags(child.flags() | Qt.ItemIsUserCheckable)
                     child.setCheckState(0, Qt.Unchecked)
+                    child.setForeground(0, Qt.darkBlue)
                     child.setText(0, item_Counter['name_counter_full'])
+                    child.setText(1, item_Counter['net_adress'])
                     # for itemChek in (cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
                     for itemChek in (cfg.lst_checked_single_counter):    
                         if itemChek == item_Counter['id']:
                             child.setCheckState(0, Qt.Checked)
                             break
             self.tree.expandAll()
+            self.tree.resizeColumnToContents(0)
+            self.tree.resizeColumnToContents(1)
             return None
 
 

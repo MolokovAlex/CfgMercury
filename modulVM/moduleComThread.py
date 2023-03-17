@@ -19,6 +19,7 @@ class CommunicationCounterThread(QThread):
     signal_progressRS = pyqtSignal(int)
     signal_error_open_connect_port = pyqtSignal()
     signal_error_connect_to_DB = pyqtSignal()
+    signal_watchdog_thread = pyqtSignal()
     
     def __init__(self, parent = None):
         QThread.__init__(self, parent)
@@ -34,6 +35,8 @@ class CommunicationCounterThread(QThread):
         # cfg.lst_online_Counter = ""
         # i=0
         # крутимся в этом цикле вечно - поток нельзя завершать пока открыто основное окно программы
+        # залезем в БД для получкения списка счетчиков - чтобы каждые 3 минуты туда не лазить
+        lst_counters, rezult_getList = msql.getListCounterDB() 
         ml.logger.debug(f'cfg.ON_TRANSFER_DATA_COUNTER={cfg.ON_TRANSFER_DATA_COUNTER}')
         while True:
             self.sleep(1)   # уменьшим скорость бесконечного цикла - сильно грузит процессор - введем паузы в 1 сек
@@ -48,34 +51,41 @@ class CommunicationCounterThread(QThread):
                 if minute_now != past_minute:
                     if minute_now in [0,3,6,9,12,15,18,21,24,27,30,33,36,39,42,45,48,51,54,57]: # and not(flag_start_oprosa):
                         ml.logger.debug(f'{date_now} : --------------------------------поток - старт опроса!') # - {str(date_time_now)}")
-                        self.signal_progressRS.emit(10)
+                        # self.signal_progressRS.emit(10)
                         # открываем порт IP или COM
                         if mpm.connection_to_port():
                             # одновременно проверяем есть ли связь с БД и доастем спиское всех зарегистрированных счетчиков
-                            lst_counters, rezult_getList = msql.getListCounterDB() 
+                            # lst_counters, rezult_getList = msql.getListCounterDB()    # перенес выше
                             if rezult_getList:
                                 # если связь с БД есть
                                 ml.logger.info('поток - доступ к БД есть')
-                                for itemCounter in lst_counters:
+                                # for itemCounter in lst_counters:
+                                for numCounter, itemCounter in enumerate(lst_counters):
                                     ml.logger.info(f"---------------Опрос счетчика с NetAdress= {int(itemCounter['net_adress'])}-----------------")
                                     #  сделаем 3 иттераций-попыток достучаться до счетчика
-                                    self.signal_progressRS.emit(20)
+                                    # self.signal_progressRS.emit(20)
                                     is_itteration = True
                                     num_itteration = 0
                                     while is_itteration:
                                         net_adress_count = int(itemCounter['net_adress'])
                                         if mpm.fn_TestCanalConnection(net_adress_count):
-                                            self.signal_progressRS.emit(40)
+                                            # self.signal_progressRS.emit(40)
                                             if mpm.fn_OpenCanalConnectionLevel1(net_adress_count):
-                                                self.signal_progressRS.emit(50)
+                                                # self.signal_progressRS.emit(50)
                                                 #
+
+
+
+                                                # ТЕСТ Watchdog !!!!!!!!!!! в релизе удалить!!!!!
+                                                self.sleep(610000)
+
                                                 # считывание параметров счетчика 
                                                 read_ReadParam(net_adress_count, itemCounter)
-                                                self.signal_progressRS.emit(60)
+                                                # self.signal_progressRS.emit(60)
                                                 #
                                                 # считывание мгновенных значений и запись в БД 
                                                 read_InstantlyValue(net_adress_count, itemCounter)
-                                                self.signal_progressRS.emit(70)
+                                                # self.signal_progressRS.emit(70)
                                                 #
                                                 # если наступила 30-минутка
                                                 if minute_now in [0,30]:
@@ -83,19 +93,19 @@ class CommunicationCounterThread(QThread):
                                                     # считывание последнйи записи профиля мощности и запись в БД
                                                     read_ReadRecordProfilPower(net_adress_count, itemCounter)
                                                 #
-                                                self.signal_progressRS.emit(90)
+                                                # self.signal_progressRS.emit(90)
                                                 mpm.fn_CloseCanalConnection(net_adress_count)
-                                                self.signal_progressRS.emit(100)
+                                                # self.signal_progressRS.emit(100)
                                                 is_itteration = False
                                             else: 
                                                 ml.logger.error(f" __не открылся канал связи с NetAdress= {net_adress_count}")
                                                 num_itteration +=1
-                                                if num_itteration == 3 : is_itteration = False
-                                                
+                                                if num_itteration == 3 : is_itteration = False 
                                         else: 
                                             ml.logger.error(f" __не прошел тест канала связи с NetAdress= {net_adress_count}")
                                             num_itteration +=1
                                             if num_itteration == 3 : is_itteration = False
+                                    self.signal_progressRS.emit(numCounter) #  пусть порядковый номер счетчика в списке будет процентом выполненного объема цикла опроса
                             
                             # если связь с БД отсутствует
                             else:
@@ -112,6 +122,8 @@ class CommunicationCounterThread(QThread):
                             cfg.ON_TRANSFER_DATA_COUNTER = False
                     
                     # конец опроса
+                    self.signal_progressRS.emit(100)
+                    self.signal_watchdog_thread.emit()
                     ml.logger.debug(f'{date_now} : поток - ожидание наступления ближайшей 3-х минутки')
                     past_minute = minute_now
 
