@@ -60,7 +60,7 @@ def createUpdate():
 
 
 # -------------------------------------------------------------------
-    # update16032013
+    # update19032013
     # следующий апдейт
 
 
@@ -78,7 +78,7 @@ def createUpdate():
                 # Если есть - не применяем текущий апдейт и уходим
                 # если нету - применяем апдейт
                 for value_update in data:
-                    if value_update[0] == '160323':
+                    if value_update[0] == '190313':
                         # программа уже прошла этот апдейт
                         flag_found_current_update = True
                         error = False
@@ -94,18 +94,18 @@ def createUpdate():
 
 
                     # запись в таблицу SERVICE номера текущего апдейта
-                    cursorDB.execute("""INSERT INTO SERVICE (updateVM, versionVM)  VALUES ('160323', '1.160323');""")
+                    cursorDB.execute("""INSERT INTO SERVICE (updateVM, versionVM)  VALUES ('190313', '1.190313');""")
                     cfg.sql_base_conn.commit() 
-                    ml.logger.info("update_16032013 применен") 
+                    ml.logger.info("update_190313 применен") 
                     error = False
 
             else:
                 # если data пустые - таблица не заполнена, т.е. программа запускается с чистой БД
-                cursorDB.execute("""INSERT INTO SERVICE (updateVM, versionVM)  VALUES ('160323', '1.160323');""")
+                cursorDB.execute("""INSERT INTO SERVICE (updateVM, versionVM)  VALUES ('190313', '1.190313');""")
                 cfg.sql_base_conn.commit() 
                 cursorDB.execute("""UPDATE DBC SET name_counter_full="водоподготовка котельной+ бытовки мПГП" WHERE net_adress=3;""")
                 cfg.sql_base_conn.commit()
-                ml.logger.info("БД SERVICE пуста... update_16032013 применен")
+                ml.logger.info("БД SERVICE пуста... update_190313 применен")
                 error = False
     except sql3.Error as error_sql:
         ml.logger.error("Exception occurred", exc_info=True)
@@ -113,7 +113,7 @@ def createUpdate():
         error = True
     
     if error:
-        ml.logger.info("ошибка в применении update_16032013 ") 
+        ml.logger.info("ошибка в применении update_190313 ") 
     
 
     return None

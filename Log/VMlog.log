@@ -218,3 +218,682 @@ root-DEBUG-17-Mar-23 18:28:47-открытие окна Параметры и н
 root-DEBUG-17-Mar-23 18:29:20-закрытие главного окна
 root-DEBUG-17-Mar-23 18:29:20-закрытие потока...
 root-DEBUG-17-Mar-23 18:29:20-закрытие потока...ОК
+root-DEBUG-18-Mar-23 15:40:47-логирование включено
+root-DEBUG-18-Mar-23 15:40:48-создание главного окна
+root-INFO-18-Mar-23 15:40:49-подключение файла БД...
+root-INFO-18-Mar-23 15:40:49-Проверка наличия файла БД SQLite Z:\Python\CfgMercury\DB\ViewMercuryDB.sqlite...
+root-INFO-18-Mar-23 15:40:49-файл БД найден
+root-INFO-18-Mar-23 15:40:49-База данных создана и успешно подключена к SQLite
+root-DEBUG-18-Mar-23 15:40:49-Версия базы данных SQLite: [('3.28.0',)]
+root-DEBUG-18-Mar-23 15:40:49-Соединение с SQLite закрыто
+root-DEBUG-18-Mar-23 15:40:49-старт потока
+root-DEBUG-18-Mar-23 15:40:49-включение watchdog
+root-DEBUG-18-Mar-23 15:40:49-поток стартовал
+root-DEBUG-18-Mar-23 15:40:49-cfg.ON_TRANSFER_DATA_COUNTER=False
+root-DEBUG-18-Mar-23 15:40:53- открытие окна вывода таблицы профиля мощности
+root-DEBUG-18-Mar-23 15:41:19-логирование включено
+root-DEBUG-18-Mar-23 15:41:19-создание главного окна
+root-INFO-18-Mar-23 15:41:19-подключение файла БД...
+root-INFO-18-Mar-23 15:41:19-Проверка наличия файла БД SQLite Z:\Python\CfgMercury\DB\ViewMercuryDB.sqlite...
+root-INFO-18-Mar-23 15:41:19-файл БД найден
+root-INFO-18-Mar-23 15:41:19-База данных создана и успешно подключена к SQLite
+root-DEBUG-18-Mar-23 15:41:19-Версия базы данных SQLite: [('3.28.0',)]
+root-DEBUG-18-Mar-23 15:41:19-Соединение с SQLite закрыто
+root-DEBUG-18-Mar-23 15:41:19-старт потока
+root-DEBUG-18-Mar-23 15:41:19-включение watchdog
+root-DEBUG-18-Mar-23 15:41:19-поток стартовал
+root-DEBUG-18-Mar-23 15:41:19-cfg.ON_TRANSFER_DATA_COUNTER=False
+root-DEBUG-18-Mar-23 15:41:21- открытие окна вывода таблицы профиля мощности
+root-DEBUG-18-Mar-23 15:43:52-логирование включено
+root-DEBUG-18-Mar-23 15:43:52-создание главного окна
+root-INFO-18-Mar-23 15:43:52-подключение файла БД...
+root-INFO-18-Mar-23 15:43:52-Проверка наличия файла БД SQLite Z:\Python\CfgMercury\DB\ViewMercuryDB.sqlite...
+root-INFO-18-Mar-23 15:43:52-файл БД найден
+root-INFO-18-Mar-23 15:43:52-База данных создана и успешно подключена к SQLite
+root-DEBUG-18-Mar-23 15:43:52-Версия базы данных SQLite: [('3.28.0',)]
+root-DEBUG-18-Mar-23 15:43:52-Соединение с SQLite закрыто
+root-DEBUG-18-Mar-23 15:43:52-старт потока
+root-DEBUG-18-Mar-23 15:43:52-включение watchdog
+root-DEBUG-18-Mar-23 15:43:52-поток стартовал
+root-DEBUG-18-Mar-23 15:43:52-cfg.ON_TRANSFER_DATA_COUNTER=False
+root-DEBUG-18-Mar-23 15:43:53- открытие окна вывода таблицы профиля мощности
+root-DEBUG-18-Mar-23 15:49:12-логирование включено
+root-DEBUG-18-Mar-23 15:49:12-создание главного окна
+root-INFO-18-Mar-23 15:49:12-подключение файла БД...
+root-INFO-18-Mar-23 15:49:12-Проверка наличия файла БД SQLite Z:\Python\CfgMercury\DB\ViewMercuryDB.sqlite...
+root-INFO-18-Mar-23 15:49:12-файл БД найден
+root-INFO-18-Mar-23 15:49:12-База данных создана и успешно подключена к SQLite
+root-DEBUG-18-Mar-23 15:49:12-Версия базы данных SQLite: [('3.28.0',)]
+root-DEBUG-18-Mar-23 15:49:12-Соединение с SQLite закрыто
+root-DEBUG-18-Mar-23 15:49:12-старт потока
+root-DEBUG-18-Mar-23 15:49:12-включение watchdog
+root-DEBUG-18-Mar-23 15:49:12-поток стартовал
+root-DEBUG-18-Mar-23 15:49:13-cfg.ON_TRANSFER_DATA_COUNTER=False
+root-DEBUG-18-Mar-23 15:49:14- открытие окна вывода таблицы профиля мощности
+root-DEBUG-18-Mar-23 16:02:59-логирование включено
+root-DEBUG-18-Mar-23 16:02:59-создание главного окна
+root-INFO-18-Mar-23 16:02:59-подключение файла БД...
+root-INFO-18-Mar-23 16:02:59-Проверка наличия файла БД SQLite Z:\Python\CfgMercury\DB\ViewMercuryDB.sqlite...
+root-INFO-18-Mar-23 16:02:59-файл БД найден
+root-INFO-18-Mar-23 16:02:59-База данных создана и успешно подключена к SQLite
+root-DEBUG-18-Mar-23 16:02:59-Версия базы данных SQLite: [('3.28.0',)]
+root-DEBUG-18-Mar-23 16:02:59-Соединение с SQLite закрыто
+root-DEBUG-18-Mar-23 16:02:59-старт потока
+root-DEBUG-18-Mar-23 16:02:59-включение watchdog
+root-DEBUG-18-Mar-23 16:02:59-поток стартовал
+root-DEBUG-18-Mar-23 16:02:59-cfg.ON_TRANSFER_DATA_COUNTER=False
+root-DEBUG-18-Mar-23 16:03:01- открытие окна вывода таблицы профиля мощности
+root-DEBUG-18-Mar-23 16:05:17-логирование включено
+root-DEBUG-18-Mar-23 16:05:17-создание главного окна
+root-INFO-18-Mar-23 16:05:17-подключение файла БД...
+root-INFO-18-Mar-23 16:05:17-Проверка наличия файла БД SQLite Z:\Python\CfgMercury\DB\ViewMercuryDB.sqlite...
+root-INFO-18-Mar-23 16:05:17-файл БД найден
+root-INFO-18-Mar-23 16:05:17-База данных создана и успешно подключена к SQLite
+root-DEBUG-18-Mar-23 16:05:17-Версия базы данных SQLite: [('3.28.0',)]
+root-DEBUG-18-Mar-23 16:05:17-Соединение с SQLite закрыто
+root-DEBUG-18-Mar-23 16:05:17-старт потока
+root-DEBUG-18-Mar-23 16:05:17-включение watchdog
+root-DEBUG-18-Mar-23 16:05:17-поток стартовал
+root-DEBUG-18-Mar-23 16:05:17-cfg.ON_TRANSFER_DATA_COUNTER=False
+root-DEBUG-18-Mar-23 16:05:19- открытие окна вывода таблицы профиля мощности
+root-DEBUG-18-Mar-23 16:06:15-логирование включено
+root-DEBUG-18-Mar-23 16:06:15-создание главного окна
+root-INFO-18-Mar-23 16:06:15-подключение файла БД...
+root-INFO-18-Mar-23 16:06:15-Проверка наличия файла БД SQLite Z:\Python\CfgMercury\DB\ViewMercuryDB.sqlite...
+root-INFO-18-Mar-23 16:06:15-файл БД найден
+root-INFO-18-Mar-23 16:06:15-База данных создана и успешно подключена к SQLite
+root-DEBUG-18-Mar-23 16:06:15-Версия базы данных SQLite: [('3.28.0',)]
+root-DEBUG-18-Mar-23 16:06:15-Соединение с SQLite закрыто
+root-DEBUG-18-Mar-23 16:06:15-старт потока
+root-DEBUG-18-Mar-23 16:06:15-включение watchdog
+root-DEBUG-18-Mar-23 16:06:15-поток стартовал
+root-DEBUG-18-Mar-23 16:06:15-cfg.ON_TRANSFER_DATA_COUNTER=False
+root-DEBUG-18-Mar-23 16:06:17- открытие окна вывода таблицы профиля мощности
+root-DEBUG-18-Mar-23 16:17:06-логирование включено
+root-DEBUG-18-Mar-23 16:17:06-создание главного окна
+root-INFO-18-Mar-23 16:17:06-подключение файла БД...
+root-INFO-18-Mar-23 16:17:06-Проверка наличия файла БД SQLite Z:\Python\CfgMercury\DB\ViewMercuryDB.sqlite...
+root-INFO-18-Mar-23 16:17:06-файл БД найден
+root-INFO-18-Mar-23 16:17:06-База данных создана и успешно подключена к SQLite
+root-DEBUG-18-Mar-23 16:17:06-Версия базы данных SQLite: [('3.28.0',)]
+root-DEBUG-18-Mar-23 16:17:06-Соединение с SQLite закрыто
+root-DEBUG-18-Mar-23 16:17:06-старт потока
+root-DEBUG-18-Mar-23 16:17:06-включение watchdog
+root-DEBUG-18-Mar-23 16:17:06-поток стартовал
+root-DEBUG-18-Mar-23 16:17:06-cfg.ON_TRANSFER_DATA_COUNTER=False
+root-DEBUG-18-Mar-23 16:17:08- открытие окна вывода таблицы профиля мощности
+root-DEBUG-18-Mar-23 16:26:51-логирование включено
+root-DEBUG-18-Mar-23 16:26:51-создание главного окна
+root-INFO-18-Mar-23 16:26:51-подключение файла БД...
+root-INFO-18-Mar-23 16:26:51-Проверка наличия файла БД SQLite Z:\Python\CfgMercury\DB\ViewMercuryDB.sqlite...
+root-INFO-18-Mar-23 16:26:51-файл БД найден
+root-INFO-18-Mar-23 16:26:51-База данных создана и успешно подключена к SQLite
+root-DEBUG-18-Mar-23 16:26:51-Версия базы данных SQLite: [('3.28.0',)]
+root-DEBUG-18-Mar-23 16:26:51-Соединение с SQLite закрыто
+root-DEBUG-18-Mar-23 16:26:51-старт потока
+root-DEBUG-18-Mar-23 16:26:51-включение watchdog
+root-DEBUG-18-Mar-23 16:26:51-поток стартовал
+root-DEBUG-18-Mar-23 16:26:51-cfg.ON_TRANSFER_DATA_COUNTER=False
+root-DEBUG-18-Mar-23 16:26:56- открытие окна вывода таблицы профиля мощности
+root-DEBUG-18-Mar-23 16:28:42-логирование включено
+root-DEBUG-18-Mar-23 16:28:42-создание главного окна
+root-INFO-18-Mar-23 16:28:42-подключение файла БД...
+root-INFO-18-Mar-23 16:28:42-Проверка наличия файла БД SQLite Z:\Python\CfgMercury\DB\ViewMercuryDB.sqlite...
+root-INFO-18-Mar-23 16:28:42-файл БД найден
+root-INFO-18-Mar-23 16:28:42-База данных создана и успешно подключена к SQLite
+root-DEBUG-18-Mar-23 16:28:42-Версия базы данных SQLite: [('3.28.0',)]
+root-DEBUG-18-Mar-23 16:28:42-Соединение с SQLite закрыто
+root-DEBUG-18-Mar-23 16:28:42-старт потока
+root-DEBUG-18-Mar-23 16:28:42-включение watchdog
+root-DEBUG-18-Mar-23 16:28:42-поток стартовал
+root-DEBUG-18-Mar-23 16:28:42-cfg.ON_TRANSFER_DATA_COUNTER=False
+root-DEBUG-18-Mar-23 16:28:44- открытие окна вывода таблицы профиля мощности
+root-DEBUG-18-Mar-23 16:29:54-логирование включено
+root-DEBUG-18-Mar-23 16:29:54-создание главного окна
+root-INFO-18-Mar-23 16:29:54-подключение файла БД...
+root-INFO-18-Mar-23 16:29:54-Проверка наличия файла БД SQLite Z:\Python\CfgMercury\DB\ViewMercuryDB.sqlite...
+root-INFO-18-Mar-23 16:29:54-файл БД найден
+root-INFO-18-Mar-23 16:29:54-База данных создана и успешно подключена к SQLite
+root-DEBUG-18-Mar-23 16:29:54-Версия базы данных SQLite: [('3.28.0',)]
+root-DEBUG-18-Mar-23 16:29:54-Соединение с SQLite закрыто
+root-DEBUG-18-Mar-23 16:29:54-старт потока
+root-DEBUG-18-Mar-23 16:29:54-включение watchdog
+root-DEBUG-18-Mar-23 16:29:54-поток стартовал
+root-DEBUG-18-Mar-23 16:29:54-cfg.ON_TRANSFER_DATA_COUNTER=False
+root-DEBUG-18-Mar-23 16:29:56- открытие окна вывода таблицы профиля мощности
+root-DEBUG-18-Mar-23 16:30:42-логирование включено
+root-DEBUG-18-Mar-23 16:30:42-создание главного окна
+root-INFO-18-Mar-23 16:30:42-подключение файла БД...
+root-INFO-18-Mar-23 16:30:42-Проверка наличия файла БД SQLite Z:\Python\CfgMercury\DB\ViewMercuryDB.sqlite...
+root-INFO-18-Mar-23 16:30:42-файл БД найден
+root-INFO-18-Mar-23 16:30:42-База данных создана и успешно подключена к SQLite
+root-DEBUG-18-Mar-23 16:30:42-Версия базы данных SQLite: [('3.28.0',)]
+root-DEBUG-18-Mar-23 16:30:42-Соединение с SQLite закрыто
+root-DEBUG-18-Mar-23 16:30:42-старт потока
+root-DEBUG-18-Mar-23 16:30:42-включение watchdog
+root-DEBUG-18-Mar-23 16:30:42-поток стартовал
+root-DEBUG-18-Mar-23 16:30:42-cfg.ON_TRANSFER_DATA_COUNTER=False
+root-DEBUG-18-Mar-23 16:30:43- открытие окна вывода таблицы профиля мощности
+root-DEBUG-18-Mar-23 16:32:17-логирование включено
+root-DEBUG-18-Mar-23 16:32:17-создание главного окна
+root-INFO-18-Mar-23 16:32:17-подключение файла БД...
+root-INFO-18-Mar-23 16:32:17-Проверка наличия файла БД SQLite Z:\Python\CfgMercury\DB\ViewMercuryDB.sqlite...
+root-INFO-18-Mar-23 16:32:17-файл БД найден
+root-INFO-18-Mar-23 16:32:17-База данных создана и успешно подключена к SQLite
+root-DEBUG-18-Mar-23 16:32:17-Версия базы данных SQLite: [('3.28.0',)]
+root-DEBUG-18-Mar-23 16:32:17-Соединение с SQLite закрыто
+root-DEBUG-18-Mar-23 16:32:17-старт потока
+root-DEBUG-18-Mar-23 16:32:17-включение watchdog
+root-DEBUG-18-Mar-23 16:32:17-поток стартовал
+root-DEBUG-18-Mar-23 16:32:17-cfg.ON_TRANSFER_DATA_COUNTER=False
+root-DEBUG-18-Mar-23 16:32:19- открытие окна вывода таблицы профиля мощности
+root-DEBUG-18-Mar-23 16:34:42-логирование включено
+root-DEBUG-18-Mar-23 16:34:42-создание главного окна
+root-INFO-18-Mar-23 16:34:42-подключение файла БД...
+root-INFO-18-Mar-23 16:34:42-Проверка наличия файла БД SQLite Z:\Python\CfgMercury\DB\ViewMercuryDB.sqlite...
+root-INFO-18-Mar-23 16:34:42-файл БД найден
+root-INFO-18-Mar-23 16:34:42-База данных создана и успешно подключена к SQLite
+root-DEBUG-18-Mar-23 16:34:42-Версия базы данных SQLite: [('3.28.0',)]
+root-DEBUG-18-Mar-23 16:34:42-Соединение с SQLite закрыто
+root-DEBUG-18-Mar-23 16:34:42-старт потока
+root-DEBUG-18-Mar-23 16:34:42-включение watchdog
+root-DEBUG-18-Mar-23 16:34:42-поток стартовал
+root-DEBUG-18-Mar-23 16:34:42-cfg.ON_TRANSFER_DATA_COUNTER=False
+root-DEBUG-18-Mar-23 16:34:43- открытие окна вывода таблицы профиля мощности
+root-DEBUG-18-Mar-23 16:35:35-логирование включено
+root-DEBUG-18-Mar-23 16:35:35-создание главного окна
+root-INFO-18-Mar-23 16:35:35-подключение файла БД...
+root-INFO-18-Mar-23 16:35:35-Проверка наличия файла БД SQLite Z:\Python\CfgMercury\DB\ViewMercuryDB.sqlite...
+root-INFO-18-Mar-23 16:35:35-файл БД найден
+root-INFO-18-Mar-23 16:35:35-База данных создана и успешно подключена к SQLite
+root-DEBUG-18-Mar-23 16:35:35-Версия базы данных SQLite: [('3.28.0',)]
+root-DEBUG-18-Mar-23 16:35:35-Соединение с SQLite закрыто
+root-DEBUG-18-Mar-23 16:35:35-старт потока
+root-DEBUG-18-Mar-23 16:35:35-включение watchdog
+root-DEBUG-18-Mar-23 16:35:35-поток стартовал
+root-DEBUG-18-Mar-23 16:35:35-cfg.ON_TRANSFER_DATA_COUNTER=False
+root-DEBUG-18-Mar-23 16:35:37- открытие окна вывода таблицы профиля мощности
+root-DEBUG-18-Mar-23 16:37:47-логирование включено
+root-DEBUG-18-Mar-23 16:37:47-создание главного окна
+root-INFO-18-Mar-23 16:37:48-подключение файла БД...
+root-INFO-18-Mar-23 16:37:48-Проверка наличия файла БД SQLite Z:\Python\CfgMercury\DB\ViewMercuryDB.sqlite...
+root-INFO-18-Mar-23 16:37:48-файл БД найден
+root-INFO-18-Mar-23 16:37:48-База данных создана и успешно подключена к SQLite
+root-DEBUG-18-Mar-23 16:37:48-Версия базы данных SQLite: [('3.28.0',)]
+root-DEBUG-18-Mar-23 16:37:48-Соединение с SQLite закрыто
+root-DEBUG-18-Mar-23 16:37:48-старт потока
+root-DEBUG-18-Mar-23 16:37:48-включение watchdog
+root-DEBUG-18-Mar-23 16:37:48-поток стартовал
+root-DEBUG-18-Mar-23 16:37:48-cfg.ON_TRANSFER_DATA_COUNTER=False
+root-DEBUG-18-Mar-23 16:37:50- открытие окна вывода таблицы профиля мощности
+root-INFO-18-Mar-23 16:38:01-Заполнение таблицы DBPP значением с datetime
+root-DEBUG-18-Mar-23 16:39:54-логирование включено
+root-DEBUG-18-Mar-23 16:39:54-создание главного окна
+root-INFO-18-Mar-23 16:39:54-подключение файла БД...
+root-INFO-18-Mar-23 16:39:54-Проверка наличия файла БД SQLite Z:\Python\CfgMercury\DB\ViewMercuryDB.sqlite...
+root-INFO-18-Mar-23 16:39:54-файл БД найден
+root-INFO-18-Mar-23 16:39:54-База данных создана и успешно подключена к SQLite
+root-DEBUG-18-Mar-23 16:39:54-Версия базы данных SQLite: [('3.28.0',)]
+root-DEBUG-18-Mar-23 16:39:54-Соединение с SQLite закрыто
+root-DEBUG-18-Mar-23 16:39:54-старт потока
+root-DEBUG-18-Mar-23 16:39:54-включение watchdog
+root-DEBUG-18-Mar-23 16:39:54-поток стартовал
+root-DEBUG-18-Mar-23 16:39:55-cfg.ON_TRANSFER_DATA_COUNTER=False
+root-DEBUG-18-Mar-23 16:39:56- открытие окна вывода таблицы профиля мощности
+root-INFO-18-Mar-23 16:40:08-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:40:08-Заполнение таблицы DBPP значением с datetime...OK
+root-DEBUG-18-Mar-23 16:51:09-логирование включено
+root-DEBUG-18-Mar-23 16:51:09-создание главного окна
+root-INFO-18-Mar-23 16:51:09-подключение файла БД...
+root-INFO-18-Mar-23 16:51:09-Проверка наличия файла БД SQLite Z:\Python\CfgMercury\DB\ViewMercuryDB.sqlite...
+root-INFO-18-Mar-23 16:51:09-файл БД найден
+root-INFO-18-Mar-23 16:51:09-База данных создана и успешно подключена к SQLite
+root-DEBUG-18-Mar-23 16:51:09-Версия базы данных SQLite: [('3.28.0',)]
+root-DEBUG-18-Mar-23 16:51:09-Соединение с SQLite закрыто
+root-DEBUG-18-Mar-23 16:51:09-старт потока
+root-DEBUG-18-Mar-23 16:51:09-включение watchdog
+root-DEBUG-18-Mar-23 16:51:09-поток стартовал
+root-DEBUG-18-Mar-23 16:51:09-cfg.ON_TRANSFER_DATA_COUNTER=False
+root-DEBUG-18-Mar-23 16:51:11- открытие окна вывода таблицы профиля мощности
+root-INFO-18-Mar-23 16:51:11-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:11-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:11-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:11-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:11-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:12-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:12-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:12-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:12-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:12-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:12-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:12-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:12-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:13-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:13-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:13-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:13-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:13-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:13-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:13-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:13-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:13-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:13-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:13-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:14-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:14-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:14-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:14-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:14-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:14-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:14-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:14-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:14-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:14-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:14-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:14-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:14-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:15-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:15-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:15-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:15-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:15-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:15-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:15-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:15-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:16-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:16-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:16-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:16-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:16-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:16-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:16-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:16-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:16-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:16-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:16-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:16-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:17-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:17-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:17-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:17-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:17-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:17-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:17-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:17-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:17-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:17-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:17-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:17-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:18-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:18-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:18-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:18-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:18-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:18-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:18-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:18-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:19-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:19-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:19-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:19-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:19-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:19-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:19-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:19-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:19-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:19-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:19-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:19-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:20-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:20-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:20-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:20-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:21-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:21-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:21-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:21-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:21-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:21-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:21-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:21-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:21-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:21-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:21-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:21-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:21-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:21-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:22-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:22-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:22-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:22-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:22-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:22-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:22-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:22-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:22-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:22-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:23-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:23-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:23-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:23-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:23-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:23-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:23-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:23-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:23-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:23-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:23-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:23-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:23-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:23-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:24-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:24-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:24-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:24-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:24-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:24-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:24-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:24-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:24-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:24-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:25-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:25-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:25-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:25-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:25-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:25-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:25-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:25-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:25-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:25-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:25-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:25-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:26-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:26-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:26-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:26-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:26-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:26-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:26-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:26-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:26-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:26-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:26-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:26-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:27-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:27-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:27-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:27-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:27-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:27-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:27-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:27-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:27-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:27-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:28-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:28-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:28-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:28-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:28-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:28-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:28-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:28-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:28-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:28-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:28-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:28-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:29-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:29-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:29-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:29-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:29-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:29-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:29-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:29-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:29-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:29-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:30-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:30-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:30-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:30-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:30-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:30-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:30-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:30-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:30-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:30-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:31-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:31-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:31-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:31-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:31-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:31-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:31-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:31-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:31-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:31-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:31-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:31-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:32-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:32-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:32-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:32-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:32-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:32-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:32-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:32-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:32-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:32-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:32-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:32-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:33-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:33-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:33-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:33-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:33-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:33-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:33-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:33-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:33-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:33-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:33-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:34-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:34-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:34-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:34-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:34-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:34-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:34-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:34-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:34-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:34-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:34-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:35-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:35-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:35-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:35-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:35-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:35-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:35-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:35-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:35-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:35-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:36-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:36-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:36-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:36-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:36-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:36-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:36-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:36-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:36-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:36-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:36-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:36-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:37-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:37-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:37-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:37-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:37-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:37-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:37-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:37-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:37-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:37-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:37-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:37-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:38-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:38-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:38-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:38-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:38-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:38-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:38-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:38-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:38-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:38-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:38-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:38-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:39-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:39-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:39-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:39-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:39-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:39-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:39-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:39-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:39-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:39-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:40-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:40-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:40-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:40-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:40-Заполнение таблицы DBPP значением с datetime...OK
+root-INFO-18-Mar-23 16:51:40-Заполнение таблицы DBPP значением с datetime
+root-INFO-18-Mar-23 16:51:40-Заполнение таблицы DBPP значением с datetime...OK
+root-DEBUG-18-Mar-23 16:52:47-закрытие главного окна
+root-DEBUG-18-Mar-23 16:52:47-закрытие потока...
+root-DEBUG-18-Mar-23 16:52:47-закрытие потока...ОК
+root-DEBUG-18-Mar-23 17:27:02-логирование включено
+root-DEBUG-18-Mar-23 17:27:02-создание главного окна
+root-INFO-18-Mar-23 17:27:02-подключение файла БД...
+root-INFO-18-Mar-23 17:27:02-Проверка наличия файла БД SQLite Z:\Python\CfgMercury\DB\ViewMercuryDB.sqlite...
+root-INFO-18-Mar-23 17:27:02-файл БД найден
+root-INFO-18-Mar-23 17:27:02-База данных создана и успешно подключена к SQLite
+root-DEBUG-18-Mar-23 17:27:02-Версия базы данных SQLite: [('3.28.0',)]
+root-DEBUG-18-Mar-23 17:27:02-Соединение с SQLite закрыто
+root-DEBUG-18-Mar-23 17:27:02-старт потока
+root-DEBUG-18-Mar-23 17:27:02-включение watchdog
+root-DEBUG-18-Mar-23 17:27:02-поток стартовал
+root-DEBUG-18-Mar-23 17:27:03-cfg.ON_TRANSFER_DATA_COUNTER=False
+root-DEBUG-18-Mar-23 17:27:06-открытие окна Параметры и настройки счетчика
+root-DEBUG-18-Mar-23 17:27:16-открытие окна редактирования счетчиков и групп
+root-DEBUG-18-Mar-23 17:28:35- открытие окна вывода таблицы профиля мощности
+root-DEBUG-18-Mar-23 17:30:02-закрытие главного окна
+root-DEBUG-18-Mar-23 17:30:02-закрытие потока...
+root-DEBUG-18-Mar-23 17:30:02-закрытие потока...ОК
+root-DEBUG-18-Mar-23 17:42:51-логирование включено
+root-DEBUG-18-Mar-23 17:42:51-создание главного окна
+root-INFO-18-Mar-23 17:42:51-подключение файла БД...
+root-INFO-18-Mar-23 17:42:51-Проверка наличия файла БД SQLite Z:\Python\CfgMercury\DB\ViewMercuryDB.sqlite...
+root-INFO-18-Mar-23 17:42:51-файл БД найден
+root-INFO-18-Mar-23 17:42:51-База данных создана и успешно подключена к SQLite
+root-DEBUG-18-Mar-23 17:42:51-Версия базы данных SQLite: [('3.28.0',)]
+root-DEBUG-18-Mar-23 17:42:51-Соединение с SQLite закрыто
+root-DEBUG-18-Mar-23 17:42:51-старт потока
+root-DEBUG-18-Mar-23 17:42:51-включение watchdog
+root-DEBUG-18-Mar-23 17:42:51-поток стартовал
+root-DEBUG-18-Mar-23 17:42:51-cfg.ON_TRANSFER_DATA_COUNTER=False
+root-DEBUG-18-Mar-23 17:42:53- открытие окна вывода таблицы профиля мощности
+root-DEBUG-18-Mar-23 17:43:05-закрытие главного окна
+root-DEBUG-18-Mar-23 17:43:05-закрытие потока...
+root-DEBUG-18-Mar-23 17:43:05-закрытие потока...ОК
+root-DEBUG-18-Mar-23 17:43:37-логирование включено
+root-DEBUG-18-Mar-23 17:43:37-создание главного окна
+root-INFO-18-Mar-23 17:43:37-подключение файла БД...
+root-INFO-18-Mar-23 17:43:37-Проверка наличия файла БД SQLite Z:\Python\CfgMercury\DB\ViewMercuryDB.sqlite...
+root-INFO-18-Mar-23 17:43:37-файл БД найден
+root-INFO-18-Mar-23 17:43:37-База данных создана и успешно подключена к SQLite
+root-DEBUG-18-Mar-23 17:43:37-Версия базы данных SQLite: [('3.28.0',)]
+root-DEBUG-18-Mar-23 17:43:37-Соединение с SQLite закрыто
+root-DEBUG-18-Mar-23 17:43:37-старт потока
+root-DEBUG-18-Mar-23 17:43:37-включение watchdog
+root-DEBUG-18-Mar-23 17:43:37-поток стартовал
+root-DEBUG-18-Mar-23 17:43:37-cfg.ON_TRANSFER_DATA_COUNTER=False
+root-DEBUG-18-Mar-23 17:43:39- открытие окна вывода таблицы профиля мощности
+root-DEBUG-18-Mar-23 17:45:09-закрытие главного окна
+root-DEBUG-18-Mar-23 17:45:09-закрытие потока...
+root-DEBUG-18-Mar-23 17:45:09-закрытие потока...ОК
+root-DEBUG-18-Mar-23 17:47:52-логирование включено
+root-DEBUG-18-Mar-23 17:47:52-создание главного окна
+root-INFO-18-Mar-23 17:47:52-подключение файла БД...
+root-INFO-18-Mar-23 17:47:52-Проверка наличия файла БД SQLite Z:\Python\CfgMercury\DB\ViewMercuryDB.sqlite...
+root-INFO-18-Mar-23 17:47:52-файл БД найден
+root-INFO-18-Mar-23 17:47:52-База данных создана и успешно подключена к SQLite
+root-DEBUG-18-Mar-23 17:47:52-Версия базы данных SQLite: [('3.28.0',)]
+root-DEBUG-18-Mar-23 17:47:52-Соединение с SQLite закрыто
+root-DEBUG-18-Mar-23 17:47:52-старт потока
+root-DEBUG-18-Mar-23 17:47:52-включение watchdog
+root-DEBUG-18-Mar-23 17:47:52-поток стартовал
+root-DEBUG-18-Mar-23 17:47:52-cfg.ON_TRANSFER_DATA_COUNTER=False
+root-DEBUG-18-Mar-23 17:47:54- открытие окна вывода таблицы профиля мощности
+root-DEBUG-18-Mar-23 17:48:49-закрытие главного окна
+root-DEBUG-18-Mar-23 17:48:49-закрытие потока...
+root-DEBUG-18-Mar-23 17:48:49-закрытие потока...ОК
+root-DEBUG-18-Mar-23 18:33:12-логирование включено
+root-DEBUG-18-Mar-23 18:33:12-создание главного окна
+root-INFO-18-Mar-23 18:33:12-подключение файла БД...
+root-INFO-18-Mar-23 18:33:12-Проверка наличия файла БД SQLite Z:\Python\CfgMercury\DB\ViewMercuryDB.sqlite...
+root-INFO-18-Mar-23 18:33:12-файл БД найден
+root-INFO-18-Mar-23 18:33:12-База данных создана и успешно подключена к SQLite
+root-DEBUG-18-Mar-23 18:33:12-Версия базы данных SQLite: [('3.28.0',)]
+root-DEBUG-18-Mar-23 18:33:12-Соединение с SQLite закрыто
+root-DEBUG-18-Mar-23 18:33:12-старт потока
+root-DEBUG-18-Mar-23 18:33:12-включение watchdog
+root-DEBUG-18-Mar-23 18:33:12-поток стартовал
+root-DEBUG-18-Mar-23 18:33:12-cfg.ON_TRANSFER_DATA_COUNTER=False
+root-DEBUG-18-Mar-23 18:33:15- открытие окна вывода таблицы профиля мощности
+root-DEBUG-18-Mar-23 18:36:20-закрытие главного окна
+root-DEBUG-18-Mar-23 18:36:20-закрытие потока...
+root-DEBUG-18-Mar-23 18:36:20-закрытие потока...ОК
+root-INFO-18-Mar-23 18:36:24-подключение файла БД...
+root-INFO-18-Mar-23 18:36:24-Проверка наличия файла БД SQLite Z:\Python\CfgMercury\DB\ViewMercuryDB.sqlite...
+root-INFO-18-Mar-23 18:36:24-файл БД найден
+root-INFO-18-Mar-23 18:36:24-База данных создана и успешно подключена к SQLite
+root-INFO-19-Mar-23 10:11:47-подключение файла БД...
+root-INFO-19-Mar-23 10:11:47-Проверка наличия файла БД SQLite Z:\Python\CfgMercury\DB\ViewMercuryDB.sqlite...
+root-INFO-19-Mar-23 10:11:47-файл БД найден
+root-INFO-19-Mar-23 10:11:47-База данных создана и успешно подключена к SQLite
+root-INFO-19-Mar-23 10:16:35-подключение файла БД...
+root-INFO-19-Mar-23 10:16:35-Проверка наличия файла БД SQLite Z:\Python\CfgMercury\DB\ViewMercuryDB.sqlite...
+root-INFO-19-Mar-23 10:16:35-файл БД найден
+root-INFO-19-Mar-23 10:16:35-База данных создана и успешно подключена к SQLite
+root-INFO-19-Mar-23 10:19:15-подключение файла БД...
+root-INFO-19-Mar-23 10:19:15-Проверка наличия файла БД SQLite Z:\Python\CfgMercury\DB\ViewMercuryDB.sqlite...
+root-INFO-19-Mar-23 10:19:15-файл БД найден
+root-INFO-19-Mar-23 10:19:15-База данных создана и успешно подключена к SQLite
+root-INFO-19-Mar-23 10:21:59-подключение файла БД...
+root-INFO-19-Mar-23 10:21:59-Проверка наличия файла БД SQLite Z:\Python\CfgMercury\DB\ViewMercuryDB.sqlite...
+root-INFO-19-Mar-23 10:21:59-файл БД найден
+root-INFO-19-Mar-23 10:21:59-База данных создана и успешно подключена к SQLite
+root-INFO-19-Mar-23 10:24:09-подключение файла БД...
+root-INFO-19-Mar-23 10:24:09-Проверка наличия файла БД SQLite Z:\Python\CfgMercury\DB\ViewMercuryDB.sqlite...
+root-INFO-19-Mar-23 10:24:09-файл БД найден
+root-INFO-19-Mar-23 10:24:09-База данных создана и успешно подключена к SQLite
+root-INFO-19-Mar-23 10:26:12-подключение файла БД...
+root-INFO-19-Mar-23 10:26:12-Проверка наличия файла БД SQLite Z:\Python\CfgMercury\DB\ViewMercuryDB.sqlite...
+root-INFO-19-Mar-23 10:26:12-файл БД найден
+root-INFO-19-Mar-23 10:26:12-База данных создана и успешно подключена к SQLite
+root-INFO-19-Mar-23 10:28:02-подключение файла БД...
+root-INFO-19-Mar-23 10:28:02-Проверка наличия файла БД SQLite Z:\Python\CfgMercury\DB\ViewMercuryDB.sqlite...
+root-INFO-19-Mar-23 10:28:02-файл БД найден
+root-INFO-19-Mar-23 10:28:02-База данных создана и успешно подключена к SQLite
+root-INFO-19-Mar-23 17:52:56-подключение файла БД...
+root-INFO-19-Mar-23 17:52:56-Проверка наличия файла БД SQLite Z:\Python\CfgMercury\DB\ViewMercuryDB.sqlite...
+root-INFO-19-Mar-23 17:52:56-файл БД найден
+root-INFO-19-Mar-23 17:52:56-База данных создана и успешно подключена к SQLite
+root-INFO-19-Mar-23 17:52:56-update_190313 применен
+root-INFO-19-Mar-23 17:54:51-подключение файла БД...
+root-INFO-19-Mar-23 17:54:51-Проверка наличия файла БД SQLite Z:\Python\CfgMercury\DB\ViewMercuryDB.sqlite...
+root-INFO-19-Mar-23 17:54:51-файл БД найден
+root-INFO-19-Mar-23 17:54:51-База данных создана и успешно подключена к SQLite

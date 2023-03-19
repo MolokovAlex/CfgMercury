@@ -11,7 +11,7 @@ from PyQt5.QtGui import *
 # from time import time
 import numpy as np
 import datetime # обязательно до import sqlite3 as sql3  !!!!!
-# from datetime import date, timedelta
+from datetime import date, timedelta
 # from statistics import mean
 # import sqlite3 as sql3
 from xlsxwriter.workbook import Workbook
@@ -84,6 +84,11 @@ class TableProfilePowerDialog(QDialog):
             self.cb_interval.currentIndexChanged.connect( self.change_cb_interval )
             self.period_integr = self.cb_interval.currentText()
 
+            self.cbox = QCheckBox("применить kU и kI")
+            self.cbox.setChecked(False)
+            self.cbox.toggled.connect(self.onClicked_cbox) 
+            layout.addWidget(self.cbox, 0, 8)
+
             self.btnRefreshTableProfilePowerCounts = QPushButton("Обновить")
             layout.addWidget(self.btnRefreshTableProfilePowerCounts, 0, 9)
             self.btnRefreshTableProfilePowerCounts.clicked.connect(self.click_btnRefreshTableProfilePowerCounts_ver2)
@@ -136,6 +141,15 @@ class TableProfilePowerDialog(QDialog):
 
             # self.load()
             self.tableProfilePowerCounts.resizeColumnsToContents()
+
+            return None
+        
+        def onClicked_cbox(self):
+            cbutton = self.sender()
+            if self.cbox.isChecked():
+                cfg.check_KU_KI = True
+            else:
+                cfg.check_KU_KI = False
             return None
         
         def emit_string_statusBar(self, strg):
@@ -248,7 +262,7 @@ class TableProfilePowerDialog(QDialog):
                 self.emit_value(25)
                 #
                 for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
-                    rezult, lst_data = msql.selectPandQfromDBPP(item_counter=item_counter, item_datetime=None, dateFrom=dateFrom_full, dateTo=dateTo_full)
+                    rezult, lst_data = msql.selectPandQfromDBPP(item_counter=item_counter, dateFrom=dateFrom_full, dateTo=dateTo_full)
                     if rezult:
                         arr_dataDB = np.array(lst_data)
                         # корректировка данных профиля мощности  полученных из БД - добавление пустых пропущенных/напринятых профилей 30-минуток

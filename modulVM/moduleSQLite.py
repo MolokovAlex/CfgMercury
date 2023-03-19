@@ -758,7 +758,7 @@ def insert_TableDBPP_value(dictData: dict):
     return  flag_rezult
 
 
-def selectPandQfromDBPP(item_counter, item_datetime=None,dateFrom=None, dateTo=None):
+def selectPandQfromDBPP(item_counter, dateFrom=None, dateTo=None):
     flag_rezult = False
     dic_out_data = {}
     lst_pole = ['datetime','P_plus', 'P_minus', 'Q_plus', 'Q_minus']
@@ -794,7 +794,38 @@ def selectPandQfromDBPP(item_counter, item_datetime=None,dateFrom=None, dateTo=N
     return flag_rezult, lst_out_data
 
 
+def select_zero_Power_from_DBPP(id_counter, date_time=None):
+    flag_rezult = False
+    # dic_out_data = {}
+    # lst_pole = ['datetime','P_plus', 'P_minus', 'Q_plus', 'Q_minus']
+    cursorDB = cfg.sql_base_conn.cursor()
+    with cfg.sql_base_conn:
+        cursorDB.execute("""SELECT P_plus FROM DBPP WHERE id_counter=? AND 
+                                                                                        datetime = ? AND
+                                                                                        period_int ='30'
+                                                                                        """, (id_counter, date_time))
+        data = cursorDB.fetchall() 
+    # lst_out_data = []
+    if data:
+        # lst_out_data = []
+        # for num_row, item_row in enumerate(data):
+        #     lst = []
+        #     lst.append(int(item_row[0][:-15]))
+        #     lst.append(int(item_row[0][5:-12]))
+        #     lst.append(int(item_row[0][8:-9]))
+        #     lst.append(int(item_row[0][11:-6]))
+        #     lst.append(int(item_row[0][14:-3]))
+        #     lst.append(    item_row[1])
+        #     lst.append(    item_row[2])
+        #     lst.append(    item_row[3])
+        #     lst.append(    item_row[4])
+        #     lst_out_data.append(lst)
 
+        flag_rezult = True
+    else:
+        flag_rezult = False
+        # lst_out_data = []
+    return flag_rezult, data
 
 
 

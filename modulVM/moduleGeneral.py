@@ -113,7 +113,7 @@ def createLstIntervalDateTime(dateFrom:datetime, dateTo:datetime, stepTime:int):
                 # создадим список с интервалом между штампами времени stepTime минут
                 newdatetime = dateFrom
                 while newdatetime <= dateTo:# + timedelta(days=1))):
-                    lst_IntervalDateTime.append(newdatetime)
+                    lst_IntervalDateTime.append(newdatetime.replace(second=0, microsecond=0))
                     lst = []
                     lst.append(int(newdatetime.strftime("%Y")))
                     lst.append(int(newdatetime.strftime("%m")))
@@ -641,8 +641,12 @@ def kWT(arr_data, arr_axisTime, lst_checked_group_and_conters):
                 if itemCounter['id'] == item_counter:
                     # применим постоянную счетчика A и коэфф ku,ki
                     koefA = itemCounter['koefA']
-                    ki = 1 #float(itemCounter['ki'])
-                    ku = 1 #float(itemCounter['ku'])
+                    if cfg.check_KU_KI:
+                        ki = float(itemCounter['ki'])
+                        ku = float(itemCounter['ku'])
+                    else:
+                        ki = 1 #float(itemCounter['ki'])
+                        ku = 1 #float(itemCounter['ku'])
                     if (koefA == 0) or (koefA == ''): 
                         koefA = 1.0     # защита от дел на ноль ели в базе каким-то образом не оказалось этого коэффициента
                     # по всем временным меткам
@@ -815,7 +819,7 @@ def create_header_table(lst_checked_counter):
                     if item['id'] == itemGroup:
                         name_group = item["name_group_full"]
                 #
-                lst_header_table.append("Группа:" + name_group +"\n"+"\n"+name_counter)
+                lst_header_table.append("Группа:" + name_group +"\n "+"\n "+name_counter)
                 # lst_header_table.append(name_counter)
                 num_counters_in_groups +=1
             index_color +=1
