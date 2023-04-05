@@ -17,6 +17,8 @@ class SetSettingsConnectionDialog(QDialog):
     """
     класс окна Настройки и параметры программы
     """
+    signal_startThreadCOM = pyqtSignal()
+    signal_stopThreadCOM = pyqtSignal()
     def __init__(self):
         super().__init__()
 
@@ -189,7 +191,10 @@ class SetSettingsConnectionDialog(QDialog):
         ml.logger.debug(f"cfg.port_COM={cfg.port_COM}")
         ml.logger.debug(f"cfg.baudrateRS485={cfg.baudrateRS485}")
         ml.logger.debug(f"cfg.parityRS485={cfg.parityRS485}")
-        ml.logger.debug(f"cfg.ON_TRANSFER_DATA_COUNTER={cfg.ON_TRANSFER_DATA_COUNTER}")       
+        ml.logger.debug(f"cfg.ON_TRANSFER_DATA_COUNTER={cfg.ON_TRANSFER_DATA_COUNTER}")    
+
+        
+
         return None
     
     def rejectBtnDialogSettingsGroup(self):
@@ -202,6 +207,10 @@ class SetSettingsConnectionDialog(QDialog):
         """ закрытие окна
         """
         cfg.ON_TRANSFER_DATA_COUNTER = self.ckb_on_transfer_data_from_counter.isChecked()
+        if cfg.ON_TRANSFER_DATA_COUNTER:
+            self.signal_startThreadCOM.emit()
+        else:
+            self.signal_stopThreadCOM.emit()
         self.hide()
         return None
 

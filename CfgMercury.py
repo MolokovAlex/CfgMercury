@@ -39,6 +39,7 @@ if __name__ == "__main__":
     if not os.path.isdir(cfg.absDB_DIR): 
         os.mkdir(cfg.absDB_DIR)
     ml.setup_logging(cfg.absLOG_FILE)
+    ml.logger.debug('---------------------------- запуск программы -------------------------------------')
     main()
 
 

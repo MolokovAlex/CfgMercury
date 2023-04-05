@@ -6,7 +6,7 @@
 # модуль логгирования
 
 import logging
-# import modulVM.config as cfg
+import modulVM.config as cfg
 
 
 
@@ -19,8 +19,8 @@ def setup_logging(filename):
     file_handler_logger = logging.FileHandler(filename, 'a', 'utf-8') 
     consol_handler_logger.setLevel(logging.INFO)
     # consol_handler_logger.setLevel(logging.WARNING)
-    # file_handler_logger.setLevel(logging.DEBUG)
-    file_handler_logger.setLevel(logging.INFO)
+    if cfg.MODE_DEBUG: file_handler_logger.setLevel(logging.DEBUG)
+    else: file_handler_logger.setLevel(logging.INFO)
     f_format = logging.Formatter('%(name)s-%(levelname)s-%(asctime)s-%(message)s', datefmt='%d-%b-%y %H:%M:%S') 
     c_format = logging.Formatter('%(name)s-%(levelname)s-%(asctime)s-%(message)s', datefmt='%d-%b-%y %H:%M:%S')
     consol_handler_logger.setFormatter(c_format)

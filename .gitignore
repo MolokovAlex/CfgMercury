@@ -3,10 +3,15 @@
 
 ### NetBeans template
 modulVM/__pycache__
+modulVM\__pycache__
 Test_data/
+Test_data\
 venvVME1/
 venvVME/
 venvVMD/
 other_data/
+other_data\
 DB/
+DB\
 Log/
+Log\

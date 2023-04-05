@@ -124,8 +124,14 @@ def connection_to_port():
             cfg.handlerSocketConn = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
             cfg.handlerSocketConn.bind(('', cfg.port_IP))
             ml.logger.debug('успешно создано подключение по MODE_CONNECTION_IP_TO_CLIENT')
-        if (cfg.handlerSerialPortConn == None) or not(cfg.handlerSerialPortConn.is_open):
-            if cfg.MODE_CONNECT == cfg.MODE_CONNECTION_COM:
+        if cfg.MODE_CONNECT == cfg.MODE_CONNECTION_COM:
+            # если СОМ порт открыт почему-то - закроем его
+            if (cfg.handlerSerialPortConn != None): #or (cfg.handlerSerialPortConn.is_open):
+                cfg.handlerSerialPortConn.close()
+                ml.logger.info('при открытии порта СОМ обнаружен что он уже открыт.Порт закрыт.')
+                cfg.handlerSerialPortConn = None
+                # если порт закрыт - окрываем его
+            if (cfg.handlerSerialPortConn == None):# or not(cfg.handlerSerialPortConn.is_open):
                 if cfg.port_COM != 'Нет доступных портов':
                     cfg.handlerSerialPortConn  = serial.Serial(cfg.port_COM, baudrate=9600, 
                                 bytesize=serial.EIGHTBITS, 
@@ -142,9 +148,9 @@ def connection_to_port():
                 else:
                     ml.logger.error("Нет доступных портов для открытия", exc_info=True)
                     rezult = False
-        else:
-            ml.logger.error("Handler порта СОМ не закрыт!", exc_info=True)
-            rezult = False
+            else:
+                ml.logger.error("Handler порта СОМ не закрыт!", exc_info=True)
+                rezult = False
     except:
         # print ("Ошибка создании подключения")
         ml.logger.error("Ошибка создании подключения Exception occurred", exc_info=True)
@@ -165,10 +171,11 @@ def close_connection_to_port():
         #     cfg.handlerSocketConn.bind(('', cfg.port_IP))
         #     ml.logger.debug('успешно создано подключение по MODE_CONNECTION_IP_TO_CLIENT')
         if cfg.MODE_CONNECT == cfg.MODE_CONNECTION_COM:
-            if cfg.handlerSerialPortConn.is_open:
-                cfg.handlerSerialPortConn.close()
-                ml.logger.debug('успешно закрыто подключение по MODE_CONNECTION_COM')
-                rezult = True
+            # if cfg.handlerSerialPortConn.is_open:
+            cfg.handlerSerialPortConn.close()
+            cfg.handlerSerialPortConn = None
+            ml.logger.debug('успешно закрыто подключение по MODE_CONNECTION_COM')
+            rezult = True
     except:
         # print ("Ошибка создании подключения")
         ml.logger.error("Ошибка закрытия подключения Exception occurred", exc_info=True)
@@ -443,6 +450,25 @@ def fn_TestCanalConnection(numberNetAdress: int)-> bool:
         rezult = False
     return rezult
 
+def test_canal_connection(numberNetAdress: int)-> bool:
+    rezult = False
+    #  сделаем 3 иттераций-попыток достучаться до счетчика
+    is_itteration = True
+    num_itteration = 0
+    while is_itteration:
+        if fn_TestCanalConnection(numberNetAdress):
+            rezult = True
+            is_itteration = False
+            break
+        else: 
+            rezult = False
+            num_itteration +=1
+            if num_itteration == 3 : 
+                is_itteration = False
+    if not rezult:
+        ml.logger.error(f"поток:  __не прошел тест канала связи с NetAdress= {numberNetAdress}")
+    return rezult
+
 def fn_OpenCanalConnectionLevel1(numberNetAdress: int)-> bool:
     rezult = False
     len_build_packet = 9
@@ -465,6 +491,25 @@ def fn_OpenCanalConnectionLevel1(numberNetAdress: int)-> bool:
             rezult = False
     else:
         rezult = False
+    return rezult
+
+def open_canal_connection_level1(numberNetAdress: int)-> bool:
+    rezult = False
+    #  сделаем 3 иттераций-попыток достучаться до счетчика
+    is_itteration = True
+    num_itteration = 0
+    while is_itteration:
+        if fn_OpenCanalConnectionLevel1(numberNetAdress):
+            rezult = True
+            is_itteration = False
+            break
+        else: 
+            rezult = False
+            num_itteration +=1
+            if num_itteration == 3 : 
+                is_itteration = False
+    if not rezult:
+        ml.logger.error(f" поток: __не открылся канал связи с NetAdress= {numberNetAdress}")
     return rezult
 
 def fn_OpenCanalConnectionLevel2(numberNetAdress: int)-> bool:

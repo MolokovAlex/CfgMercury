@@ -305,15 +305,17 @@ class TableProfilePowerDialog(QDialog):
                                 num_rowDB +=1
                                 if num_rowDB >= np.shape(arr_dataDB)[0]: break
 
-
+                self.emit_value(30)
                 # теперь в массиве будут храниться числа с плавающей точкой
                 arr_data = np.array(arr_data, dtype=float)
                 # переведем абстрактные числа из БД в реальные используя коэфф счетчика A
                 arr_data = mg.kWT(arr_data, arr_TimeAxis_full, cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter)
                 #
+                self.emit_value(35)
                 # обрежем массив в соответвии с датами, которые выбрал пользователь
                 arr_data_custom, arr_TimeAxis_custom = mg.cut_arr_custom_time(arr_data, arr_TimeAxis_full, dateFrom, dateTo)
                 #
+                self.emit_value(40)
                 # найдем сумму для ВСЕГО 
                 arr_summ_Alltime, arr_summ_Alltime_Group =mg.summ_per_day_and_month_and_year_v2(arr_data_custom, arr_TimeAxis_custom, cfg.lst_checked_group, cfg.lst_checked_counter_in_group, cfg.lst_checked_single_counter)
                 #
@@ -322,7 +324,7 @@ class TableProfilePowerDialog(QDialog):
                 #
                 #  Сделаем ИТОГО за период по группе
                 summGroupPeriod = np.full(shape=(len(cfg.lst_checked_group)),fill_value=0.0, dtype=float)
-
+                self.emit_value(50)
                 # приведение к виду периода отображения
                 arr_data_custom, arr_TimeAxis_custom = mg.createView_periodView(arr_data_custom, arr_TimeAxis_custom, self.period_integr)
                 #
@@ -331,7 +333,7 @@ class TableProfilePowerDialog(QDialog):
                 # округлим все  float в массиве до трех знаков после запятой
                 arr_data_custom = np.around(arr_data_custom, 4)
                 #
-                
+                self.emit_value(60)
                 # перобразовать массив из  int в str чтобы добавлять текст "итого"
                 # преобразуем и дату и загоовок, а потом склеим
                 arr_data_custom = np.array(arr_data_custom, dtype=str)
@@ -396,6 +398,7 @@ class TableProfilePowerDialog(QDialog):
                 #
                 arr_Table = np.hstack((arr_TimeAxis_custom, arr_data_custom))
                 #
+                self.emit_value(70)
                 # # добавим в конец таблицы еще пустых строк (нужно для визуализации первой таблицы групп заголовков)
                 # leng = np.shape(arr_Table)[0]
                 # for i in range (0,30,1):
@@ -407,7 +410,7 @@ class TableProfilePowerDialog(QDialog):
                 self.model.set(self.data.copy())
                 self.tableProfilePowerCounts.resizeColumnsToContents()
                 
-
+                self.emit_value(90)
                 # # сделаем вторую таблицу, которая будет прсто шапкой над первой
                 # self.model2.lst_header_table = mg.create_header_table2(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter)
                 # self.data2 = arr_Table

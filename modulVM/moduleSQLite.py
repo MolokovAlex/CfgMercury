@@ -159,25 +159,16 @@ def createTableDBFile(nameFileDB:str)->bool:
             ml.logger.info("create_table_DBIC")
             cursorDB.execute(cfg.sql_create_table_DBIC)
             connectionDBFile.commit()
-            # print ("create_table_DBIP")
-            # cursorDB.execute(cfg.sql_create_table_DBIP)
-            # connectionDBFile.commit()
-            # print ("create_table_DBIKP")
-            # cursorDB.execute(cfg.sql_create_table_DBIKP)
-            # connectionDBFile.commit()
-            # print ("create_table_DBIE")
-            # cursorDB.execute(cfg.sql_create_table_DBIE)
-            connectionDBFile.commit()
 
-            cursorDB.execute(""" CREATE TABLE IF NOT EXISTS SERVICE (
-                                    id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
-                                    updateVM TEXT,
-                                    versionVM TEXT
-                                    );
-                                    """)
+
+            cursorDB.execute(cfg.sql_create_table_SERVICE)
             connectionDBFile.commit()
- 
             ml.logger.info("create_table_SERVICE")
+
+            # cursorDB.execute(cfg.sql_create_table_LOSTDATAPP)
+            # connectionDBFile.commit()
+            # ml.logger.info("create_table_LOSTDATAPP")
+
             FlagCreateTableDBf = True
     except sql3.Error as error_sql:
         ml.logger.error("Exception occurred", exc_info=True)
@@ -794,38 +785,28 @@ def selectPandQfromDBPP(item_counter, dateFrom=None, dateTo=None):
     return flag_rezult, lst_out_data
 
 
-def select_zero_Power_from_DBPP(id_counter, date_time=None):
+def select_zero_Power_from_DBPP(id_counter, date_time):
     flag_rezult = False
-    # dic_out_data = {}
-    # lst_pole = ['datetime','P_plus', 'P_minus', 'Q_plus', 'Q_minus']
-    cursorDB = cfg.sql_base_conn.cursor()
-    with cfg.sql_base_conn:
-        cursorDB.execute("""SELECT P_plus FROM DBPP WHERE id_counter=? AND 
-                                                                                        datetime = ? AND
-                                                                                        period_int ='30'
-                                                                                        """, (id_counter, date_time))
-        data = cursorDB.fetchall() 
-    # lst_out_data = []
-    if data:
-        # lst_out_data = []
-        # for num_row, item_row in enumerate(data):
-        #     lst = []
-        #     lst.append(int(item_row[0][:-15]))
-        #     lst.append(int(item_row[0][5:-12]))
-        #     lst.append(int(item_row[0][8:-9]))
-        #     lst.append(int(item_row[0][11:-6]))
-        #     lst.append(int(item_row[0][14:-3]))
-        #     lst.append(    item_row[1])
-        #     lst.append(    item_row[2])
-        #     lst.append(    item_row[3])
-        #     lst.append(    item_row[4])
-        #     lst_out_data.append(lst)
-
-        flag_rezult = True
-    else:
-        flag_rezult = False
-        # lst_out_data = []
+    try:
+        cursorDB = cfg.sql_base_conn.cursor()
+        with cfg.sql_base_conn:
+            cursorDB.execute("""SELECT P_plus FROM DBPP WHERE id_counter=? AND 
+                                                                datetime = ? AND
+                                                                period_int ='30'
+                                                                """, (id_counter, date_time))
+            data = cursorDB.fetchall() 
+        if data:
+            flag_rezult = True
+        else:
+            flag_rezult = False
+    except sql3.Error as error_sql:
+        ml.logger.error("Exception occurred", exc_info=True)
+        viewCodeError (error_sql)
+        rezult = False
     return flag_rezult, data
+
+
+
 
 
 
@@ -996,3 +977,67 @@ def selectItemFromDBIC_all_param_v2(item_counter, dateFrom=None, dateTo=None):
         flag_rezult = False
     return flag_rezult, lst_out_data 
 
+
+
+
+
+
+
+# ------------------------------------------------------------------------------------
+# ----------------- LOSTDATAPP -------------------------------------------------------
+# ------------------------------------------------------------------------------------
+
+def select_in_LOSTDATAPP(id_counter, date_time):
+    flag_rezult = False
+    try:
+        cursorDB = cfg.sql_base_conn.cursor()
+        with cfg.sql_base_conn:
+            cursorDB.execute("""SELECT datetime FROM LOSTDATAPP WHERE id_counter=? AND 
+                                                                datetime = ?
+                                                                """, (id_counter, date_time))
+            data = cursorDB.fetchall() 
+        if data:
+            flag_rezult = True
+        else:
+            flag_rezult = False
+    except sql3.Error as error_sql:
+        ml.logger.error("Exception occurred", exc_info=True)
+        viewCodeError (error_sql)
+        rezult = False
+    return flag_rezult, data
+
+def add_in_LOSTDATAPP(id_counter, date_time):
+    rezult = False
+    # newNameCounter.pop('id')
+    # a = newNameCounter.values()
+    # lst_newNameCounter = []
+    # for item in a:
+    #     lst_newNameCounter.append(item)
+    try:
+        cursorDB = cfg.sql_base_conn.cursor()
+        with cfg.sql_base_conn:
+                cursorDB.execute("""INSERT INTO LOSTDATAPP (id_counter, datetime) VALUES (?,?);""", (id_counter, date_time))
+                cfg.sql_base_conn.commit()
+                rezult = True
+    except sql3.Error as error_sql:
+        ml.logger.error("Exception occurred", exc_info=True)
+        viewCodeError (error_sql)
+        rezult = False
+    return rezult
+
+def delete_in_LOSTDATAPP(id_counter, datetime):
+    rezult_delete = False
+    try:
+        cursorDB = cfg.sql_base_conn.cursor()
+        with cfg.sql_base_conn:
+                cursorDB.execute("""DELETE FROM LOSTDATAPP WHERE id_counter=?
+                                                                AND
+                                                                datetime=?
+                                                                    ;""", (id_counter, datetime))
+                cfg.sql_base_conn.commit()
+                rezult_delete = True
+    except sql3.Error as error_sql:
+        ml.logger.error("Exception occurred", exc_info=True)
+        viewCodeError (error_sql)
+        rezult_delete = False
+    return rezult_delete

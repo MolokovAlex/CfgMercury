@@ -26,6 +26,7 @@ import modulVM.moduleEditGroupAndCounter as megc
 import modulVM.moduleLogging as ml
 import modulVM.moduleParamSettingDataCounter as mpsdc
 import modulVM.moduleUpdate as mudp
+import modulVM.mLostData as mld
 
 
 # Подкласс QMainWindow для настройки главного окна приложения
@@ -40,7 +41,7 @@ class MainWindow(QMainWindow):
             )
 
         self.setWindowTitle("Программа считывания данных со счетчиков Меркурий 230 ART версия "+ cfg.VERSION)
-
+        
         # Получить размер разрешения монитора и распахнуть окно во весь монитор
         self.desktop = QApplication.desktop()
         self.screenRect = self.desktop.screenGeometry()
@@ -58,35 +59,49 @@ class MainWindow(QMainWindow):
 
         #  подключение БД
         try:
-            # self.open_window_wait()
             name_file_DB = cfg.absDB_FILE
             ml.logger.info('подключение файла БД...')
-            if msql.connect_to_DB(name_file_DB):
-                cfg.sql_base_conn = sql3.connect(name_file_DB, check_same_thread=False)
-            # self.window2.hide()
+            if msql.connect_to_DB(cfg.absDB_FILE):
+                cfg.sql_base_conn = sql3.connect(cfg.absDB_FILE, check_same_thread=False)
         except sql3.Error as error_sql:
             ml.logger.error("Ошибка в подключении БД - Exception occurred", exc_info=True)
             # sql3.viewCodeError (error_sql)
 
+        # a = sql3.threadsafety
+        
+        # cursorDB = cfg.sql_base_conn.cursor()
+        # with cfg.sql_base_conn:
+        #     cursorDB.execute("""SELECT * FROM pragma_compile_options WHERE compile_options LIKE 'THREADSAFE=%';""")
+        #     data = cursorDB.fetchall()
+        #     selec = 0
+
         # вызовем функцию Update программы
-        mudp.createUpdate()
+        # mudp.createUpdate()
 
         #  создание  watchdog  сторожевого таймера для потока
         self.timer = QTimer()
         self.timer.timeout.connect(self.on_watchdog_timeout)
+        
 
-        # включение потока
+        # создание потока
         # if not self.thread:
-        ml.logger.debug('старт потока')
-        self.thread = mct.CommunicationCounterThread()
+        # self.start_thread_COM()
+        self.thread = mct.CommunicationCounterThread(cfg.absDB_FILE)
         self.thread.signal_progressRS.connect(self.onChangeProgressRS)
         self.thread.signal_error_open_connect_port.connect(self.openWindows_error_open_connect_port)
         self.thread.signal_error_connect_to_DB.connect(self.openWindows_error_connect_to_DB)
-        self.thread.signal_watchdog_thread.connect(self.on_change_watchdog_timer)
-        self.thread.finished.connect(self.on_finished_thread)
-        self.thread.start()
-        ml.logger.debug('включение watchdog')
-        self.timer.start(cfg.time_watchdog_thread)
+        self.thread.signal_thread_is_working.connect(self.on_change_watchdog_timer)
+        self.thread.signal_errorCount.connect(self.on_watchdog_timeout)     #  при большом количестве ошибок - перезагрузим поток
+        # self.thread.finished.connect(self.stop_thread_COM)
+        self.thread.finished.connect(self.on_watchdog_timeout)
+        # self.timer.start(cfg.time_watchdog_thread)
+
+
+        # включеине потока поиска потерянных данных в DBPP
+        # ml.logger.debug('старт потока FindLostData')
+        # self.thread_FindLostData = mld.FindLostDataThread(cfg.absDB_FILE)
+        # self.thread_FindLostData.finished.connect(self.on_finished_thread_FindLostData)
+        # self.thread_FindLostData.start()
 
         # self.connect(self.thread, SIGNAL("mysignal(QString"), self.onChangeProgressRS, Qt.QueuedConnection)
         return None
@@ -136,7 +151,8 @@ class MainWindow(QMainWindow):
                 QMessageBox.No)
         if result == QMessageBox.Yes:
             ml.logger.debug('закрытие главного окна')
-            self.on_finished_thread()
+            self.stop_thread_COM()
+            # self.on_finished_thread_FindLostData()
 
             event.accept()
             # если открыта БД - закрыть
@@ -150,29 +166,27 @@ class MainWindow(QMainWindow):
         """
         функция обработки срабатывания watchdog сторожевого таймера
         """
-        ml.logger.error('срабатывание watchdog потока')
+        ml.logger.error('срабатывание timer, остановка таймера')
         # остановим таймер
         self.timer.stop()
-
-        # перезапустим поток опроса счетчиков
-        # 1.закроем/финишируем поток 
-        self.on_finished_thread()
-        mpm.close_connection_to_port()
-        # 2.заново запустим поток
-        cfg.ON_TRANSFER_DATA_COUNTER = True
-        ml.logger.debug('старт потока')
-        self.thread = mct.CommunicationCounterThread()
-        self.thread.signal_progressRS.connect(self.onChangeProgressRS)
-        self.thread.signal_error_open_connect_port.connect(self.openWindows_error_open_connect_port)
-        self.thread.signal_error_connect_to_DB.connect(self.openWindows_error_connect_to_DB)
-        self.thread.signal_watchdog_thread.connect(self.on_change_watchdog_timer)
-        self.thread.finished.connect(self.on_finished_thread)
-        self.thread.start()
-        # 3.и запустим таймер снова
-        ml.logger.debug('включение watchdog')
-        self.timer.start(cfg.time_watchdog_thread)
-
+        # надо проверить - если галочка "опрос счетчиков" стоит - то значит не пришел сигнал из потока
+        if cfg.ON_TRANSFER_DATA_COUNTER == True:
+            # ml.logger.error('срабатывание watchdog потока')
+            # перезапустим поток опроса счетчиков
+            # 1.закроем/финишируем поток 
+            ml.logger.debug('остановка поотока из функции срабатывания таймера')
+            self.stop_thread_COM()
+            if (cfg.handlerSerialPortConn != None): #or (cfg.handlerSerialPortConn.is_open):
+                cfg.handlerSerialPortConn.close()
+                # mpm.close_connection_to_port()
+            # 2.заново запустим поток
+            cfg.ON_TRANSFER_DATA_COUNTER = True
+            ml.logger.debug('запуск поотока из функции срабатывания таймера...')
+            self.start_thread_COM()
+            ml.logger.debug('запуск поотока из функции срабатывания таймера...OK')
         return None
+
+    
 
     def on_change_watchdog_timer(self):
         """
@@ -194,7 +208,7 @@ class MainWindow(QMainWindow):
             
     def onChangeProgressRS(self, s):
         progressrs485 = s
-        if progressrs485 < 100:
+        if progressrs485 <= 100:
                 self.progressRS.setValue(progressrs485)
                 self.progressRS.setFormat(f"Serial {progressrs485}%")
                 
@@ -202,12 +216,46 @@ class MainWindow(QMainWindow):
         self.statusbar.showMessage(strng, msecs=6000)
         return None
                 
-    def on_finished_thread(self):
-        ml.logger.debug('закрытие потока...')
-        self.thread.signal_progressRS.disconnect(self.onChangeProgressRS)
-        self.thread.finished.disconnect(self.on_finished_thread)
-        self.thread = None
-        ml.logger.debug('закрытие потока...ОК')
+    def start_thread_COM(self):
+        # try:
+            # if self.thread.isRunning(): 
+            #     self.stop_thread_COM()
+            #     ml.logger.debug('при попытке запуска потока оказалось что он открыт. Закроекм.')
+            # if not self.thread.isRunning():
+        ml.logger.debug('фукция - старт потока')
+        ml.logger.debug('включение watchdog')
+        self.timer.start(cfg.time_watchdog_thread)
+        self.thread.start()
+        # self.thread.run()
+        
+        # except:
+        #     ml.logger.debug('ошибка старта потока')
+        return None
+
+    def stop_thread_COM(self):
+        try:
+            ml.logger.debug('функция - закрытие потока...')
+            # self.thread.signal_progressRS.disconnect(self.onChangeProgressRS)
+            # self.thread.finished.disconnect(self.stop_thread_COM)
+            # self.thread = None
+            self.thread.stop_th()
+            self.thread.exit()
+            # self.thread.wait(5000)
+            ml.logger.debug('закрытие потока...ОК')
+            ml.logger.debug('остановка watchdog')
+            self.timer.stop()
+        except:
+            ml.logger.debug('ошибка в закрытие потока из stop_thread_COM')
+        return None
+
+    def on_finished_thread_FindLostData(self):
+        ml.logger.debug('закрытие потока_FindLostData...')
+        # self.thread_FindLostData.finished.disconnect(self.on_finished_thread_FindLostData)
+        # self.thread_FindLostData.exit()
+        # self.thread_FindLostData = None
+        # ml.logger.debug('закрытие потока_FindLostData...ОК')
+
+
 
     def createStatusBar(self):
         self.statusbar = QStatusBar()
@@ -260,33 +308,16 @@ class MainWindow(QMainWindow):
     def _connectActions(self):
         """# Connect Connection actions
         """
-        # self.IPConnectionAction.triggered.connect(self.SetIPConnection)
-        # self.RS485ConnectionAction.triggered.connect(self.SetRS485Connection)
         self.SettingsConnectionAction.triggered.connect(self.SetSettingsConnection)
-        # self.FieldCountsAction.triggered.connect(self.RenderFieldCountsWindow)
-        # self.openTableCountersAction.triggered.connect(self.openTableCountersWindow)
         self.openParamAndSettingDataCountersAction.triggered.connect(self.openParamAndSettingDataCounterWindow)
         self.EditGroupsCounterAction.triggered.connect(self.EditGroupsCounterWindow)
-        # self.EditCounterAction.triggered.connect(self.EditCounterWindow)
         self.openTableProfilePowerAction.triggered.connect(self.TableProfilePowerWindow)
         self.openInstantlyParamCounterAction.triggered.connect(self.InstantlyParamCountersWindow)
-        # Connect Help actions
-        # self.helpContentAction.triggered.connect(self.helpContent)
-        # self.aboutAction.triggered.connect(self.about)
-        # Connect Demo actions
-        # self.demoAction.triggered.connect(self.demo)
 
     def _createActions(self):
-        # self.CreateConnAction = QAction("Create connection", self)
-        # self.IPConnectionAction = QAction("Setting IP", self)
-        # self.RS485ConnectionAction = QAction("Setting net RS485", self)
         self.SettingsConnectionAction = QAction("Настройки соединения", self)
-        # self.FieldCountsAction =  QAction("Field counts", self)
-        # self.openTableCountersAction =  QAction("Таблица", self)
         self.openParamAndSettingDataCountersAction = QAction("Параметры и установки", self)
         self.EditGroupsCounterAction =  QAction("Редактирование Групп, Счетчиков", self)
-        # self.EditCounterAction =  QAction("Редактирование Счетчиков", self)
-
         self.openTableProfilePowerAction =  QAction("Профиль мощности", self)
         openTableProfilePowerTip = "Таблица профиля мощности"
         self.openTableProfilePowerAction.setStatusTip(openTableProfilePowerTip)
@@ -296,10 +327,6 @@ class MainWindow(QMainWindow):
         openInstantlyParamCounterTip = "Мгновенные значения"
         self.openInstantlyParamCounterAction.setStatusTip(openInstantlyParamCounterTip)
         self.openInstantlyParamCounterAction.setToolTip(openInstantlyParamCounterTip)
-
-        # self.helpContentAction = QAction("Help Content", self)
-        # self.aboutAction = QAction("About", self)
-        # self.demotAction = QAction("Demo", self)
 
 
     def _createMenuBar(self):
@@ -314,15 +341,12 @@ class MainWindow(QMainWindow):
 
         countsMenu = menuBar.addMenu("Счетчики")
         menuBar.addMenu(countsMenu)
-        # countsMenu.addAction(self.openTableCountersAction)   
         countsMenu.addAction(self.openParamAndSettingDataCountersAction)
         countsMenu.addAction(self.EditGroupsCounterAction)
-        # countsMenu.addAction(self.EditCounterAction)
         
         profilePowerMenu = menuBar.addMenu("Профиль мощности")
         menuBar.addMenu(profilePowerMenu)
         profilePowerMenu.addAction(self.openTableProfilePowerAction)   
-        # ProfilePowerMenu.addAction(self.EditGroupsCounterAction)
 
         instantlyParamMenu = menuBar.addMenu("Мгновенные значения")
         menuBar.addMenu(instantlyParamMenu)
@@ -339,7 +363,9 @@ class MainWindow(QMainWindow):
         открытие окна ввода настроек соединения
         """
         self.windowSetSettingsConnection = mca.SetSettingsConnectionDialog()
-        # self.windowSetSettingsConnection.signal_error_open_connect_port.connect(self.magqt.click_ckb_on_transfer_data_from_counter)
+        self.windowSetSettingsConnection.signal_startThreadCOM.connect(self.start_thread_COM)
+        # self.windowSetSettingsConnection.signal_stopThreadCOM.connect(self.stop_thread_COM)
+
         self.windowSetSettingsConnection.exec()
 
         return None
