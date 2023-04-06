@@ -6,7 +6,7 @@
 
 import os
 from pathlib import Path
-# import datetime
+
 
 # ------------------------------------------------------------------
 # --------------- константы всей программы --------------------------
@@ -21,7 +21,7 @@ VERSION = '1.060423'
 # коды ошибок из потока связи со счетчиками
 # 0 = None error
 # 1 = No open port
-codeMessageFromThread = 0
+# codeMessageFromThread = 0
 
 # global handler SQL Database
 sql_base_conn = None
@@ -40,14 +40,10 @@ lst_checked_counter_in_group=[]
 # флаг для остановки потока опроса счетчиков
 stop_CommunicationCounterThread = False
 
-# lst_progress_work = []
-
-# window = None
-# lock = None
 running_thread1 = False
 thread_handler = None
 # глубина вытаскивания данных = 10 суток
-length_put_date  = 10
+# length_put_date  = 10
 # значения периода интегрирования в окне профиля мощности
 # VALUE_PERIOD_INTEGR_POFIL = ["30 мин","час", "день", "месяц"]
 VALUE_PERIOD_INTEGR_POFIL = ["30 мин","час"]
@@ -83,7 +79,7 @@ stepTimeInGraph = 3
 # т.е. от текущей даты NOW назад в прошлое на эту глубину
 # depthViewTimeBack = 100 не надо использовать
 
-QueueRequestInDB = None
+# QueueRequestInDB = None
 
 # ------------------------------------------------------------------------
 # --------------- переменные БД SQLite программы --------------------------
@@ -95,9 +91,6 @@ DB_BACKUP_FILE = 'ViewMercuryDB_backup.sqlite'
 LOG_FILE = 'VMlog.log'
 TEST_DATA_PP_FILE = 'test_data_pp.json'
 TEST_DATA_IC_FILE = 'test_data_ic.json'
-
-# Demo_DB_FILE = 'ViewMercuryDB_demo.sqlite'
-# Demo_DB_BACKUP_FILE = 'ViewMercuryDB_demo_backup.sqlite'
 
 LOG_DIR = 'Log'
 DB_DIR = 'DB'
@@ -114,9 +107,6 @@ absLOG_FILE= os.path.join(absLOG_DIR, LOG_FILE)
 absTEST_DIR= os.path.join(BASE_DIR, TEST_DIR)
 absTEST_DATA_PP_FILE= os.path.join(absTEST_DIR, TEST_DATA_PP_FILE)
 absTEST_DATA_IC_FILE= os.path.join(absTEST_DIR, TEST_DATA_IC_FILE)
-# absDemoDB_DIR= os.path.join(BASE_DIR, DB_DIR)
-# absDemoDB_FILE= os.path.join(absDB_DIR, Demo_DB_FILE)
-# absDemoDB_BACKUP_FILE= os.path.join(absDB_DIR, Demo_DB_BACKUP_FILE)
 
 #полный путь (abspath) c наименование файла резерной БД и полный путь (abspath) c наименование файла БД
 
@@ -277,12 +267,20 @@ data_list_demo_DBC = [
 # ------- промежуточная таблица сетчик-группа для реализации many-to-many ----
 # ----------------------------------------------------------------------------
 lst_name_poles_DBGC = ['id', 'id_group', 'id_counter'] 
+# sql_create_table_DBGC = """ CREATE TABLE IF NOT EXISTS DBGC (
+#         id INTEGER PRIMARY KEY AUTOINCREMENT,
+#         id_group INTEGER NOT NULL,
+#         id_counter INTEGER NOT NULL,
+#         FOREIGN KEY (id_group)  REFERENCES DBG (id) ON DELETE RESTRICT,
+#         FOREIGN KEY (id_counter)  REFERENCES DBC (id) ON DELETE RESTRICT   
+#         );
+#         """
 sql_create_table_DBGC = """ CREATE TABLE IF NOT EXISTS DBGC (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         id_group INTEGER NOT NULL,
         id_counter INTEGER NOT NULL,
-        FOREIGN KEY (id_group)  REFERENCES DBG (id) ON DELETE RESTRICT,
-        FOREIGN KEY (id_counter)  REFERENCES DBC (id) ON DELETE RESTRICT   
+        FOREIGN KEY (id_group)  REFERENCES DBG (id),
+        FOREIGN KEY (id_counter)  REFERENCES DBC (id)   
         );
         """
 # (id_group, id_counter) 
@@ -361,6 +359,18 @@ dic_template_DBPP = {
         'Q_plus': "",
         'Q_minus': ""
 }
+# sql_create_table_DBPofilP = """ CREATE TABLE IF NOT EXISTS DBPP (
+#         id INTEGER PRIMARY KEY AUTOINCREMENT,
+#         id_counter INTEGER NOT NULL,
+#         datetime timestamp,
+#         period_int TEXT,
+#         P_plus INTEGER,
+#         P_minus INTEGER,
+#         Q_plus INTEGER,
+#         Q_minus INTEGER,
+#         FOREIGN KEY (id_counter)  REFERENCES DBC (id) ON DELETE RESTRICT
+#         );
+#         """
 sql_create_table_DBPofilP = """ CREATE TABLE IF NOT EXISTS DBPP (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         id_counter INTEGER NOT NULL,
@@ -370,49 +380,10 @@ sql_create_table_DBPofilP = """ CREATE TABLE IF NOT EXISTS DBPP (
         P_minus INTEGER,
         Q_plus INTEGER,
         Q_minus INTEGER,
-        FOREIGN KEY (id_counter)  REFERENCES DBC (id) ON DELETE RESTRICT
+        FOREIGN KEY (id_counter)  REFERENCES DBC (id)
         );
         """
-# data_list_demo_table_DBPofilP = [
-#         (1, datetime.datetime(2022,12,25,0,0), '30', '300', '350','400', '450'),
-#         (1, datetime.datetime(2022,12,25,0,30), '30', '301', '351','401', '451'),
-#         (1, datetime.datetime(2022,12,25,1,0), '30', '302', '352','402', '452'),
-#         (1, datetime.datetime(2022,12,25,1,30), '30', '303', '353','403', '453'),
-#         (1, datetime.datetime(2022,12,25,2,0), '30', '304', '354','404', '454'),
-#         (1, datetime.datetime(2022,12,25,2,30), '30', '305', '355','405', '455'),
-#         (1, datetime.datetime(2022,12,25,3,0), '30', '300', '350','400', '450'),
-#         (1, datetime.datetime(2022,12,25,3,30), '30', '301', '351','401', '451'),
-#         (1, datetime.datetime(2022,12,25,4,0), '30', '302', '352','402', '452'),
-#         (1, datetime.datetime(2022,12,25,4,30), '30', '303', '353','403', '453'),
-#         (1, datetime.datetime(2022,12,25,5,0), '30', '304', '354','404', '454'),
-#         (1, datetime.datetime(2022,12,25,5,30), '30', '305', '355','405', '455'),
 
-#         (2, datetime.datetime(2022,12,25,0,0), '30', '100', '250','300', '550'),
-#         (2, datetime.datetime(2022,12,25,0,30), '30', '101', '251','301', '551'),
-#         (2, datetime.datetime(2022,12,25,1,0), '30', '102', '252','302', '552'),
-#         (2, datetime.datetime(2022,12,25,1,30), '30', '103', '253','303', '553'),
-#         (2, datetime.datetime(2022,12,25,2,0), '30', '104', '254','304', '554'),
-#         (2, datetime.datetime(2022,12,25,2,30), '30', '105', '255','305', '555'),
-#         (2, datetime.datetime(2022,12,25,3,0), '30', '100', '250','300', '550'),
-#         (2, datetime.datetime(2022,12,25,3,30), '30', '101', '251','301', '551'),
-#         (2, datetime.datetime(2022,12,25,4,0), '30', '102', '252','302', '552'),
-#         (2, datetime.datetime(2022,12,25,4,30), '30', '103', '253','303', '553'),
-#         (2, datetime.datetime(2022,12,25,5,0), '30', '104', '254','304', '554'),
-#         (2, datetime.datetime(2022,12,25,5,30), '30', '105', '255','305', '555'),
-
-#         (3, datetime.datetime(2022,12,25,0,0), '30', '500', '650','700', '850'),
-#         (3, datetime.datetime(2022,12,25,0,30), '30', '501', '651','701', '851'),
-#         (3, datetime.datetime(2022,12,25,1,0), '30', '502', '652','702', '852'),
-#         (3, datetime.datetime(2022,12,25,1,30), '30', '503', '653','703', '853'),
-#         (3, datetime.datetime(2022,12,25,2,0), '30', '504', '654','704', '854'),
-#         (3, datetime.datetime(2022,12,25,2,30), '30', '505', '655','705', '855'),
-#         (3, datetime.datetime(2022,12,25,3,0), '30', '500', '650','700', '850'),
-#         (3, datetime.datetime(2022,12,25,3,30), '30', '501', '651','701', '851'),
-#         (3, datetime.datetime(2022,12,25,4,0), '30', '502', '652','702', '852'),
-#         (3, datetime.datetime(2022,12,25,4,30), '30', '503', '653','703', '853'),
-#         (3, datetime.datetime(2022,12,25,5,0), '30', '504', '654','704', '854'),
-#         (3, datetime.datetime(2022,12,25,5,30), '30', '505', '655','705', '855'),
-#     ]
 # ----------------------------------------------------------------------------
 # --------------- БД мгновенных значений счетчика (Instantly Counter)----
 # ----------------------------------------------------------------------------
@@ -454,6 +425,38 @@ dic_template_DBIC = {
         'EnergyTarif3'    : 0,
         'EnergyTarif4'    : 0
 }
+# sql_create_table_DBIC = """ CREATE TABLE IF NOT EXISTS DBIC (
+#         id INTEGER PRIMARY KEY AUTOINCREMENT,
+#         id_counter INTEGER NOT NULL,
+#         datetime timestamp,
+#         CurrentFaze1 INTEGER,
+#         CurrentFaze2 INTEGER,
+#         CurrentFaze3 INTEGER,
+#         CurrentSum INTEGER,
+#         PowerPFaze1 INTEGER,
+#         PowerPFaze2 INTEGER,
+#         PowerPFaze3 INTEGER,
+#         PowerPFazeSum INTEGER,
+#         PowerQFaze1 INTEGER,
+#         PowerQFaze2 INTEGER,
+#         PowerQFaze3 INTEGER,
+#         PowerQFazeSum INTEGER,
+#         PowerSFaze1 INTEGER,
+#         PowerSFaze2 INTEGER,
+#         PowerSFaze3 INTEGER,
+#         PowerSFazeSum INTEGER,
+#         KPowerFaze1 INTEGER,
+#         KPowerFaze2 INTEGER,
+#         KPowerFaze3 INTEGER,
+#         KPowerFazeSum INTEGER,
+#         EnergyTarif1 INTEGER,
+#         EnergyTarif2 INTEGER,
+#         EnergyTarif3 INTEGER,
+#         EnergyTarif4 INTEGER,
+#         EnergyTarifSum INTEGER,
+#         FOREIGN KEY (id_counter)  REFERENCES DBC (id) ON DELETE RESTRICT
+#         );
+#         """
 sql_create_table_DBIC = """ CREATE TABLE IF NOT EXISTS DBIC (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         id_counter INTEGER NOT NULL,
@@ -483,216 +486,9 @@ sql_create_table_DBIC = """ CREATE TABLE IF NOT EXISTS DBIC (
         EnergyTarif3 INTEGER,
         EnergyTarif4 INTEGER,
         EnergyTarifSum INTEGER,
-        FOREIGN KEY (id_counter)  REFERENCES DBC (id) ON DELETE RESTRICT
+        FOREIGN KEY (id_counter)  REFERENCES DBC (id)
         );
         """
-        # CurrentFaze1 TEXT,
-        # CurrentFaze2 TEXT,
-        # CurrentFaze3 TEXT,
-        # CurrentSum TEXT,
-        # PowerPFaze1 TEXT,
-        # PowerPFaze2 TEXT,
-        # PowerPFaze3 TEXT,
-        # PowerPFazeSum TEXT,
-        # PowerQFaze1 TEXT,
-        # PowerQFaze2 TEXT,
-        # PowerQFaze3 TEXT,
-        # PowerQFazeSum TEXT,
-        # PowerSFaze1 TEXT,
-        # PowerSFaze2 TEXT,
-        # PowerSFaze3 TEXT,
-        # PowerSFazeSum TEXT,
-        # KPowerFaze1 TEXT,
-        # KPowerFaze2 TEXT,
-        # KPowerFaze3 TEXT,
-        # KPowerFazeSum TEXT,
-        # EnergyTarif1 TEXT,
-        # EnergyTarif2 TEXT,
-        # EnergyTarif3 TEXT,
-        # EnergyTarif4 TEXT,
-        # EnergyTarifSum TEXT,
-# data_list_demo_table_DBIC = [
-#         (1, datetime.datetime(2022,12,25,0,0), '3', '5', '5'),
-#         (1, datetime.datetime(2022,12,25,0,3), '2', '5', '5'),
-#         (1, datetime.datetime(2022,12,25,0,6), '1', '5', '5'),
-#         (1, datetime.datetime(2022,12,25,0,9), '0', '5', '5'),
-#         (1, datetime.datetime(2022,12,25,0,12), '2', '5', '5'),
-#         (1, datetime.datetime(2022,12,25,0,15), '3', '5', '5'),
-#         (1, datetime.datetime(2022,12,25,0,18), '4', '5', '5'),
-#         (1, datetime.datetime(2022,12,25,0,21), '5', '5', '5'),
-#         (1, datetime.datetime(2022,12,25,0,24), '6', '5', '5'),
-#         (1, datetime.datetime(2022,12,25,0,27), '7', '5', '5'),
-#         (1, datetime.datetime(2022,12,25,0,30), '8', '5', '5'),
-#         (1, datetime.datetime(2022,12,25,0,33), '3', '5', '5'),
-#         (1, datetime.datetime(2022,12,25,0,36), '4', '5', '5'),
-#         (1, datetime.datetime(2022,12,25,0,39), '3', '5', '5'),
-#         (1, datetime.datetime(2022,12,25,0,42), '6', '5', '5'),
-#         (1, datetime.datetime(2022,12,25,0,45), '7', '5', '5'),
-#         (1, datetime.datetime(2022,12,25,0,48), '8', '5', '5'),
-#         (1, datetime.datetime(2022,12,25,0,51), '9', '6', '5'),
-#         (1, datetime.datetime(2022,12,25,0,54), '10', '7', '5'),
-#         (1, datetime.datetime(2022,12,25,0,57), '3', '8', '5'),
-#         (1, datetime.datetime(2022,12,25,1,0), '4', '9', '5'),
-#         (1, datetime.datetime(2022,12,25,1,3), '5', '10', '5'),
-#         (1, datetime.datetime(2022,12,25,1,6), '6', '5', '5'),
-#         (1, datetime.datetime(2022,12,25,1,9), '7', '5', '5'),
-#         (1, datetime.datetime(2022,12,25,1,12), '3', '5', '5'),
-#         (1, datetime.datetime(2022,12,25,1,15), '4', '5', '5'),
-#         (1, datetime.datetime(2022,12,25,1,18), '5', '5', '5'),
-#         (1, datetime.datetime(2022,12,25,1,21), '6', '3', '5'),
-#         (1, datetime.datetime(2022,12,25,1,24), '7', '4', '5'),
-#         (1, datetime.datetime(2022,12,25,1,27), '8', '2', '5'),
-#         (1, datetime.datetime(2022,12,25,1,30), '1', '1', '5'),
-#         (1, datetime.datetime(2022,12,25,1,33), '0', '0', '5'),
-#         (1, datetime.datetime(2022,12,25,1,36), '0', '0', '5'),
-#         (1, datetime.datetime(2022,12,25,1,39), '0', '5', '5'),
-#         (1, datetime.datetime(2022,12,25,1,42), '10', '1', '5'),
-#         (1, datetime.datetime(2022,12,25,1,45), '12', '2', '5'),
-#         (1, datetime.datetime(2022,12,25,1,48), '3', '3', '5'),
-#         (1, datetime.datetime(2022,12,25,1,51), '4', '5', '5'),
-#         (1, datetime.datetime(2022,12,25,1,54), '5', '2', '5'),
-#         (1, datetime.datetime(2022,12,25,1,57), '6', '2', '5'),
-#         (1, datetime.datetime(2022,12,25,2,0), '7', '2', '5'),
-
-#         (2, datetime.datetime(2022,12,25,0,0), '3', '10', '5'),
-#         (2, datetime.datetime(2022,12,25,0,3), '2', '5', '5'),
-#         (2, datetime.datetime(2022,12,25,0,6), '2', '5', '5'),
-#         (2, datetime.datetime(2022,12,25,0,9), '0', '10', '5'),
-#         (2, datetime.datetime(2022,12,25,0,12), '2', '5', '5'),
-#         (2, datetime.datetime(2022,12,25,0,15), '3', '6', '4'),
-#         (2, datetime.datetime(2022,12,25,0,18), '4', '7', '3'),
-#         (2, datetime.datetime(2022,12,25,0,21), '5', '8', '2'),
-#         (2, datetime.datetime(2022,12,25,0,24), '6', '9', '1'),
-#         (2, datetime.datetime(2022,12,25,0,27), '7', '2', '5'),
-#         (2, datetime.datetime(2022,12,25,0,30), '8', '1', '5'),
-#         (2, datetime.datetime(2022,12,25,0,33), '3', '2', '5'),
-#         (2, datetime.datetime(2022,12,25,0,36), '4', '3', '0'),
-#         (2, datetime.datetime(2022,12,25,0,39), '3', '4', '0'),
-#         (2, datetime.datetime(2022,12,25,0,42), '6', '5', '0'),
-#         (2, datetime.datetime(2022,12,25,0,45), '7', '5', '0'),
-#         (2, datetime.datetime(2022,12,25,0,48), '8', '6', '0'),
-#         (2, datetime.datetime(2022,12,25,0,51), '9', '6', '5'),
-#         (2, datetime.datetime(2022,12,25,0,54), '10', '7', '5'),
-#         (2, datetime.datetime(2022,12,25,0,57), '3', '8', '0'),
-#         (2, datetime.datetime(2022,12,25,1,0), '4', '9', '0'),
-#         (2, datetime.datetime(2022,12,25,1,3), '5', '0', '0'),
-#         (2, datetime.datetime(2022,12,25,1,6), '6', '0', '0'),
-#         (2, datetime.datetime(2022,12,25,1,9), '7', '5', '5'),
-#         (2, datetime.datetime(2022,12,25,1,12), '3', '0', '5'),
-#         (2, datetime.datetime(2022,12,25,1,15), '4', '5', '5'),
-#         (2, datetime.datetime(2022,12,25,1,18), '5', '5', '5'),
-#         (2, datetime.datetime(2022,12,25,1,21), '6', '3', '5'),
-#         (2, datetime.datetime(2022,12,25,1,24), '7', '0', '0'),
-#         (2, datetime.datetime(2022,12,25,1,27), '8', '2', '5'),
-#         (2, datetime.datetime(2022,12,25,1,30), '1', '1', '5'),
-#         (2, datetime.datetime(2022,12,25,1,33), '0', '0', '5'),
-#         (2, datetime.datetime(2022,12,25,1,36), '0', '0', '5'),
-#         (2, datetime.datetime(2022,12,25,1,39), '0', '5', '5'),
-#         (2, datetime.datetime(2022,12,25,1,42), '10', '1', '5'),
-#         (2, datetime.datetime(2022,12,25,1,45), '12', '2', '5'),
-#         (2, datetime.datetime(2022,12,25,1,48), '3', '3', '5'),
-#         (2, datetime.datetime(2022,12,25,1,51), '4', '5', '5'),
-#         (2, datetime.datetime(2022,12,25,1,54), '5', '2', '5'),
-#         (2, datetime.datetime(2022,12,25,1,57), '6', '2', '5'),
-#         (2, datetime.datetime(2022,12,25,2,0), '7', '2', '5'),
-        
-#         (3, datetime.datetime(2022,12,25,0,0), '3', '10', '1'),
-#         (3, datetime.datetime(2022,12,25,0,3), '2', '5', '2'),
-#         (3, datetime.datetime(2022,12,25,0,6), '2', '1', '3'),
-#         (3, datetime.datetime(2022,12,25,0,9), '0', '1', '5'),
-#         (3, datetime.datetime(2022,12,25,0,12), '2', '2', '2'),
-#         (3, datetime.datetime(2022,12,25,0,15), '10', '3', '1'),
-#         (3, datetime.datetime(2022,12,25,0,18), '4', '10', '4'),
-#         (3, datetime.datetime(2022,12,25,0,21), '11', '9', '3'),
-#         (3, datetime.datetime(2022,12,25,0,24), '10', '8', '2'),
-#         (3, datetime.datetime(2022,12,25,0,27), '9', '7', '5'),
-#         (3, datetime.datetime(2022,12,25,0,30), '8', '6', '5'),
-#         (3, datetime.datetime(2022,12,25,0,33), '7', '5', '10'),
-#         (3, datetime.datetime(2022,12,25,0,36), '6', '4', '9'),
-#         (3, datetime.datetime(2022,12,25,0,39), '5', '3', '8'),
-#         (3, datetime.datetime(2022,12,25,0,42), '4', '2', '7'),
-#         (3, datetime.datetime(2022,12,25,0,45), '3', '1', '6'),
-#         (3, datetime.datetime(2022,12,25,0,48), '2', '1', '5'),
-#         (3, datetime.datetime(2022,12,25,0,51), '1', '2', '4'),
-#         (3, datetime.datetime(2022,12,25,0,54), '10', '9', '3'),
-#         (3, datetime.datetime(2022,12,25,0,57), '10', '10', '2'),
-#         (3, datetime.datetime(2022,12,25,1,0), '9', '11', '1'),
-#         (3, datetime.datetime(2022,12,25,1,3), '8', '12', '10'),
-#         (3, datetime.datetime(2022,12,25,1,6), '7', '1', '9'),
-#         (3, datetime.datetime(2022,12,25,1,9), '7', '2', '8'),
-#         (3, datetime.datetime(2022,12,25,1,12), '6', '3', '7'),
-#         (3, datetime.datetime(2022,12,25,1,15), '5', '4', '6'),
-#         (3, datetime.datetime(2022,12,25,1,18), '4', '5', '5'),
-#         (3, datetime.datetime(2022,12,25,1,21), '3', '6', '4'),
-#         (3, datetime.datetime(2022,12,25,1,24), '2', '7', '3'),
-#         (3, datetime.datetime(2022,12,25,1,27), '1', '8', '2'),
-#         (3, datetime.datetime(2022,12,25,1,30), '1', '5', '1'),
-#         (3, datetime.datetime(2022,12,25,1,33), '0', '6', '10'),
-#         (3, datetime.datetime(2022,12,25,1,36), '0', '7', '9'),
-#         (3, datetime.datetime(2022,12,25,1,39), '0', '8', '8'),
-#         (3, datetime.datetime(2022,12,25,1,42), '10', '9', '7'),
-#         (3, datetime.datetime(2022,12,25,1,45), '12', '10', '6'),
-#         (3, datetime.datetime(2022,12,25,1,48), '3', '12', '5'),
-#         (3, datetime.datetime(2022,12,25,1,51), '4', '5', '4'),
-#         (3, datetime.datetime(2022,12,25,1,54), '5', '5', '3'),
-#         (3, datetime.datetime(2022,12,25,1,57), '6', '5', '2'),
-#         (3, datetime.datetime(2022,12,25,2,0), '7', '5', '1'),
-
-#     ]
-# ----------------------------------------------------------------------------
-# --------------- БД мгновенных значений мощности счетчика (Instantly Power)----
-# ----------------------------------------------------------------------------
-# sql_create_table_DBIP = """ CREATE TABLE IF NOT EXISTS DBIP (
-#         id INTEGER PRIMARY KEY AUTOINCREMENT,
-#         id_counter INTEGER NOT NULL,
-#         datetime timestamp,
-#         PowerPFaze1 TEXT,
-#         PowerPFaze2 TEXT,
-#         PowerPFaze3 TEXT,
-#         PowerPFazeSum TEXT,
-#         PowerQFaze1 TEXT,
-#         PowerQFaze2 TEXT,
-#         PowerQFaze3 TEXT,
-#         PowerQFazeSum TEXT,
-#         PowerSFaze1 TEXT,
-#         PowerSFaze2 TEXT,
-#         PowerSFaze3 TEXT,
-#         PowerSFazeSum TEXT,
-#         FOREIGN KEY (id_counter)  REFERENCES DBC (id) ON DELETE RESTRICT
-#         );
-#         """
-# ----------------------------------------------------------------------------
-# --------------- БД мгновенных значений мгновенного коэффициента мощности счетчика (Instantly KPower)----
-# ----------------------------------------------------------------------------
-# sql_create_table_DBIKP = """ CREATE TABLE IF NOT EXISTS DBIKP (
-#         id INTEGER PRIMARY KEY AUTOINCREMENT,
-#         id_counter INTEGER NOT NULL,
-#         datetime timestamp,
-#         KPowerFaze1 TEXT,
-#         KPowerFaze2 TEXT,
-#         KPowerFaze3 TEXT,
-#         KPowerFazeSum TEXT,
-#         FOREIGN KEY (id_counter)  REFERENCES DBC (id) ON DELETE RESTRICT
-#         );
-#         """
-# # ----------------------------------------------------------------------------
-# # --------------- БД мгновенных значений зафиксированная энергии счетчика (Instantly Energy)----
-# # ----------------------------------------------------------------------------
-# sql_create_table_DBIE = """ CREATE TABLE IF NOT EXISTS DBIE (
-#         id INTEGER PRIMARY KEY AUTOINCREMENT,
-#         id_counter INTEGER NOT NULL,
-#         datetime timestamp,
-#         EnergyTarif1 TEXT,
-#         EnergyTarif2 TEXT,
-#         EnergyTarif3 TEXT,
-#         EnergyTarif4 TEXT,
-#         EnergyTarifSum TEXT,
-#         FOREIGN KEY (id_counter)  REFERENCES DBC (id) ON DELETE RESTRICT
-#         );
-#         """
-
-
-
 
 # ------------------------------------------------------------------------------------
 # ----------------- SERVICE -------------------------------------------------------
@@ -709,11 +505,18 @@ sql_create_table_SERVICE = """ CREATE TABLE IF NOT EXISTS SERVICE (
 # ----------------- LOSTDATAPP -------------------------------------------------------
 # ------------------------------------------------------------------------------------
 
+# sql_create_table_LOSTDATAPP = """ CREATE TABLE IF NOT EXISTS LOSTDATAPP (
+#                                                     id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
+#                                                     id_counter INTEGER NOT NULL,
+#                                                     datetime timestamp,
+#                                                     FOREIGN KEY (id_counter)  REFERENCES DBC (id) ON DELETE RESTRICT
+#                                                     );
+#                                                     """
 sql_create_table_LOSTDATAPP = """ CREATE TABLE IF NOT EXISTS LOSTDATAPP (
                                                     id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
                                                     id_counter INTEGER NOT NULL,
                                                     datetime timestamp,
-                                                    FOREIGN KEY (id_counter)  REFERENCES DBC (id) ON DELETE RESTRICT
+                                                    FOREIGN KEY (id_counter)  REFERENCES DBC (id)
                                                     );
                                                     """
 

@@ -167,14 +167,14 @@ def find_update(numerUpDate):
 
 def body_update_260313():
     numerUpDate = '260313'
-    # создание таблицы LOSTDATAPP в БД
-    ml.logger.info("Создание таблицы LOSTDATAPP в БД")
-    FlagCreateTableDBf = False
+    # # создание таблицы LOSTDATAPP в БД
+    # ml.logger.info("Создание таблицы LOSTDATAPP в БД")
+    # FlagCreateTableDBf = False
     try:
         cursorDB = cfg.sql_base_conn.cursor()
-        with cfg.sql_base_conn:
-            cursorDB.execute(cfg.sql_create_table_LOSTDATAPP)
-            cfg.sql_base_conn.commit()
+    #     with cfg.sql_base_conn:
+    #         cursorDB.execute(cfg.sql_create_table_LOSTDATAPP)
+    #         cfg.sql_base_conn.commit()
     except sql3.Error as error_sql:
         ml.logger.error("Exception occurred", exc_info=True)
         msql.viewCodeError (error_sql)
