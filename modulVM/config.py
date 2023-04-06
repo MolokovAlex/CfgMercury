@@ -16,7 +16,7 @@ from pathlib import Path
 MODE_DEBUG = False
 
 #  версия программы
-VERSION = '1.040423'
+VERSION = '1.060423'
 
 # коды ошибок из потока связи со счетчиками
 # 0 = None error

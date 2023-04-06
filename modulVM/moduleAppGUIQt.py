@@ -84,8 +84,7 @@ class MainWindow(QMainWindow):
         
 
         # создание потока
-        # if not self.thread:
-        # self.start_thread_COM()
+
         self.thread = mct.CommunicationCounterThread(cfg.absDB_FILE)
         self.thread.signal_progressRS.connect(self.onChangeProgressRS)
         self.thread.signal_error_open_connect_port.connect(self.openWindows_error_open_connect_port)
