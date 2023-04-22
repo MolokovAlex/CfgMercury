@@ -17,6 +17,7 @@ import modulVM.moduleLogging as ml
 import modulVM.moduleProtocolMercury as mpm
 # import modulVM.moduleGeneral as mg
 # import modulVM.moduleSQLite as msql
+import modulVM.moduleComThread as mct
 
 
 
@@ -227,29 +228,7 @@ class CommunicationCounterThread(QObject):
             # self.signal_error_open_connect_port.emit()
             self.sleep(30)
 
-    def create_list_loss_datetime_from_DBPP(self, date_time_Start):
-        """ получим список datetime по всем счетчикам глубиной 80 суток с сортировкой по уменьшению
-        """
-        date_past = date_time_Start - timedelta(days=80)
-        date_past = date_past.replace(hour=0,  minute = 0, second=0, microsecond=0)
-        rezult_select_listDateTime, dataDBPP = self.select_listDateTime_in_DBPP_v2(date_time_Start,date_past)
-        # !!!!!!! преобразовать dataDBPP
-        dictt = dict()
-        for tuple_val in dataDBPP:
-            list_val = list(tuple_val)
-            key = list_val[0]
-            if key in dictt.keys():
-                l_v = dictt[key]
-                list_val.pop(0)
-                l_v.append(list_val[0])
-                dictt[key] = l_v
-            else:
-                
-                list_val.pop(0)
-                dictt[key] = list_val
-
-
-        return dictt
+    
 
     def read_old_record_from_DBPP_full(self,datetime_start):
         """ считывание истории профиля мощности счетчиков и запись в БД 
@@ -284,8 +263,6 @@ class CommunicationCounterThread(QObject):
                 # self.signal_progressRS.emit(numCounter) #  пусть порядковый номер счетчика в списке будет процентом выполненного объема цикла опроса
         return None
 
-
-
     def reception_data_form_counter(self, function_for_counter):
         """ тест канал связи, открытие канала связи, применение функции _______ для связи со счетчиками и закрытие канала связи
         """
@@ -313,6 +290,10 @@ class CommunicationCounterThread(QObject):
                         # self.signal_errorCount.emit()  #  при большом количестве ошибок - перезагрузим поток
                 # self.signal_progressRS.emit(numCounter) #  пусть порядковый номер счетчика в списке будет процентом выполненного объема цикла опроса
 
+
+    
+
+    
     def sleep(self, num):
         time.sleep(num)
         return None
@@ -321,7 +302,11 @@ class CommunicationCounterThread(QObject):
         rezult_get = False
         lst_counterDB = []       
         with self.connectDB:
-            self.cursor.execute("""SELECT id, schem, name_counter_full, net_adress, manuf_number, manuf_data, klass_react, klass_act, nom_u, ku, ki, koefA, comment FROM DBC ORDER BY net_adress ASC""")
+            self.cursor.execute("""SELECT id, schem, name_counter_full, 
+                net_adress, manuf_number, manuf_data, klass_react, 
+                klass_act, nom_u, ku, ki, koefA, comment 
+                FROM DBC 
+                ORDER BY net_adress ASC""")
             b = self.cursor.fetchall()
             if b:
                 lst_counterDB = []
@@ -347,7 +332,11 @@ class CommunicationCounterThread(QObject):
         lst_newNameCounter.append(id_counter)
         try:
             with self.connectDB:
-                    self.cursor.executemany("""UPDATE DBC SET schem=?, name_counter_full=?, net_adress=?, manuf_number=?, manuf_data=?, klass_react=?, klass_act=?, nom_u=?, ku=?, ki=?, koefA=?, comment=? WHERE id=?;""", (lst_newNameCounter,))
+                    self.cursor.executemany("""UPDATE DBC SET schem=?, name_counter_full=?, 
+                                                net_adress=?, manuf_number=?, manuf_data=?, 
+                                                klass_react=?, klass_act=?, nom_u=?, ku=?, 
+                                                ki=?, koefA=?, comment=? 
+                                                WHERE id=?;""", (lst_newNameCounter,))
                     self.connectDB.commit()
                     rezult_edit = True
         except sql3.Error as error_sql:
@@ -416,7 +405,7 @@ class CommunicationCounterThread(QObject):
                                                     P_plus, P_minus, Q_plus, Q_minus
                                                     ) VALUES (?,?,?,?,?,?,?);""", lst_data)
                     self.connectDB.commit()
-                    ml.logger.info("поток: Заполнение таблицы DBPP значением с datetime...OK")
+                    ml.logger.info(f"поток: Заполнение таблицы DBPP значением с datetime {dict_data['datetime']}...OK")
                     flag_rezult = True
             except sql3.Error as error_sql:
                 ml.logger.error("поток: Exception occurred", exc_info=True)
@@ -424,6 +413,9 @@ class CommunicationCounterThread(QObject):
                 flag_rezult = False
         else: flag_rezult = False
         return  flag_rezult
+
+    
+
 
     def read_ReadParam(self, net_adress_count, itemCounter):
         """ Cчитывание параметров счетчика 
@@ -558,7 +550,8 @@ class CommunicationCounterThread(QObject):
             with self.connectDB:
                 self.cursor.execute("""SELECT id_counter, datetime FROM DBPP WHERE  
                                                             datetime <= ? AND
-                                                            datetime >= ? ORDER BY datetime DESC;
+                                                            datetime >= ? 
+                                                            ORDER BY datetime DESC;
                                                                     """, (date_now,date_past ))
                 dataDB = self.cursor.fetchall() 
             if dataDB:
@@ -573,7 +566,29 @@ class CommunicationCounterThread(QObject):
         return flag_rezult, dataDB
 
 
+    def create_list_loss_datetime_from_DBPP(self, date_time_Start):
+        """ получим список datetime по всем счетчикам глубиной 80 суток с сортировкой по уменьшению
+        """
+        date_past = date_time_Start - timedelta(days=80)
+        date_past = date_past.replace(hour=0,  minute = 0, second=0, microsecond=0)
+        rezult_select_listDateTime, dataDBPP = self.select_listDateTime_in_DBPP_v2(date_time_Start,date_past)
+        # !!!!!!! преобразовать dataDBPP
+        dictt = dict()
+        for tuple_val in dataDBPP:
+            list_val = list(tuple_val)
+            key = list_val[0]
+            if key in dictt.keys():
+                l_v = dictt[key]
+                list_val.pop(0)
+                l_v.append(list_val[0])
+                dictt[key] = l_v
+            else:
+                
+                list_val.pop(0)
+                dictt[key] = list_val
 
+
+        return dictt
 
     # def read_old_record_from_DBPP(self, net_adress_count, id_counter, date_time_Start):
     #     num_recordPP = 0    # счетчик количества успешно вынутых и записаннных в БД записей
@@ -692,7 +707,10 @@ class CommunicationCounterThread(QObject):
         ml.logger.debug(f'поток: считывание записи по адресу 0х0010')
         adr_0x0010 = 0x0010
         dic_data_pp_0x0010, rezult_ReadRecordMassProfilPower = mpm.fn_ReadRecordMassProfilPower(net_adress_count, adr_0x0010, id_counter)
-
+        ml.logger.info(f"поток: Начало памяти содержит штамп времени = {dic_data_pp_0x0010['datetime']}")
+        
+        # если не получим даташтамп из адреса 0х0010 - нет смысла что-то делать дальше
+        if not rezult_ReadRecordMassProfilPower:    return None
         #  пройдемся по временной оси глубиной в 80 суток 
         # ищем отстутсвующие в списке от DBPP штампы datetime
         date_past = date_time_Start - timedelta(days=80)
@@ -731,7 +749,7 @@ class CommunicationCounterThread(QObject):
                     if not rezult_zero_DBPP:
                         self.insert_TableDBPP_value(dic_data_pp)
                         num_recordPP += 1
-                        if num_recordPP >= 3: 
+                        if num_recordPP >= 1: 
                             ml.logger.debug("поток: вытащили 3 записей")
                             return None # за каждую трехминутку вытаскиваем не более 3 записей
                     else:
@@ -750,10 +768,15 @@ if __name__ == "__main__":
         os.mkdir(cfg.absDB_DIR)
     ml.setup_logging(cfg.absLOG_FILE)
     # cfg.port_COM = 'COM9'
-    cfg.port_COM = '/dev/ttyUSB0'
-    cfg.MODE_CONNECT=2
+    # cfg.port_COM = 'COM3'
+    # cfg.port_COM = '/dev/ttyUSB0'
+    # cfg.MODE_CONNECT=2
+
+    cfg.host_IP = '192.168.0.7'
+    cfg.port_IP = 20108 
+    cfg.MODE_CONNECT = cfg.MODE_CONNECTION_IP_TO_SERVER
     ml.logger.debug('---------------------------- запуск программы -------------------------------------')
-    cct = CommunicationCounterThread(cfg.absDB_FILE)
+    cct = mct.CommunicationCounterThread(cfg.absDB_FILE)
     cct.run()
     # cct.read_old_record_from_DBPP(77, 44, datetime.datetime.now())
     a=0

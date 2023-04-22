@@ -26,7 +26,7 @@ import modulVM.moduleEditGroupAndCounter as megc
 import modulVM.moduleLogging as ml
 import modulVM.moduleParamSettingDataCounter as mpsdc
 import modulVM.moduleUpdate as mudp
-import modulVM.mLostData as mld
+# import modulVM.mLostData as mld
 
 
 # Подкласс QMainWindow для настройки главного окна приложения
@@ -76,7 +76,7 @@ class MainWindow(QMainWindow):
         #     selec = 0
 
         # вызовем функцию Update программы
-        # mudp.createUpdate()
+        mudp.createUpdate()
 
         #  создание  watchdog  сторожевого таймера для потока
         self.timer = QTimer()
@@ -149,7 +149,7 @@ class MainWindow(QMainWindow):
                 QMessageBox.Yes | QMessageBox.No,
                 QMessageBox.No)
         if result == QMessageBox.Yes:
-            ml.logger.debug('закрытие главного окна')
+            ml.logger.info('закрытие главного окна')
             self.stop_thread_COM()
             # self.on_finished_thread_FindLostData()
 
@@ -240,7 +240,7 @@ class MainWindow(QMainWindow):
             self.thread.stop_th()
             self.thread.exit()
             # self.thread.wait(5000)
-            ml.logger.debug('закрытие потока...ОК')
+            ml.logger.info('закрытие потока...ОК')
             ml.logger.debug('остановка watchdog')
             self.timer.stop()
         except:
@@ -252,7 +252,7 @@ class MainWindow(QMainWindow):
         # self.thread_FindLostData.finished.disconnect(self.on_finished_thread_FindLostData)
         # self.thread_FindLostData.exit()
         # self.thread_FindLostData = None
-        # ml.logger.debug('закрытие потока_FindLostData...ОК')
+        # ml.logger.info('закрытие потока_FindLostData...ОК')
 
 
 

@@ -13,10 +13,14 @@ from pathlib import Path
 # ------------------------------------------------------------------
 
 # mode debug
-MODE_DEBUG = False
+# MODE_DEBUG = False
+MODE_DEBUG = True
 
 #  версия программы
-VERSION = '1.060423'
+VERSION = '1.210423'
+# последний апдейт
+numberUpDate = '210423'
+
 
 # коды ошибок из потока связи со счетчиками
 # 0 = None error
@@ -178,9 +182,9 @@ data_list_demo_DBG = [
 # ----------------------------------------------------------------------------
 # --------------- БД счетчиков --------------------------
 # ----------------------------------------------------------------------------
-lst_name_poles_DBC = ['id', 'schem', 'name_counter_full', 'net_adress', 'manuf_number', 'manuf_data', 'klass_react', 'klass_act', 'nom_u', 'ku', 'ki', 'koefA', 'comment']
-lst_readOnly_poles_DBC = [True, False, False, False, True, True, True, True, True, False, False, True, False]
-lst_rusname_poles_DBC =  ['id', 'Обозн на схеме', 'Имя счетчика полное', 'Сетевой адрес', 'Зав.номер', 'Дата изготовл.', 'Класс реакт.', 'Класс акт.', 'Номинальное напряжение', 'Коэфф.трансф. по напряжению', 'Коэфф.трансф. по току', 'Постоянная счетчика', 'Комментарии']
+lst_name_poles_DBC = ['id', 'schem', 'name_counter_full', 'net_adress', 'manuf_number', 'manuf_data', 'klass_react', 'klass_act', 'nom_u', 'ku', 'ki', 'koefA', 'datetime', 'adress_last_record', 'datetime_adr0', 'comment']
+lst_readOnly_poles_DBC = [True, False, False, False, True, True, True, True, True, False, False, True, True, True, True, False]
+lst_rusname_poles_DBC =  ['id', 'Обозн на схеме', 'Имя счетчика полное', 'Сетевой адрес', 'Зав.номер', 'Дата изготовл.', 'Класс реакт.', 'Класс акт.', 'Номинальное напряжение', 'Коэфф.трансф. по напряжению', 'Коэфф.трансф. по току', 'Постоянная счетчика', ' Дата/время счетчика', 'Адрес последней записи', 'Дата/время на adress=0', 'Комментарии']
 dic_template_DBC = {
         'id': 500,
         'schem': "",
@@ -194,6 +198,9 @@ dic_template_DBC = {
         'ku': "",
         'ki': "",
         'koefA': 0,
+        'datetime':"",
+        'adress_last_record': 0, 
+        'datetime_adr0':"",
         'comment': ""
 }
 sql_create_table_DBC = """ CREATE TABLE IF NOT EXISTS DBC (
@@ -210,6 +217,9 @@ sql_create_table_DBC = """ CREATE TABLE IF NOT EXISTS DBC (
         ku TEXT,    
         ki TEXT,
         koefA INTEGER,
+        datetime timestamp,
+        adress_last_record INTEGER,
+        datetime_adr0 timestamp,
         comment TEXT
         );
         """
@@ -516,6 +526,7 @@ sql_create_table_LOSTDATAPP = """ CREATE TABLE IF NOT EXISTS LOSTDATAPP (
                                                     id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
                                                     id_counter INTEGER NOT NULL,
                                                     datetime timestamp,
+                                                    adress INTEGER,
                                                     FOREIGN KEY (id_counter)  REFERENCES DBC (id)
                                                     );
                                                     """

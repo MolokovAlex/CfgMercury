@@ -165,9 +165,9 @@ def createTableDBFile(nameFileDB:str)->bool:
             connectionDBFile.commit()
             ml.logger.info("create_table_SERVICE")
 
-            # cursorDB.execute(cfg.sql_create_table_LOSTDATAPP)
-            # connectionDBFile.commit()
-            # ml.logger.info("create_table_LOSTDATAPP")
+            cursorDB.execute(cfg.sql_create_table_LOSTDATAPP)
+            connectionDBFile.commit()
+            ml.logger.info("create_table_LOSTDATAPP")
 
             FlagCreateTableDBf = True
     except sql3.Error as error_sql:
@@ -322,7 +322,13 @@ def getListCounterDB():
         lst_counterDB = []       
         cursorDB = cfg.sql_base_conn.cursor()
         with cfg.sql_base_conn:
-            cursorDB.execute("""SELECT id, schem, name_counter_full, net_adress, manuf_number, manuf_data, klass_react, klass_act, nom_u, ku, ki, koefA, comment FROM DBC ORDER BY name_counter_full ASC""")
+            # cursorDB.execute("""SELECT id, schem, name_counter_full, net_adress, manuf_number, manuf_data, klass_react, klass_act, nom_u, ku, ki, koefA, comment FROM DBC ORDER BY name_counter_full ASC""")
+            cursorDB.execute("""SELECT id, schem, name_counter_full, 
+                                net_adress, manuf_number, manuf_data, 
+                                klass_react, klass_act, nom_u, ku, ki, 
+                                koefA, datetime, adress_last_record, datetime_adr0, comment 
+                                FROM DBC 
+                                ORDER BY net_adress ASC""")
             b = cursorDB.fetchall()
             if b:
                 lst_counterDB = []
@@ -341,7 +347,7 @@ def getCounterDB(number_id):
         lst_counterDB = []       
         cursorDB = cfg.sql_base_conn.cursor()
         with cfg.sql_base_conn:
-            cursorDB.execute("""SELECT id, schem, name_counter_full, net_adress, manuf_number, manuf_data, klass_react, klass_act, nom_u, ku, ki, koefA, comment FROM DBC WHERE id = ?;""", (number_id,))
+            cursorDB.execute("""SELECT id, schem, name_counter_full, net_adress, manuf_number, manuf_data, klass_react, klass_act, nom_u, ku, ki, koefA,  datetime, adress_last_record, datetime_adr0, comment FROM DBC WHERE id = ?;""", (number_id,))
             data = cursorDB.fetchall()
             if data:
                 dict_counter=dict(zip(cfg.lst_name_poles_DBC, data[0]))
@@ -380,7 +386,7 @@ def addNewCounterDB(newNameCounter:dict):
     try:
         cursorDB = cfg.sql_base_conn.cursor()
         with cfg.sql_base_conn:
-                cursorDB.executemany("""INSERT INTO DBC (schem, name_counter_full, net_adress, manuf_number, manuf_data, klass_react, klass_act, nom_u, ku, ki, koefA, comment) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);""", (lst_newNameCounter,))
+                cursorDB.executemany("""INSERT INTO DBC (schem, name_counter_full, net_adress, manuf_number, manuf_data, klass_react, klass_act, nom_u, ku, ki, koefA,  datetime, adress_last_record, datetime_adr0, comment) VALUES (?,?,?,?,?,?,?,?,?,?,?,?, ?, ?, ?);""", (lst_newNameCounter,))
                 cfg.sql_base_conn.commit()
                 rezult_edit = True
     except sql3.Error as error_sql:
@@ -403,7 +409,7 @@ def editCounterDB(new_NameCounter:dict):
     try:
         cursorDB = cfg.sql_base_conn.cursor()
         with cfg.sql_base_conn:
-                cursorDB.executemany("""UPDATE DBC SET schem=?, name_counter_full=?, net_adress=?, manuf_number=?, manuf_data=?, klass_react=?, klass_act=?, nom_u=?, ku=?, ki=?, koefA=?, comment=? WHERE id=?;""", (lst_newNameCounter,))
+                cursorDB.executemany("""UPDATE DBC SET schem=?, name_counter_full=?, net_adress=?, manuf_number=?, manuf_data=?, klass_react=?, klass_act=?, nom_u=?, ku=?, ki=?, koefA=?,  datetime=?, adress_last_record=?, datetime_adr0=?, comment=? WHERE id=?;""", (lst_newNameCounter,))
                 cfg.sql_base_conn.commit()
                 rezult_edit = True
     except sql3.Error as error_sql:

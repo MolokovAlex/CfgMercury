@@ -320,6 +320,9 @@ class InstantlyParamCountersDialog(QDialog):
                     self.curve[numberLineGraph].setData(x=arr_x , y=arr_y)
                     self.emit_value(55+2*numberLineGraph)
                 self.graphWidget.enableAutoRange('xy', True)
+            else:
+                self.curve.clear()
+                self.graphWidget.clear()
         self.emit_value(0)
         self.emit_string_statusBar("Готово.")
         self.btnRefreshGraph.setEnabled(True)

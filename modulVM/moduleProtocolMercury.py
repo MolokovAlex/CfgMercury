@@ -120,10 +120,12 @@ def connection_to_port():
             cfg.handlerSocketConn.connect((cfg.host_IP, int(cfg.port_IP)))
             # print("IP")
             ml.logger.debug('успешно создано подключение по MODE_CONNECTION_IP_TO_SERVER')
+            rezult = True
         elif cfg.MODE_CONNECT == cfg.MODE_CONNECTION_IP_TO_CLIENT:
             cfg.handlerSocketConn = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
             cfg.handlerSocketConn.bind(('', cfg.port_IP))
             ml.logger.debug('успешно создано подключение по MODE_CONNECTION_IP_TO_CLIENT')
+            rezult = True
         if cfg.MODE_CONNECT == cfg.MODE_CONNECTION_COM:
             # если СОМ порт открыт почему-то - закроем его
             if (cfg.handlerSerialPortConn != None): #or (cfg.handlerSerialPortConn.is_open):
@@ -209,12 +211,16 @@ def writePort(data):
             pass
         elif cfg.MODE_CONNECT == cfg.MODE_CONNECTION_COM:
             number_of_bytes_written = cfg.handlerSerialPortConn.write(data)
+            if number_of_bytes_written != len(data):
+                rezult = False
+                ml.logger.debug("Ошибка в переданных данных")
+                return rezult
         rezult = True
-        if number_of_bytes_written != len(data):
-            rezult = False
-            ml.logger.debug("Ошибка в переданных данных")
+        # if number_of_bytes_written != len(data):
+        #     rezult = False
+        #     ml.logger.debug("Ошибка в переданных данных")
     except:
-        pass
+        
         # print ("Ошибка отправки данных")
         ml.logger.error("Ошибка отправки данных - Exception occurred", exc_info=True)
     return rezult
@@ -224,6 +230,7 @@ def recievePort(response_length):
     recieveData=''
     try:
         if cfg.MODE_CONNECT == cfg.MODE_CONNECTION_IP_TO_SERVER:
+            cfg.handlerSocketConn.settimeout(1)
             recieveData = cfg.handlerSocketConn.recv(response_length)
         elif cfg.MODE_CONNECT == cfg.MODE_CONNECTION_IP_TO_CLIENT:
             pass
@@ -233,7 +240,7 @@ def recievePort(response_length):
         rezult = True
     except:
         # print ("Ошибка приема данных")
-        ml.logger.error("Ошибка приема данных - Exception occurred", exc_info=True)
+        ml.logger.error("Ошибка приема данных") # - Exception occurred", exc_info=True)
         rezult = False
     if recieveData == '': 
         rezult = False
@@ -347,6 +354,7 @@ def buildPacket(netAdress: int, len: int, *args):
             len: int - длина пакета включая сетевой номер спереди, но без CRC
         """
         rezult = False
+        packet = b'\x00'
         try:
             if len == 2:
                 packet = struct.pack(">BB", netAdress, *args)

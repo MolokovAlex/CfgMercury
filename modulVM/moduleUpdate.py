@@ -18,7 +18,7 @@ import modulVM.moduleLogging as ml
 
 
 
-def createUpdate():
+
     # -------------------------------------------------------------------
     # update05032013
     # запись в БД кофф KU kI
@@ -119,18 +119,25 @@ def createUpdate():
     # update 26032013
     # следующий апдейт
 
-    numerUpDate = '260313'
+    # cfg.numberUpDate = '260313'
     # запись номера очередного апдейта в БД
+
+    
+def createUpdate():
     error = False
 
-    if not(find_update(numerUpDate)):
-        body_update_260313()
+    if not(find_update(cfg.numberUpDate)):
+        if body_update_210423():
+            if save_update_in_DB_SERVICE(cfg.numberUpDate, cfg.VERSION):
+                error = False
     else:
         # если data пустые - таблица не заполнена, т.е. программа запускается с чистой БД
-        error = False
+        error = True
 
-    if error:
-        ml.logger.info(f"ошибка в применении update_{numerUpDate} ") 
+    if not error:
+        ml.logger.info(f"update_{cfg.numberUpDate} применен") 
+    else:    
+        ml.logger.info(f"ошибка в применении update_{cfg.numberUpDate} ") 
     return None
 
 
@@ -153,6 +160,7 @@ def find_update(numerUpDate):
                 for value_update in data:
                     if value_update[0] == numerUpDate:
                         # программа уже прошла этот апдейт
+                        ml.logger.info(f"update {cfg.numberUpDate} уже был применен ") 
                         flag_found_current_update = True
                         error = False
                         break
@@ -165,24 +173,77 @@ def find_update(numerUpDate):
 
     return flag_found_current_update
 
-def body_update_260313():
-    numerUpDate = '260313'
+def save_update_in_DB_SERVICE(numberUpDate, version):
+    # numberUpDate = '260313'
     # # создание таблицы LOSTDATAPP в БД
     # ml.logger.info("Создание таблицы LOSTDATAPP в БД")
     # FlagCreateTableDBf = False
+    rezult = False
     try:
         cursorDB = cfg.sql_base_conn.cursor()
+        cursorDB.execute("""INSERT INTO SERVICE (updateVM, versionVM)  VALUES (?, ?);""",(numberUpDate, version))
+        cfg.sql_base_conn.commit() 
+        rezult = True
     #     with cfg.sql_base_conn:
     #         cursorDB.execute(cfg.sql_create_table_LOSTDATAPP)
     #         cfg.sql_base_conn.commit()
     except sql3.Error as error_sql:
         ml.logger.error("Exception occurred", exc_info=True)
         msql.viewCodeError (error_sql)
-        # rezult_edit = Fal
+        rezult = False
         # запись в таблицу SERVICE номера текущего апдейта
-    cursorDB.execute("""INSERT INTO SERVICE (updateVM, versionVM)  VALUES ('260313', '1.260313');""")
-    cfg.sql_base_conn.commit() 
-    ml.logger.info(f"update_{numerUpDate} применен") 
-    error = False
 
-    return error
+    
+    return rezult
+
+
+
+# def body_update_260313():
+#     numerUpDate = '260313'
+#     # # создание таблицы LOSTDATAPP в БД
+#     # ml.logger.info("Создание таблицы LOSTDATAPP в БД")
+#     # FlagCreateTableDBf = False
+#     try:
+#         cursorDB = cfg.sql_base_conn.cursor()
+#     #     with cfg.sql_base_conn:
+#     #         cursorDB.execute(cfg.sql_create_table_LOSTDATAPP)
+#     #         cfg.sql_base_conn.commit()
+#     except sql3.Error as error_sql:
+#         ml.logger.error("Exception occurred", exc_info=True)
+#         msql.viewCodeError (error_sql)
+#         # rezult_edit = Fal
+#         # запись в таблицу SERVICE номера текущего апдейта
+#     cursorDB.execute("""INSERT INTO SERVICE (updateVM, versionVM)  VALUES ('260313', '1.260313');""")
+#     cfg.sql_base_conn.commit() 
+#     ml.logger.info(f"update_{numerUpDate} применен") 
+#     error = False
+#     return error
+
+
+
+def body_update_210423():
+    rezult = False
+    try:
+        cursorDB = cfg.sql_base_conn.cursor()
+        # cursorDB.execute("""INSERT INTO SERVICE (updateVM, versionVM)  VALUES (?, ?);""",(numberUpDate, version))
+        # cfg.sql_base_conn.commit() 
+        
+        with cfg.sql_base_conn:
+            cursorDB.execute(cfg.sql_create_table_LOSTDATAPP)
+            cfg.sql_base_conn.commit()
+            
+            cursorDB.execute("""ALTER TABLE DBC ADD datetime timestamp;""")
+            cfg.sql_base_conn.commit()
+            
+            cursorDB.execute("""ALTER TABLE DBC ADD adress_last_record INTEGER;""")
+            cfg.sql_base_conn.commit()
+            
+            cursorDB.execute("""ALTER TABLE DBC ADD datetime_adr0 timestamp;""")
+            cfg.sql_base_conn.commit()
+            
+            rezult = True
+    except sql3.Error as error_sql:
+        ml.logger.error("Exception occurred", exc_info=True)
+        msql.viewCodeError (error_sql)
+        rezult = False
+    return rezult

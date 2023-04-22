@@ -176,7 +176,7 @@ class TableProfilePowerDialog(QDialog):
             self.DialogCaseCounterAndGroups = QDialog()
             self.DialogCaseCounterAndGroups.setWindowTitle("Выбор счетчиков и групп")
             self.DialogCaseCounterAndGroups.setWindowModality(Qt.ApplicationModal)
-            self.DialogCaseCounterAndGroups.resize(500, 800)
+            self.DialogCaseCounterAndGroups.resize(800, 800)
         
             layout = QGridLayout()
             self.DialogCaseCounterAndGroups.setLayout(layout)
@@ -184,7 +184,8 @@ class TableProfilePowerDialog(QDialog):
             self.tree.setColumnCount(2)
             self.tree.setHeaderLabels(['Наименование', 'Сетевой адрес'])
             self.renderTreePanel_for_ProfilPower()
-            # self.tree.clicked.connect(self.click_onClickedOnItemTree)
+            self.tree.clicked.connect(self.click_onClickedOnItemTree)
+            # self.tree.doubleClicked.connect(self.click_onClickedOnItemTree)
             layout.addWidget(self.tree,0,0,2,2)
             
             btn_OKCase = QPushButton("OK")
@@ -197,6 +198,12 @@ class TableProfilePowerDialog(QDialog):
             self.DialogCaseCounterAndGroups.exec_()
             return None
         
+        def click_onClickedOnItemTree(self , sel:QModelIndex):
+            a=0
+            parentItem = self.tree.item(sel.parent().row(), sel.parent.column())
+            item = parentItem.child(sel.row(), sel.column)
+            print(item.data())
+            return None
         
         
         def click_btn_OKCase(self):
