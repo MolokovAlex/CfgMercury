@@ -775,22 +775,53 @@ def fn_fixInstantlyValue(numberNetAdress: int)-> bool:
         rezult = False
     return rezult
     
+def fn_fixInstantlyValue_UDP()-> bool:
+    """ широковещательный запрос-приказ фиксации мгновенных значений - без открытия канала связи 
+
+    """
+    rezult = False
+    len_build_packet = 3
+    len_recieve_packet = 4
+    numberNetAdress = 0xFE  #  широковещательный запрос-приказ
+    # зафиксировать мгновенные значения
+    # packData = struct.pack( ">BBB", numberNetAdress,0x03, 0x08)     
+    # packData += struct.pack(">H", computeCRC(packData))
+    packData, rezult_build = buildPacket(numberNetAdress, len_build_packet, 0x03, 0x08)
+    ml.logger.debug("широковещательный запрос-приказ фиксации мгн значений.")
+    if rezult_build:
+        writePort(packData)
+        # if writePort(packData):
+            # packet, rezult_recieve = recievePort(len_recieve_packet)
+            # if rezult_recieve:
+            #     parsed_packet, rezult_parser = parserBytePacket(packet, len_recieve_packet)
+            #     if rezult_parser and (parsed_packet[0] == 0x00):
+            #         rezult = True
+            #     else:
+            #         rezult = False
+            # else:
+            #     rezult = False
+        # else:
+        #     rezult = False
+    else:
+        rezult = False
+    return rezult
 
 
 
 
 
 
-
-def fn_ReadInstantlyValue_TimeFix(numberNetAdress: int, id_counter)-> bool:
+def fn_ReadInstantlyValue_TimeFix(dic_data_DBIC, itemCounter)-> bool:
     rezult = False
     #--- дата и время фиксации
-    dic = cfg.dic_template_DBIC.copy()
+    # dic_data_DBIC = cfg.dic_template_DBIC.copy()
+    id_counter = itemCounter["id"]
+    net_adress_count = int(itemCounter['net_adress'])
     len_build_packet = 4
     len_recieve_packet = 11
     # packData = struct.pack( ">BBBB", numberNetAdress,0x08, 0x14, 0xe0)     # 0x4d 0x8 0x14 0xe0 0x98 0x2
     # packData += struct.pack(">H", computeCRC(packData))
-    packData, rezult_build = buildPacket(numberNetAdress, len_build_packet, 0x08, 0x14, 0xe0)
+    packData, rezult_build = buildPacket(net_adress_count, len_build_packet, 0x08, 0x14, 0xe0)
     ml.logger.debug("Запрос дата и время фиксации.")
     if rezult_build:
         if writePort(packData):
@@ -825,9 +856,9 @@ def fn_ReadInstantlyValue_TimeFix(numberNetAdress: int, id_counter)-> bool:
                                     #  защита от неверного минуты
                                     if (int(t[1])>=0) and (int(t[1])<=59):
                     #
-                                        dic['datetime'] = datetime.datetime(int(d[2]),int(d[1]),int(d[0]),int(t[0]),int(t[1])).strftime("%d/%m/%Y %H:%M")
+                                        dic_data_DBIC['datetime'] = datetime.datetime(int(d[2]),int(d[1]),int(d[0]),int(t[0]),int(t[1])).strftime("%d/%m/%Y %H:%M")
                                         ml.logger.debug(f"Time: {TimeFix}, Data: {DataFix}")
-                                        dic['id_counter'] = id_counter
+                                        dic_data_DBIC['id_counter'] = id_counter
                                         # print ("TimeFix:", TimeFix ) 
                                         # print ("DataFix:", DataFix)
                                         rezult = True
@@ -849,7 +880,7 @@ def fn_ReadInstantlyValue_TimeFix(numberNetAdress: int, id_counter)-> bool:
             rezult = False
     else:
         rezult = False
-    return dic, rezult
+    return dic_data_DBIC, rezult
     
         
 # def fn_ReadInstantlyValue_U(numberNetAdress: int, id_counter, dic)-> bool:
@@ -888,12 +919,14 @@ def fn_ReadInstantlyValue_TimeFix(numberNetAdress: int, id_counter)-> bool:
 #         rezult = False
 #     return dic, rezult
 
-def fn_ReadInstantlyValue_I(numberNetAdress: int, id_counter, dic)-> bool:
+def fn_ReadInstantlyValue_I(dic_data_DBIC, itemCounter)-> bool:
     rezult = False
     #--- мгновенный ток
+    # id_counter = itemCounter["id"]
+    net_adress_count = int(itemCounter['net_adress'])
     len_build_packet = 4
     len_recieve_packet = 12
-    packData, rezult_build = buildPacket(numberNetAdress, len_build_packet, 0x08, 0x14, 0x21)
+    packData, rezult_build = buildPacket(net_adress_count, len_build_packet, 0x08, 0x14, 0x21)
     ml.logger.debug("Запрос мгн токи.")
     if rezult_build:
         if writePort(packData):
@@ -912,10 +945,10 @@ def fn_ReadInstantlyValue_I(numberNetAdress: int, id_counter, dic)-> bool:
                     Ifaza2 = (packetIfaza2[0]<<16) + (packetIfaza2[1]<<8) + packetIfaza2[2]
                     Ifaza3 = (packetIfaza3[0]<<16) + (packetIfaza3[1]<<8) + packetIfaza3[2]
                     ISumm =  (Ifaza1+Ifaza2+Ifaza3)
-                    dic['CurrentFaze1'] = Ifaza1
-                    dic['CurrentFaze2'] = Ifaza2
-                    dic['CurrentFaze3'] = Ifaza3
-                    dic['CurrentSum'] = ISumm
+                    dic_data_DBIC['CurrentFaze1'] = Ifaza1
+                    dic_data_DBIC['CurrentFaze2'] = Ifaza2
+                    dic_data_DBIC['CurrentFaze3'] = Ifaza3
+                    dic_data_DBIC['CurrentSum'] = ISumm
                     ml.logger.debug(f"FixI_faza1: {Ifaza1}, FixI_faza2: {Ifaza2}, FixI_faza3: {Ifaza3}, FixI_summ: {ISumm}" )
                     rezult = True
                 else:
@@ -926,15 +959,16 @@ def fn_ReadInstantlyValue_I(numberNetAdress: int, id_counter, dic)-> bool:
             rezult = False
     else:
         rezult = False   
-    return dic, rezult 
+    return dic_data_DBIC, rezult 
 
-def fn_ReadInstantlyValue_PowerP(numberNetAdress: int, id_counter, dic)-> bool:
+def fn_ReadInstantlyValue_PowerP(dic_data_DBIC, itemCounter)-> bool:
     rezult = False
     #--- мгновенная активная мощность
-    # rezult = False
+
+    net_adress_count = int(itemCounter['net_adress'])
     len_build_packet = 4
     len_recieve_packet = 19
-    packData, rezult_build = buildPacket(numberNetAdress, len_build_packet, 0x08, 0x14, 0x00)
+    packData, rezult_build = buildPacket(net_adress_count, len_build_packet, 0x08, 0x14, 0x00)
     ml.logger.debug("Запрос мгн акт мощ.")
     if rezult_build:
         if writePort(packData):
@@ -959,10 +993,10 @@ def fn_ReadInstantlyValue_PowerP(numberNetAdress: int, id_counter, dic)-> bool:
                     Pfaza2 = (packetPfaza2[1]<<16) + (packetPfaza2[2]<<8) + packetPfaza2[3]
                     Pfaza3 = (packetPfaza3[1]<<16) + (packetPfaza3[2]<<8) + packetPfaza3[3]
                     PSumm = (packetPSum[1]<<16) + (packetPSum[2]<<8) + packetPSum[3]
-                    dic['PowerPFaze1'] = Pfaza1
-                    dic['PowerPFaze2'] = Pfaza2
-                    dic['PowerPFaze3'] = Pfaza3
-                    dic['PowerPFazeSum'] = PSumm
+                    dic_data_DBIC['PowerPFaze1'] = Pfaza1
+                    dic_data_DBIC['PowerPFaze2'] = Pfaza2
+                    dic_data_DBIC['PowerPFaze3'] = Pfaza3
+                    dic_data_DBIC['PowerPFazeSum'] = PSumm
                     ml.logger.debug(f"FixP_faza1: {Pfaza1}, FixP_faza2: {Pfaza2}, FixP_faza3: {Pfaza3}, FixP_summ: {PSumm}")
                     rezult = True
                 else:
@@ -973,14 +1007,15 @@ def fn_ReadInstantlyValue_PowerP(numberNetAdress: int, id_counter, dic)-> bool:
             rezult = False
     else:
         rezult = False 
-    return dic, rezult
+    return dic_data_DBIC, rezult
     
-def fn_ReadInstantlyValue_PowerQ(numberNetAdress: int, id_counter, dic)-> bool:
+def fn_ReadInstantlyValue_PowerQ(dic_data_DBIC, itemCounter)-> bool:
     rezult = False
     #--- мгновенная реактивная мощность
+    net_adress_count = int(itemCounter['net_adress'])
     len_build_packet = 4
     len_recieve_packet = 19
-    packData, rezult_build = buildPacket(numberNetAdress, len_build_packet, 0x08, 0x14, 0x04)
+    packData, rezult_build = buildPacket(net_adress_count, len_build_packet, 0x08, 0x14, 0x04)
     ml.logger.debug("Запрос мгн реакт мощ.")
     if rezult_build:
         if writePort(packData):
@@ -1005,10 +1040,10 @@ def fn_ReadInstantlyValue_PowerQ(numberNetAdress: int, id_counter, dic)-> bool:
                     Qfaza2 = (packetQfaza2[1]<<16) + (packetQfaza2[2]<<8) + packetQfaza2[3]
                     Qfaza3 = (packetQfaza3[1]<<16) + (packetQfaza3[2]<<8) + packetQfaza3[3]
                     QSumm = (packetQSum[1]<<16) + (packetQSum[2]<<8) + packetQSum[3]
-                    dic['PowerQFaze1'] = Qfaza1
-                    dic['PowerQFaze2'] = Qfaza2
-                    dic['PowerQFaze3'] = Qfaza3
-                    dic['PowerQFazeSum'] = QSumm
+                    dic_data_DBIC['PowerQFaze1'] = Qfaza1
+                    dic_data_DBIC['PowerQFaze2'] = Qfaza2
+                    dic_data_DBIC['PowerQFaze3'] = Qfaza3
+                    dic_data_DBIC['PowerQFazeSum'] = QSumm
                     ml.logger.debug(f"FixQ_faza1: {Qfaza1}, FixQ_faza2: {Qfaza2}, FixQ_faza3: {Qfaza3}, FixQ_summ: {QSumm}" )
                     rezult = True
                 else:
@@ -1019,15 +1054,16 @@ def fn_ReadInstantlyValue_PowerQ(numberNetAdress: int, id_counter, dic)-> bool:
             rezult = False
     else:
         rezult = False 
-    return dic, rezult
+    return dic_data_DBIC, rezult
     
-def fn_ReadInstantlyValue_Cos(numberNetAdress: int, id_counter, dic)-> bool:
+def fn_ReadInstantlyValue_Cos(dic_data_DBIC, itemCounter)-> bool:
     rezult = False
     #--- мгновенный коэфф мощности
-    # rezult = False
+
+    net_adress_count = int(itemCounter['net_adress'])
     len_build_packet = 4
     len_recieve_packet = 15
-    packData, rezult_build = buildPacket(numberNetAdress, len_build_packet, 0x08, 0x14, 0x30)
+    packData, rezult_build = buildPacket(net_adress_count, len_build_packet, 0x08, 0x14, 0x30)
                                                                             #запрос 87 08 14 30 a6 46
                                                                             # ответ 87 40 fa 01 00 00 00 00 00 00 40 fa 01 07 f8
 
@@ -1051,10 +1087,10 @@ def fn_ReadInstantlyValue_Cos(numberNetAdress: int, id_counter, dic)-> bool:
                     KPowerFaze2 = (packetKPowerFaze2[1]<<8) + packetKPowerFaze2[2]
                     KPowerFaze3 = (packetKPowerFaze3[1]<<8) + packetKPowerFaze3[2]
                     KPowerFazeSum = (packetKPowerFazeSum[1]<<8) + packetKPowerFazeSum[2]
-                    dic['KPowerFaze1'] = KPowerFaze1
-                    dic['KPowerFaze2'] = KPowerFaze2
-                    dic['KPowerFaze3'] = KPowerFaze3
-                    dic['KPowerFazeSum'] = KPowerFazeSum
+                    dic_data_DBIC['KPowerFaze1'] = KPowerFaze1
+                    dic_data_DBIC['KPowerFaze2'] = KPowerFaze2
+                    dic_data_DBIC['KPowerFaze3'] = KPowerFaze3
+                    dic_data_DBIC['KPowerFazeSum'] = KPowerFazeSum
                     ml.logger.debug(f"KPowerFaze1: {KPowerFaze1},KPowerFaze2: {KPowerFaze2},KPowerFaze3: {KPowerFaze3}, FixCosSum: {KPowerFazeSum}" )
                     rezult = True
                 else:
@@ -1065,7 +1101,7 @@ def fn_ReadInstantlyValue_Cos(numberNetAdress: int, id_counter, dic)-> bool:
             rezult = False
     else:
         rezult = False 
-    return dic, rezult
+    return dic_data_DBIC, rezult
     
     
 
@@ -1168,8 +1204,10 @@ def fn_ReadLastRecordMassProfilPower(numberNetAdress: int):
         rezult = False 
     return adress, rezult
 
-def fn_ReadRecordMassProfilPower(numberNetAdress: int, adress:int, id_counter)-> bool:
+def fn_ReadRecordMassProfilPower(itemCounter, adress:int)-> bool: #adress:int, id_counter)-> bool:
     rezult = False
+    numberNetAdress = int(itemCounter['net_adress'])
+    id_counter = int(itemCounter['id'])
     dic = cfg.dic_template_DBPP.copy()
     adrH = adress >> 8
     adrL = adress & 0xFF

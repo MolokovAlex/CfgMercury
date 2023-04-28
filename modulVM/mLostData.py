@@ -28,15 +28,15 @@ import modulVM.moduleGeneral as mg
 # import modulVM.moduleSQLite as msql
 
 
-# class FindLostDataThread(QThread):    #######################################################
-class FindLostDataThread(QObject):
+class FindLostDataThread(QThread):    #######################################################
+# class FindLostDataThread(QObject):
     # signal_progressRS = pyqtSignal(int)
     # signal_error_open_connect_port = pyqtSignal()
     # signal_error_connect_to_DB = pyqtSignal()
     # signal_watchdog_thread = pyqtSignal()
     
     def __init__(self, name_file_DB):
-        # QThread.__init__(self)    #############################################################
+        QThread.__init__(self)    #############################################################
         ml.logger.info('поток FindLostData: инициализация')
         self.running =False
         self.name_file_DB = name_file_DB
@@ -57,9 +57,9 @@ class FindLostDataThread(QObject):
             ml.logger.error("поток FindLostData: ошибка доступа к БД - Exception occurred", exc_info=True)
 
     ################ комментировать в релизе ####
-    def sleep(self, num):
-        time.sleep(num)
-        return None
+    # def sleep(self, num):
+    #     time.sleep(num)
+    #     return None
         
 
     def run(self):
@@ -144,37 +144,41 @@ class FindLostDataThread(QObject):
             # ml.logger.debug(f'анализ: номер счетчика по списку = {numCounter}')
             net_adress_counter = int(itemCounter['net_adress'])
             id_counter = int(itemCounter['id'])
-            ml.logger.info(f'поток FindLostData: анализ: номер счетчика по списку = {numCounter}, сетевой номер = {net_adress_counter}')
+            
+            ml.logger.debug(f'поток FindLostData: анализ: номер счетчика по списку = {numCounter}, сетевой номер = {net_adress_counter}')
             datetime_adr0 = itemCounter['datetime_adr0']
-            !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            for numTimeshtamp, itemTimeshtamp in enumerate(arr_timeshtamp):
-                # проверим наличие записи в DBPP по данному счетчику.
-                rezult_zero_DBPP, dataDBPP = self.select_zero_Power_from_DBPP(id_counter, itemTimeshtamp)
-                rezult_LOSTDATAPP, dataLOSTDATAPP = self.select_in_LOSTDATAPP(id_counter, itemTimeshtamp)
-                if (not rezult_zero_DBPP) and (not rezult_LOSTDATAPP):
-                    # если записи не существует в DBPP и нет такой записи в LOSTDATAPP
-                    flag_existence = False
-                    # self.sleep(1)
-                    # adr_0x0010 = 0x0010
-                    datetime_adr0 = itemCounter['datetime_adr0']
-                    if datetime_adr0:
-                        # dic_data_pp_0x0010, rezult_ReadRecordMassProfilPower = mpm.fn_ReadRecordMassProfilPower(net_adress_count, adr_0x0010, id_counter)
-                        # ml.logger.info(f"поток: Начало памяти содержит штамп времени = {dic_data_pp_0x0010['datetime']}")
-                        # рассчитываем адрес
-                        # узнаем длительность интервала времени от штампа адреса 0x0010 до требуемой даты newdatetime
-                        interval_of_time = itemTimeshtamp - datetime.strptime(datetime_adr0, "%d/%m/%Y %H:%M") #- dic_data_pp['datetime']
-                        # # ml.logger.debug(f'{interval_of_time} - длительность интервала времени  от штампа адреса 0x0010={dic_data_pp_0x0010}  до требуемой даты newdatetime= {newdatetime} ')
-                        step_of_time = int(interval_of_time/(timedelta(seconds=30*60)))     # 30*60=1800 секунд = 30 мин
-                        adr_newdatetime = 0x0010+ step_of_time*0x0010
-                        # # ml.logger.debug(f'step_of_time = {step_of_time} ')
-                        # # ml.logger.debug(f'adr_newdatetime = {adr_newdatetime} ')
-                        if adr_newdatetime <= 0x0010: 
-                            ml.logger.debug("поток LOSSDATA: в вычислении адреса дошли до 0х0010")
-                            break # в вычислении адреса дошли до 0х0010
-                        self.add_in_LOSTDATAPP(id_counter, itemTimeshtamp, adr_newdatetime)
-                else:
-                    # если запись существует
-                    flag_existence = True
+            if datetime_adr0 :
+                # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                for numTimeshtamp, itemTimeshtamp in enumerate(arr_timeshtamp):
+                    # проверим наличие записи в DBPP по данному счетчику.
+                    rezult_zero_DBPP, dataDBPP = self.select_zero_Power_from_DBPP(id_counter, itemTimeshtamp)
+                    rezult_LOSTDATAPP, dataLOSTDATAPP = self.select_in_LOSTDATAPP(id_counter, itemTimeshtamp)
+                    if (not rezult_zero_DBPP) and (not rezult_LOSTDATAPP):
+                        # если записи не существует в DBPP и нет такой записи в LOSTDATAPP
+                        flag_existence = False
+                        self.sleep(1)
+                        # adr_0x0010 = 0x0010
+                        datetime_adr0 = itemCounter['datetime_adr0']
+                        if datetime_adr0:
+                            # dic_data_pp_0x0010, rezult_ReadRecordMassProfilPower = mpm.fn_ReadRecordMassProfilPower(net_adress_count, adr_0x0010, id_counter)
+                            # ml.logger.info(f"поток: Начало памяти содержит штамп времени = {dic_data_pp_0x0010['datetime']}")
+                            # рассчитываем адрес
+                            # узнаем длительность интервала времени от штампа адреса 0x0010 до требуемой даты newdatetime
+                            interval_of_time = itemTimeshtamp - datetime.strptime(datetime_adr0, "%d/%m/%Y %H:%M") #- dic_data_pp['datetime']
+                            # # ml.logger.debug(f'{interval_of_time} - длительность интервала времени  от штампа адреса 0x0010={dic_data_pp_0x0010}  до требуемой даты newdatetime= {newdatetime} ')
+                            step_of_time = int(interval_of_time/(timedelta(seconds=30*60)))     # 30*60=1800 секунд = 30 мин
+                            adr_newdatetime = 0x0010+ step_of_time*0x0010
+                            # # ml.logger.debug(f'step_of_time = {step_of_time} ')
+                            # # ml.logger.debug(f'adr_newdatetime = {adr_newdatetime} ')
+                            if adr_newdatetime <= 0x0010: 
+                                ml.logger.debug("поток LOSSDATA: в вычислении адреса дошли до 0х0010")
+                                break # в вычислении адреса дошли до 0х0010
+                            self.add_in_LOSTDATAPP(id_counter, itemTimeshtamp, adr_newdatetime)
+                    else:
+                        # если запись существует
+                        flag_existence = True
+            else:
+                ml.logger.debug(f'поток FindLostData: по счетчику нет данных в DBC')
         return None
 
     def select_zero_Power_from_DBPP(self, id_counter, date_time):

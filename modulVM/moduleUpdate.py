@@ -124,19 +124,25 @@ import modulVM.moduleLogging as ml
 
     
 def createUpdate():
-    error = False
+    error = True
 
-    if not(find_update(cfg.numberUpDate)):
-        if body_update_210423():
+    flag_found_current_update, flag_empty_table = find_update(cfg.numberUpDate)
+    if not(flag_found_current_update) and not flag_empty_table:
+        if body_update_250423():
             if save_update_in_DB_SERVICE(cfg.numberUpDate, cfg.VERSION):
+                ml.logger.info(f"update_{cfg.numberUpDate} применен")
                 error = False
-    else:
-        # если data пустые - таблица не заполнена, т.е. программа запускается с чистой БД
-        error = True
+                
+    # если data пустые - таблица не заполнена, т.е. программа запускается с чистой БД
+    if flag_empty_table:
+        save_update_in_DB_SERVICE(cfg.numberUpDate, cfg.VERSION)
+        ml.logger.info(f"Запуск на чистой БД - update не нужен, запишем только номер апдейта")
+        error = False
+    if flag_found_current_update:
+        ml.logger.info(f"update_{cfg.numberUpDate} уже был применен")
+        error = False           
 
-    if not error:
-        ml.logger.info(f"update_{cfg.numberUpDate} применен") 
-    else:    
+    if error:  
         ml.logger.info(f"ошибка в применении update_{cfg.numberUpDate} ") 
     return None
 
@@ -147,6 +153,7 @@ def createUpdate():
 
 def find_update(numerUpDate):
     flag_found_current_update = False
+    flag_empty_table = True
     try:
         cursorDB = cfg.sql_base_conn.cursor()
         with cfg.sql_base_conn:
@@ -163,15 +170,20 @@ def find_update(numerUpDate):
                         ml.logger.info(f"update {cfg.numberUpDate} уже был применен ") 
                         flag_found_current_update = True
                         error = False
+                        flag_empty_table = False
                         break
                     else:
                         flag_found_current_update = False
+                        flag_empty_table = False
+            else:
+                # если таблица пуста - запускаемся на пустой БД
+                flag_empty_table = True
     except sql3.Error as error_sql:
         ml.logger.error("Exception occurred", exc_info=True)
         msql.viewCodeError (error_sql)
         error = True
 
-    return flag_found_current_update
+    return flag_found_current_update, flag_empty_table
 
 def save_update_in_DB_SERVICE(numberUpDate, version):
     # numberUpDate = '260313'
@@ -221,7 +233,7 @@ def save_update_in_DB_SERVICE(numberUpDate, version):
 
 
 
-def body_update_210423():
+def body_update_250423():
     rezult = False
     try:
         cursorDB = cfg.sql_base_conn.cursor()

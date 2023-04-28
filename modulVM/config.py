@@ -13,13 +13,17 @@ from pathlib import Path
 # ------------------------------------------------------------------
 
 # mode debug
-# MODE_DEBUG = False
-MODE_DEBUG = True
+MODE_DEBUG = False
+# MODE_DEBUG = True
+# MODE_ONLY_DEBUG_COUNTER = True
+MODE_ONLY_DEBUG_COUNTER = False
+MODE_QOBJECT = False
+# MODE_QOBJECT = True
 
 #  версия программы
-VERSION = '1.210423'
+VERSION = '1.260423'
 # последний апдейт
-numberUpDate = '210423'
+numberUpDate = '260423'
 
 
 # коды ошибок из потока связи со счетчиками
@@ -515,23 +519,65 @@ sql_create_table_SERVICE = """ CREATE TABLE IF NOT EXISTS SERVICE (
 # ----------------- LOSTDATAPP -------------------------------------------------------
 # ------------------------------------------------------------------------------------
 
-# sql_create_table_LOSTDATAPP = """ CREATE TABLE IF NOT EXISTS LOSTDATAPP (
-#                                                     id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
-#                                                     id_counter INTEGER NOT NULL,
-#                                                     datetime timestamp,
-#                                                     FOREIGN KEY (id_counter)  REFERENCES DBC (id) ON DELETE RESTRICT
-#                                                     );
-#                                                     """
+
 sql_create_table_LOSTDATAPP = """ CREATE TABLE IF NOT EXISTS LOSTDATAPP (
                                                     id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
                                                     id_counter INTEGER NOT NULL,
                                                     datetime timestamp,
-                                                    adress INTEGER,
+                                                    adress INTEGER ,
                                                     FOREIGN KEY (id_counter)  REFERENCES DBC (id)
                                                     );
                                                     """
 
-
+data_list_default_LOSTDATAPP = [
+        (1,     '',     0,),
+        (2,     '',     0,),
+        (3,     '',     0,),
+        (4,     '',     0,),
+        (5,     '',     0,),
+        (6,     '',     0,),
+        (7,     '',     0,),
+        (8,     '',     0,),
+        (9,     '',     0,),
+        (10,     '',     0,),
+        (11,     '',     0,),
+        (12,     '',     0,),
+        (13,     '',     0,),
+        (14,     '',     0,),
+        (15,     '',     0,),
+        (16,     '',     0,),
+        (17,     '',     0,),
+        (18,     '',     0,),
+        (19,     '',     0,),
+        (20,     '',     0,),
+        (21,     '',     0,),
+        (22,     '',     0,),
+        (23,     '',     0,),
+        (24,     '',     0,),
+        (25,     '',     0,),
+        (26,     '',     0,),
+        (27,     '',     0,),
+        (28,     '',     0,),
+        (29,     '',     0,),
+        (30,     '',     0,),
+        (31,     '',     0,),
+        (32,     '',     0,),
+        (33,     '',     0,),
+        (34,     '',     0,),
+        (35,     '',     0,),
+        (36,     '',     0,),
+        (37,     '',     0,),
+        (38,     '',     0,),
+        (39,     '',     0,),
+        (40,     '',     0,),
+        (41,     '',     0,),
+        (42,     '',     0,),
+        (43,     '',     0,),
+        (44,     '',     0,),
+        (45,     '',     0,),
+        (46,     '',     0,),
+        (47,     '',     0,)
+    ]
 
 
 

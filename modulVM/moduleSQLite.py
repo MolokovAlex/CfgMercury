@@ -43,8 +43,9 @@ def connect_to_DB(nameFileDB:str)->bool:
         fill_TableDBC_demo_value(nameFileDB)
         fill_TableDBG_demo_value(nameFileDB)
         fill_TableDBGC_demo_value(nameFileDB)
-        fill_TableDBPP_demo_value(nameFileDB)
-        fill_TableDBIC_demo_value(nameFileDB)
+        fill_TableLOSTDATAPP_default_value(nameFileDB)
+        # fill_TableDBPP_demo_value(nameFileDB)
+        # fill_TableDBIC_demo_value(nameFileDB)
         Flag_connectDB = True
     return Flag_connectDB
 
@@ -347,7 +348,10 @@ def getCounterDB(number_id):
         lst_counterDB = []       
         cursorDB = cfg.sql_base_conn.cursor()
         with cfg.sql_base_conn:
-            cursorDB.execute("""SELECT id, schem, name_counter_full, net_adress, manuf_number, manuf_data, klass_react, klass_act, nom_u, ku, ki, koefA,  datetime, adress_last_record, datetime_adr0, comment FROM DBC WHERE id = ?;""", (number_id,))
+            cursorDB.execute("""SELECT id, schem, name_counter_full, net_adress, manuf_number, manuf_data, klass_react, klass_act, 
+                                nom_u, ku, ki, koefA,  datetime, adress_last_record, datetime_adr0, comment 
+                                FROM DBC 
+                                WHERE id = ?;""", (number_id,))
             data = cursorDB.fetchall()
             if data:
                 dict_counter=dict(zip(cfg.lst_name_poles_DBC, data[0]))
@@ -992,6 +996,34 @@ def selectItemFromDBIC_all_param_v2(item_counter, dateFrom=None, dateTo=None):
 # ------------------------------------------------------------------------------------
 # ----------------- LOSTDATAPP -------------------------------------------------------
 # ------------------------------------------------------------------------------------
+
+def fill_TableLOSTDATAPP_default_value(nameFileDB:str):
+    """
+    заполнение таблицы LOSTDATAPP_default-значениями
+
+    """
+    ml.logger.info("Заполнение таблицы LOSTDATAPP_default-значениями...")
+    insert_data_query = """INSERT INTO LOSTDATAPP (id_counter, datetime, adress) VALUES (?,?,?);"""
+    Flag_fill_TableLOSTDATAPP_defaul_value = False
+    try:
+        connectionDBFile = sql3.connect(nameFileDB)
+        cursorDB = connectionDBFile.cursor()
+        with connectionDBFile: 
+            # for key, value in appDemoData.items():
+            cursorDB.executemany(insert_data_query, cfg.data_list_default_LOSTDATAPP)
+            connectionDBFile.commit()
+            Flag_fill_TableLOSTDATAPP_defaul_value = True
+            ml.logger.info("Заполнение таблицы LOSTDATAPP_default-значениями...OK")
+    except sql3.Error as error_sql:
+        ml.logger.error("Exception occurred", exc_info=True)
+        viewCodeError (error_sql)
+        Flag_fill_TableLOSTDATAPP_defaul_value = False
+    finally:
+        if(connectionDBFile):
+            connectionDBFile.close()
+            ml.logger.debug("Соединение с SQLite закрыто")
+    return Flag_fill_TableLOSTDATAPP_defaul_value
+
 
 def select_in_LOSTDATAPP(id_counter, date_time):
     flag_rezult = False
