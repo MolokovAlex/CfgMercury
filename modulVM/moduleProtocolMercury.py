@@ -214,6 +214,7 @@ def writePort(data):
             if number_of_bytes_written != len(data):
                 rezult = False
                 ml.logger.debug("Ошибка в переданных данных")
+                cfg.error_write_to_port = True
                 return rezult
         rezult = True
         # if number_of_bytes_written != len(data):
@@ -244,7 +245,7 @@ def recievePort(response_length):
         rezult = False
     if recieveData == '': 
         rezult = False
-        ml.logger.error("Принятый пакет - пустой")
+        # ml.logger.error("Принятый пакет - пустой")
     else:
         rezult = True
     return recieveData, rezult
@@ -336,14 +337,14 @@ def parserBytePacket(data, len)-> bool:
                     #     rezult = False
             else:
                 parsed_packet = ''
-                ml.logger.error("ошибка длины принятого пакета ")
+                ml.logger.debug("ошибка длины принятого пакета ")
                 rezult = False
         else:
-            ml.logger.error("Принятый пакет - пустой")
+            ml.logger.debug("Принятый пакет - пустой")
             rezult = False
     except :
         # print("ошибка struct при разборе")
-        ml.logger.error("ошибка struct при разборе - Exception occurred", exc_info=True)
+        ml.logger.debug("ошибка struct при разборе - Exception occurred", exc_info=True)
         # ml.logger.error("ошибка struct при разборе - Exception occurred", exc_info=False)
         rezult = False
     ml.logger.debug(f"разобр пакет: {parsed_packet}")
@@ -746,11 +747,12 @@ def fn_ReadParam_VariantOld(numberNetAdress: int, dic_counter)-> bool:
 # --------------------------------------------------------------------------------------------------
 # --------------------------------------------------------------------------------------------------
 
-def fn_fixInstantlyValue(numberNetAdress: int)-> bool:
+def fn_fixInstantlyValue(itemCounter: dict)-> bool:
     """ фиксация мгновенных значений - без открытия канала связи 
 
     """
     rezult = False
+    numberNetAdress = int(itemCounter['net_adress'])
     len_build_packet = 3
     len_recieve_packet = 4
     # зафиксировать мгновенные значения

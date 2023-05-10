@@ -41,9 +41,13 @@ handlerSerialPortConn = None
 handlerSocketConn = None
 
 # список выбранных счетчиков и групп в дереве
-lst_checked_single_counter =[]
-lst_checked_group = []
-lst_checked_counter_in_group=[]
+lst_id_checked_single_counter =[]
+lst_id_checked_group = []
+lst_id_checked_counter_in_group=[]
+
+# lst_checked_single_counter_name =[]
+# lst_checked_group_name = []
+
 
 # флаг для остановки потока опроса счетчиков
 stop_CommunicationCounterThread = False
@@ -68,6 +72,10 @@ time_watchdog_thread = 600000 # 600 секунд=10 мнут
 # флаг выбора пользователем применение к таблице профиля мощности коэффициентов KU and KI
 check_KU_KI = False
 
+run_inSelectionChange = 0
+run_onChangeCheckBox = 0
+
+error_write_to_port = False
 # --------------------------------------------------------------
 # ------ конфигурация параметров профиля мощности --------------
 # --------------------------------------------------------------
@@ -132,8 +140,11 @@ baudrateRS485 = "9600"      # по default счетчики Меркурий и�
 parityRS485 = "8N1"         # 
 timeOutSerial = 0.5     # тайм-аут ожидания ответа от счетчика (по таблице не менее 150мс*N, стр.7 руководства по командам)
 
-host_IP = '192.168.0.7'
-port_IP = '20108' 
+# host_IP = '192.168.0.7'
+# port_IP = '20108' 
+
+host_IP = '192.168.32.45'
+port_IP = '2001' 
 
 # переключатели режимов связи со счетчиками
 # (должен быть выбран один из трех вариантов)
@@ -143,7 +154,8 @@ MODE_CONNECTION_IP_TO_SERVER = 0x00
 MODE_CONNECTION_IP_TO_CLIENT = 0x01
 # 0x02  связь через преобразователь COM-RS485
 MODE_CONNECTION_COM = 0x02
-MODE_CONNECT = MODE_CONNECTION_COM
+# MODE_CONNECT = MODE_CONNECTION_COM
+MODE_CONNECT = MODE_CONNECTION_IP_TO_SERVER
 
 #  включение режима опроса счетчиков (запуск  паралельного потока)
 ON_TRANSFER_DATA_COUNTER = False

@@ -80,7 +80,7 @@ class CommunicationCounterThread(QThread):
             if not(cfg.MODE_QOBJECT): self.signal_thread_is_working.emit()  #  сигнал о том что поток жив и не завис
             # считывание параметров счетчика  и запись в БД 
             self.reception_data_form_counter(self.read_ReadParam)
-            while self.running:
+            while self.running:# and cfg.ON_TRANSFER_DATA_COUNTER:
                 self.sleep(1)   # уменьшим скорость бесконечного цикла - сильно грузит процессор - введем паузы в 1 сек
                 #  если константа опроса счетчиков установлена - пошел алгоритм опроса счетчиков
                 past_minute =  datetime.datetime.now().minute
@@ -95,8 +95,8 @@ class CommunicationCounterThread(QThread):
                 ml.logger.debug('--------------------------------поток: старт опроса!') # - {str(date_time_now)}")
                 datetime_start =  datetime.datetime.now()
                 minute_now = datetime_start.minute
-                mpm.fn_fixInstantlyValue_UDP()
-                mpm.fn_fixInstantlyValue_UDP()
+                # mpm.fn_fixInstantlyValue_UDP()
+                # mpm.fn_fixInstantlyValue_UDP()
                 self.reception_data_form_counter(self.read_InstantlyValue)
                 if not(cfg.MODE_QOBJECT): self.signal_thread_is_working.emit()  #  сигнал о том что поток жив и не завис
                 # !!!!!!!!!!!!!!!!! ТОЛЬКО ДЛЯ ОТЛАДКИ ТЕСТ Watchdog !!!!!!!!!!! в релизе удалить!!!!!
@@ -167,7 +167,7 @@ class CommunicationCounterThread(QThread):
                     # уменьшаем адрес и записываем его в LOSTDATAPP
                     adress = adress - 0x0010
                     if adress <= 0x0010:
-                        ml.logger.debug("поток: дошли до 0х0010")
+                        ml.logger.info("поток: дошли до 0х0010")
                         adress = 0
                     rezult = self.update_adress_in_LOSTDATAPP(id_counter, adress)
 
@@ -182,6 +182,7 @@ class CommunicationCounterThread(QThread):
                 #         ml.logger.error(" поток: посылка сигнала на пере-сброс потока по ошибкам")
                 #         if not(cfg.MODE_QTHREAD): self.signal_errorCount.emit()  #  при большом количестве ошибок - перезагрузим поток
                 # if not(cfg.MODE_QTHREAD): self.signal_progressRS.emit(numCounter) #  пусть порядковый номер счетчика в списке будет процентом выполненного объема цикла опроса
+        if cfg.error_write_to_port and not(cfg.MODE_QOBJECT): self.signal_errorCount.emit() 
         return None
     
     def is_record_from_DBPP(self, id_counter, date_time):
@@ -278,8 +279,11 @@ class CommunicationCounterThread(QThread):
             if not(cfg.MODE_ONLY_DEBUG_COUNTER) or (cfg.MODE_ONLY_DEBUG_COUNTER and (net_adress_count in [136,77])):
             # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 ml.logger.info(f"---------------поток: Опрос счетчика с NetAdress= {net_adress_count}-----------------")
+                cfg.error_write_to_port = False
                 if mpm.test_canal_connection(net_adress_count):
+                    if cfg.error_write_to_port and not(cfg.MODE_QOBJECT): self.signal_errorCount.emit() 
                     if mpm.open_canal_connection_level1(net_adress_count):
+                        if cfg.error_write_to_port and not(cfg.MODE_QOBJECT): self.signal_errorCount.emit() 
                         # считывание datetime счетчика с адреса 0x0010 и запись в DBC
                         # adr_0x0010 = 0x0010
                         # dic_data_pp_0x0010, rezult_ReadRecordMassProfilPower = mpm.fn_ReadRecordMassProfilPower(itemCounter, adr_0x0010)
@@ -294,6 +298,7 @@ class CommunicationCounterThread(QThread):
                         count_error = 0
                         mpm.fn_CloseCanalConnection(net_adress_count)
                 else:
+                    if cfg.error_write_to_port and not(cfg.MODE_QOBJECT): self.signal_errorCount.emit() 
                     count_error +=1
                     ml.logger.debug(f'----------------------------------------------------count_error = {count_error} ')
                     if count_error > 50: 
@@ -524,6 +529,7 @@ class CommunicationCounterThread(QThread):
                 ml.logger.error("поток: не удалось получить параметры: коэфициенты KU и KI счетчика")
         else:
             ml.logger.error("поток: не удалось получить параметры: серийный номер и дату выпуска счетчика")
+        if cfg.error_write_to_port and not(cfg.MODE_QOBJECT): self.signal_errorCount.emit() 
         return None
 
 
@@ -536,9 +542,9 @@ class CommunicationCounterThread(QThread):
         # net_adress_count = int(itemCounter['net_adress'])
         # сделаем словарь для записи строки в DBIC, словарь будем заполнять в каждой фукции, которая считывает мгн значения
         dic_data_DBIC = cfg.dic_template_DBIC.copy()
-        # rezult_fix_datetime = mpm.fn_fixInstantlyValue(net_adress_count)
-        # if rezult_fix_datetime:
-        if True:
+        rezult_fix_datetime = mpm.fn_fixInstantlyValue(itemCounter)
+        if rezult_fix_datetime:
+        # if True:
             dic_data_DBIC, rezult_ReadInstantlyValue_TimeFix = mpm.fn_ReadInstantlyValue_TimeFix(dic_data_DBIC, itemCounter)
             if rezult_ReadInstantlyValue_TimeFix: 
                 dic_data_DBIC, rezult_ReadInstantlyValue_I = mpm.fn_ReadInstantlyValue_I(dic_data_DBIC, itemCounter)
@@ -562,6 +568,7 @@ class CommunicationCounterThread(QThread):
                 ml.logger.error("поток: не удалось считать зафиксировные дату и время мгн значений счетчика")
         # else:
         #     ml.logger.error("поток: не удалось счетчику зафиксировать мгн значения")
+        if cfg.error_write_to_port and not(cfg.MODE_QOBJECT): self.signal_errorCount.emit() 
         return None
 
     def viewCodeError (self, sql_error):

@@ -181,11 +181,16 @@ class TableProfilePowerDialog(QDialog):
             layout = QGridLayout()
             self.DialogCaseCounterAndGroups.setLayout(layout)
             self.tree = QTreeWidget()
-            self.tree.setColumnCount(2)
-            self.tree.setHeaderLabels(['Наименование', 'Сетевой адрес'])
+            # self.tree.setColumnCount(2)
+            # self.tree.setHeaderLabels(['Наименование', 'Сетевой адрес'])
+            self.tree.setColumnCount(1)
+            self.tree.setHeaderLabels(['Наименование'])
             self.renderTreePanel_for_ProfilPower()
-            self.tree.clicked.connect(self.click_onClickedOnItemTree)
+            # self.tree.clicked.connect(self.click_onClickedOnItemTree)
+            # self.tree.selectionModel().selectionChanged.connect(self.onSelectionChanged)      # QItemSelectionModel
+            # self.tree.itemChanged.connect(self.onChangeCheckBox)
             # self.tree.doubleClicked.connect(self.click_onClickedOnItemTree)
+            self.tree.itemClicked.connect(self.onItemClicked)
             layout.addWidget(self.tree,0,0,2,2)
             
             btn_OKCase = QPushButton("OK")
@@ -198,12 +203,188 @@ class TableProfilePowerDialog(QDialog):
             self.DialogCaseCounterAndGroups.exec_()
             return None
         
-        def click_onClickedOnItemTree(self , sel:QModelIndex):
+        
+
+        def onChangeCheckBox(self, item):
             a=0
-            parentItem = self.tree.item(sel.parent().row(), sel.parent.column())
-            item = parentItem.child(sel.row(), sel.column)
-            print(item.data())
+            run_inSelectionChange= cfg.run_inSelectionChange
+            run_onChangeCheckBox = cfg.run_onChangeCheckBox
+            if cfg.run_onChangeCheckBox == 1: return None
+            if cfg.run_inSelectionChange == 1: return None
+            cfg.run_onChangeCheckBox = 1
+            run_onChangeCheckBox = cfg.run_onChangeCheckBox
+            # item.setSelected(True)
+            # self.onSelectionChanged(item)
+            # item.setSelected(True)
+            self.onItemClicked(item, 0)
+            # self.onSelectionChanged(item)
+            # cfg.run_inSelectionChange = 0
+            run_inSelectionChange= cfg.run_inSelectionChange
+            # item.setSelected(False)
+
+            # if cfg.flag_callonChangeCheckBox == 0:
+            #     self.onSelectionChanged(item)
+                
+            # cfg.flag_callonChangeCheckBox = 0
+            # flag_callonChangeCheckBox= cfg.flag_callonChangeCheckBox
+            cfg.run_onChangeCheckBox = 0
+            run_onChangeCheckBox = cfg.run_onChangeCheckBox
             return None
+        
+        def onItemClicked(self, it, col):
+            a=0
+            if cfg.run_onChangeCheckBox == 1: return None
+            if cfg.run_inSelectionChange == 1: return None
+            print(it, col, it.text(col))
+            it.setSelected(True)
+            self.onSelectionChanged()
+            return None
+
+        def onSelectionChanged(self):#, item):
+            """ Обработка клики мышкой в дереве на группе или одиночном счетчике
+            """
+            run_inSelectionChange= cfg.run_inSelectionChange
+            run_onChangeCheckBox = cfg.run_onChangeCheckBox
+            # if cfg.run_onChangeCheckBox == 1: return None
+            if cfg.run_inSelectionChange == 1: return None
+            rezult_get_id_group = False
+            cfg.run_inSelectionChange = 1
+            run_inSelectionChange = cfg.run_inSelectionChange
+            id_group = 0
+            list_id_counter_in_group = []
+            rezult_get_id_counter_in_group = False
+            id_counter = 0 
+            rezult_get_id_counter = False
+            
+            lst_id_checked_group = cfg.lst_id_checked_group.copy()
+            lst_id_checked_single_counter = cfg.lst_id_checked_single_counter.copy()
+            lst_id_checked_counter_in_group = cfg.lst_id_checked_counter_in_group.copy()
+            for sel in self.tree.selectedIndexes():
+                selected_idgetItem = self.tree.itemFromIndex(sel)
+                val = sel.data()
+                try:
+                # если название предположительно - название группы - по названию получим  id группы
+                    id_group, rezult_get_id_group =  msql.get_id_group_DBG(sel.data())
+                    #  если это группа - найдем какие счетчики есть в этой группу и начнем заполнять список счетчиками группы
+                    if rezult_get_id_group:
+                        list_id_counter_in_group, rezult_get_id_counter_in_group = msql.get_list_counter_in_group_DBGC(id_group)
+                except:
+                    a=0
+
+                
+                try:
+                    # если название предположительно - название одиноч счетчика - по названию получим  id счтечика
+                    id_counter, rezult_get_id_counter =  msql.get_id_counter_DBC(sel.data())
+                except:
+                    a=0
+                
+
+                # если нет родителя (это название группы) и это не "Все счетчики"
+                if not(sel.parent().isValid()) and sel.data() != "Все счетчики":
+                    # если галочка в checkbox-е установлена (checkState(0) = 2)
+                    if cfg.run_onChangeCheckBox == 0:
+                        if selected_idgetItem.checkState(0) == Qt.Checked:
+                        # print (widgetItem.checkState(0))
+                        # if widgetItem.isChecked():
+                            # получаем id группы и проверяем есть ли этот id в списке lst_id_checked_group
+                            # id_group, rezult =  msql.get_id_group_DBG(sel.data())
+                            if rezult_get_id_group and (id_group in lst_id_checked_group): 
+                                # if id_group in lst_id_checked_group:
+                                    # если есть в списке - удаляем из списка
+                                    lst_id_checked_group.remove(id_group)
+                                    # заполним/уберем  id  из списка lst_id_checked_counter_in_group
+                                    if rezult_get_id_counter_in_group:
+                                        for item_list in list_id_counter_in_group:
+                                            lst_id_checked_counter_in_group.remove(item_list)
+                        # если галочка в checkbox-е НЕустановлена
+                        else:
+                            # id_group, rezult =  msql.get_id_group_DBG(sel.data())
+                            if rezult_get_id_group and not(id_group in lst_id_checked_group): 
+                                # if not(id_group in lst_id_checked_group):
+                                    lst_id_checked_group.append(id_group)
+                                    # заполним/уберем  id  из списка lst_id_checked_counter_in_group
+                                    if rezult_get_id_counter_in_group:
+                                        for item_list in list_id_counter_in_group:
+                                            lst_id_checked_counter_in_group.append(item_list)
+                    if cfg.run_onChangeCheckBox == 1:
+                        if selected_idgetItem.checkState(0) == Qt.Checked:
+                            if rezult_get_id_group and not(id_group in lst_id_checked_group): 
+                                    lst_id_checked_group.append(id_group)
+                                    # заполним/уберем  id  из списка lst_id_checked_counter_in_group
+                                    if rezult_get_id_counter_in_group:
+                                        for item_list in list_id_counter_in_group:
+                                            lst_id_checked_counter_in_group.append(item_list)
+                        # если галочка в checkbox-е НЕустановлена
+                        else:
+                            if rezult_get_id_group and (id_group in lst_id_checked_group): 
+                                    # если есть в списке - удаляем из списка
+                                    lst_id_checked_group.remove(id_group)
+                                    # заполним/уберем  id  из списка lst_id_checked_counter_in_group
+                                    if rezult_get_id_counter_in_group:
+                                        for item_list in list_id_counter_in_group:
+                                            lst_id_checked_counter_in_group.remove(item_list)
+                            
+
+                # если есть родитель и он называется "Все счетчики" - это название одиночного счетчика
+                # - снимаем или ставим галочку на названии счетчика
+                # если этот одинокий счетчик есть в cfg.lst_checked_single_counter - удаляем его из списка
+                # и наоборот
+                if sel.parent().isValid() and sel.parent().data()=="Все счетчики":
+                    
+                    if cfg.run_onChangeCheckBox == 0:
+                        if selected_idgetItem.checkState(0) == Qt.Checked:
+                            if rezult_get_id_counter and (id_counter in lst_id_checked_single_counter):
+                                lst_id_checked_single_counter.remove(id_counter)
+                        else:
+                            if rezult_get_id_counter and not(id_counter in lst_id_checked_single_counter):
+                                lst_id_checked_single_counter.append(id_counter)
+                    if cfg.run_onChangeCheckBox == 1:
+                        if selected_idgetItem.checkState(0) == Qt.Checked:
+                            if rezult_get_id_counter and not(id_counter in lst_id_checked_single_counter):
+                                lst_id_checked_single_counter.append(id_counter)
+                        else:
+                            if rezult_get_id_counter and (id_counter in lst_id_checked_single_counter):
+                                lst_id_checked_single_counter.remove(id_counter)
+
+                
+                # если галочка в checkbox-е установлена (checkState(0) = 2) - снимаем или ставим галочку на названии группы/счетчика
+                if cfg.run_onChangeCheckBox == 0:
+                    if selected_idgetItem.checkState(0) == 2:
+                        # cfg.run_inSelectionChange = 1
+                        # b= cfg.run_inSelectionChange
+                        selected_idgetItem.setCheckState(0, Qt.Unchecked)
+                        # selected_idgetItem.setForeground(0, Qt.darkBlue)
+                    else:
+                        # cfg.run_inSelectionChange = 1
+                        # b= cfg.run_inSelectionChange
+                        selected_idgetItem.setCheckState(0, Qt.Checked)
+                        # selected_idgetItem.setForeground(0, Qt.red)
+                    # selected_idgetItem.setSelected(False)
+                if cfg.run_onChangeCheckBox == 1:
+                    if selected_idgetItem.checkState(0) == 2:
+                        selected_idgetItem.setCheckState(0, Qt.Checked)
+                    else:
+                        selected_idgetItem.setCheckState(0, Qt.Unchecked)
+                selected_idgetItem.setSelected(False)
+            # self.tree.clearSelection()  # QItemSelectionModel
+
+            cfg.lst_id_checked_group = lst_id_checked_group.copy()
+            cfg.lst_id_checked_single_counter = lst_id_checked_single_counter.copy()
+            cfg.lst_id_checked_counter_in_group = lst_id_checked_counter_in_group.copy()
+                # cfg.run_inSelectionChange = 0
+                # b= cfg.run_inSelectionChange
+            cfg.run_inSelectionChange = 0
+            run_inSelectionChange = cfg.run_inSelectionChange
+                # selected_idgetItem.setSelected(False)
+            return None
+        
+        # def click_onClickedOnItemTree(self , sel:QModelIndex):
+        #     a=0
+        #     # parentItem = self.tree.item(sel.parent().row(), sel.parent.column())
+        #     # item = parentItem.child(sel.row(), sel.column)
+        #     # print(item.data())
+        #     b = self.tree.selectedItems()
+        #     return None
         
         
         def click_btn_OKCase(self):
@@ -211,15 +392,16 @@ class TableProfilePowerDialog(QDialog):
             обработка нажатия клавиши ОК в окне выбора счетчиков и групп
             """
             # составим список элементов, где пользователь поставиль галочки в дереве
-            self.lst_checkItemTree=[]
-            iterator = QTreeWidgetItemIterator(self.tree, QTreeWidgetItemIterator.Checked)
-            while iterator.value():
-                item = iterator.value()
-                # print (item.text(0))
-                self.lst_checkItemTree.append(item.text(0))
-                iterator += 1
+            # self.lst_checkItemTree=[]
+            # iterator = QTreeWidgetItemIterator(self.tree, QTreeWidgetItemIterator.Checked)
+            # while iterator.value():
+            #     item = iterator.value()
+            #     print (item.text(0))
+            #     self.lst_checkItemTree.append(item.text(0))
+            #     iterator += 1
             # если какой то выбор сделан - разблокированить кнопки Обновить и Экспорт в Иксель
-            if self.lst_checkItemTree:
+            # if self.lst_checkItemTree:
+            if cfg.lst_id_checked_group or cfg.lst_id_checked_single_counter:
                 self.flag_caseCountersAndGroups = True
                 self.btnRefreshTableProfilePowerCounts.setEnabled(True)
                 self.btnImportTableProfilePowerCounts.setEnabled(True) 
@@ -229,9 +411,14 @@ class TableProfilePowerDialog(QDialog):
                 self.btnRefreshTableProfilePowerCounts.setEnabled(False)
                 self.btnImportTableProfilePowerCounts.setEnabled(False)
             # создаем список выбранных пользователем групп и список выбранных счетчиков - все по отдельности
-            cfg.lst_checked_counter_in_group, cfg.lst_checked_group, cfg.lst_checked_single_counter = mg.createLstCheckedCounterAndGroups(self.lst_checkItemTree)
+            # cfg.lst_checked_counter_in_group, cfg.lst_checked_group, cfg.lst_checked_single_counter = mg.createLstCheckedCounterAndGroups(self.lst_checkItemTree)
+            # cfg.lst_id_checked_counter_in_group, cfg.lst_id_checked_group, cfg.lst_id_checked_single_counter = mg.create_id_LstCheckedCounterAndGroups()
             # закроем диалоговое окно
-            self.DialogCaseCounterAndGroups.hide()    
+            self.DialogCaseCounterAndGroups.hide() 
+            lst_id_checked_group = cfg.lst_id_checked_group.copy()
+            lst_id_checked_single_counter = cfg.lst_id_checked_single_counter.copy()
+            lst_id_checked_counter_in_group = cfg.lst_id_checked_counter_in_group.copy() 
+            cfg.run_inSelectionChange = 0  
             return
         
         def click_btn_CancelCase(self):
@@ -264,11 +451,11 @@ class TableProfilePowerDialog(QDialog):
             arr_TimeAxis_full, rezult = mg.create_Array_TimeAxis(dateFrom_full, dateTo_full)
             #
             self.emit_value(20)
-            arr_data = np.full(shape=(np.shape(arr_TimeAxis_full)[0], len(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter)),fill_value=0)
+            arr_data = np.full(shape=(np.shape(arr_TimeAxis_full)[0], len(cfg.lst_id_checked_counter_in_group + cfg.lst_id_checked_single_counter)),fill_value=0)
             if True:
                 self.emit_value(25)
                 #
-                for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
+                for num_counter, item_counter in enumerate(cfg.lst_id_checked_counter_in_group + cfg.lst_id_checked_single_counter):
                     rezult, lst_data = msql.selectPandQfromDBPP(item_counter=item_counter, dateFrom=dateFrom_full, dateTo=dateTo_full)
                     if rezult:
                         arr_dataDB = np.array(lst_data)
@@ -316,7 +503,7 @@ class TableProfilePowerDialog(QDialog):
                 # теперь в массиве будут храниться числа с плавающей точкой
                 arr_data = np.array(arr_data, dtype=float)
                 # переведем абстрактные числа из БД в реальные используя коэфф счетчика A
-                arr_data = mg.kWT(arr_data, arr_TimeAxis_full, cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter)
+                arr_data = mg.kWT(arr_data, arr_TimeAxis_full, cfg.lst_id_checked_counter_in_group + cfg.lst_id_checked_single_counter)
                 #
                 self.emit_value(35)
                 # обрежем массив в соответвии с датами, которые выбрал пользователь
@@ -324,13 +511,13 @@ class TableProfilePowerDialog(QDialog):
                 #
                 self.emit_value(40)
                 # найдем сумму для ВСЕГО 
-                arr_summ_Alltime, arr_summ_Alltime_Group =mg.summ_per_day_and_month_and_year_v2(arr_data_custom, arr_TimeAxis_custom, cfg.lst_checked_group, cfg.lst_checked_counter_in_group, cfg.lst_checked_single_counter)
+                arr_summ_Alltime, arr_summ_Alltime_Group =mg.summ_per_day_and_month_and_year_v2(arr_data_custom, arr_TimeAxis_custom, cfg.lst_id_checked_group, cfg.lst_id_checked_counter_in_group, cfg.lst_id_checked_single_counter)
                 #
                 # найдем сумму для ИТОГО 
-                arr_summ_Alltime_custom, arr_summ_Alltime_Group_custom =mg.summ_per_day_and_month_and_year_v2(arr_data_custom, arr_TimeAxis_custom, cfg.lst_checked_group, cfg.lst_checked_counter_in_group, cfg.lst_checked_single_counter)
+                arr_summ_Alltime_custom, arr_summ_Alltime_Group_custom =mg.summ_per_day_and_month_and_year_v2(arr_data_custom, arr_TimeAxis_custom, cfg.lst_id_checked_group, cfg.lst_id_checked_counter_in_group, cfg.lst_id_checked_single_counter)
                 #
                 #  Сделаем ИТОГО за период по группе
-                summGroupPeriod = np.full(shape=(len(cfg.lst_checked_group)),fill_value=0.0, dtype=float)
+                summGroupPeriod = np.full(shape=(len(cfg.lst_id_checked_group)),fill_value=0.0, dtype=float)
                 self.emit_value(50)
                 # приведение к виду периода отображения
                 arr_data_custom, arr_TimeAxis_custom = mg.createView_periodView(arr_data_custom, arr_TimeAxis_custom, self.period_integr)
@@ -411,7 +598,7 @@ class TableProfilePowerDialog(QDialog):
                 # for i in range (0,30,1):
                 #     arr_Table = np.insert(arr_Table, leng+i, "", axis=0)
                 # дополним списко заголовки шапки таблицы на экране названиями выбранных счетчиков
-                self.model.lst_header_table, self.model.lst_backgroundcolor_group = mg.create_header_table(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter)
+                self.model.lst_header_table, self.model.lst_backgroundcolor_group = mg.create_header_table(cfg.lst_id_checked_counter_in_group + cfg.lst_id_checked_single_counter)
                 #
                 self.data = arr_Table
                 self.model.set(self.data.copy())
@@ -458,7 +645,7 @@ class TableProfilePowerDialog(QDialog):
                         # setSpan(row, column, rowSpan, columnSpan)
                         self.tableProfilePowerCounts.setSpan(num_time, 0, 1, 2)
                         # self.tableProfilePowerCounts.setRowHeight(num_time, 50)
-                        for num_group, itemGroup in enumerate(cfg.lst_checked_group):
+                        for num_group, itemGroup in enumerate(cfg.lst_id_checked_group):
                             list_counter_in_group, rezult_get = msql.get_list_counter_in_group_DBGC(itemGroup)
                             from_mesto = mesto[num_group]+2
                             span_row = len(list_counter_in_group)
@@ -491,7 +678,7 @@ class TableProfilePowerDialog(QDialog):
 
                 # дополним списк заголовки шапки таблицы
                 # lst_header_table2 = mg.create_header_table2(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter)
-                lst_header_table,lst_backgroundcolor_group = mg.create_header_table(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter)
+                lst_header_table,lst_backgroundcolor_group = mg.create_header_table(cfg.lst_id_checked_counter_in_group + cfg.lst_id_checked_single_counter)
                 # _list.append(lst_header_table2)
                 _list.append(lst_header_table)
 
@@ -568,7 +755,7 @@ class TableProfilePowerDialog(QDialog):
                 list_DictGroupWithCounterDB, rezult_getListOfGroupDB = msql.getListCounterInGroupDB(self,item_Group['name_group_full'])
                 parent.setFlags(parent.flags() | Qt.ItemIsUserCheckable)
                 parent.setCheckState(0, Qt.Unchecked)
-                for itemChek in cfg.lst_checked_group:
+                for itemChek in cfg.lst_id_checked_group:
                     if itemChek == item_Group['id']:
                         parent.setCheckState(0, Qt.Checked)
                         break
@@ -576,7 +763,7 @@ class TableProfilePowerDialog(QDialog):
                     child = QTreeWidgetItem(parent)
                     child.setForeground(0, Qt.darkBlue)
                     child.setText(0, "    " + item['name_counter_full'])
-                    child.setText(1, item['net_adress'])
+                    # child.setText(1, item['net_adress'])
             parent = QTreeWidgetItem(self.tree)
             parent.setText(0, "Все счетчики")
             for item_Counter in list_counterDB:
@@ -585,15 +772,15 @@ class TableProfilePowerDialog(QDialog):
                     child.setCheckState(0, Qt.Unchecked)
                     child.setForeground(0, Qt.darkBlue)
                     child.setText(0, item_Counter['name_counter_full'])
-                    child.setText(1, item_Counter['net_adress'])
+                    # child.setText(1, item_Counter['net_adress'])
                     # for itemChek in (cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
-                    for itemChek in (cfg.lst_checked_single_counter):    
+                    for itemChek in (cfg.lst_id_checked_single_counter):    
                         if itemChek == item_Counter['id']:
                             child.setCheckState(0, Qt.Checked)
                             break
             self.tree.expandAll()
             self.tree.resizeColumnToContents(0)
-            self.tree.resizeColumnToContents(1)
+            # self.tree.resizeColumnToContents(1)
             return None
 
 

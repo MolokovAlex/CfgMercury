@@ -130,36 +130,77 @@ def createLstIntervalDateTime(dateFrom:datetime, dateTo:datetime, stepTime:int):
 
 
 
-def createLstCheckedCounterAndGroups(listcheckItemTree):
-            """создаем список выбранных пользователем групп и список выбранных счетчиков - все по отдельности
-                выход:
-                lst_checked_group  - список id_group по полям БД
-                lst_checked_counter_in_group    - список id_counter содержащиеся во всех группах lst_checked_group
-                lst_checked_single_counter - список id_counter по полям БД
-            """
-            lst_checked_group = [] 
-            lst_checked_counter_in_group = []
-            lst_checked_single_counter = []
-            
-            list_CounterDB, rezult_getListOfCounterDB = msql.getListCounterDB()
-            list_GroupDB, rezult_getListOfGroupDB = msql.getListGroupDB()
-            for itemLst in listcheckItemTree:
-                for itemGroup in list_GroupDB:
-                    if itemLst == itemGroup['name_group_full']:
-                        lst_checked_group.append(itemGroup['id'])
-                        #  и найдем какие счетчики есть в этой группу и начнем заполнять список счетчиками группы
-                        list_counter_in_group, rezult_get = msql.get_list_counter_in_group_DBGC(itemGroup['id'])
-                        for item_list in list_counter_in_group:
-                            lst_checked_counter_in_group.append(item_list)
+# def createLstCheckedCounterAndGroups(listcheckItemTree):
+#             """создаем список выбранных пользователем групп и список выбранных счетчиков - все по отдельности
+#                 выход:
+#                 lst_checked_group  - список id_group по полям БД
+#                 lst_checked_counter_in_group    - список id_counter содержащиеся во всех группах lst_checked_group
+#                 lst_checked_single_counter - список id_counter по полям БД
+#             """
+#             lst_checked_group = [] 
+#             lst_checked_counter_in_group = []
+#             lst_checked_single_counter = []
+#             list_CounterDB, rezult_getListOfCounterDB = msql.getListCounterDB()
+#             list_GroupDB, rezult_getListOfGroupDB = msql.getListGroupDB()
+
+#             for itemLst in listcheckItemTree:
+#                 for itemGroup in list_GroupDB:
+#                     if itemLst == itemGroup['name_group_full']:
+#                         lst_checked_group.append(itemGroup['id'])
+#                         #  и найдем какие счетчики есть в этой группу и начнем заполнять список счетчиками группы
+#                         list_counter_in_group, rezult_get = msql.get_list_counter_in_group_DBGC(itemGroup['id'])
+#                         for item_list in list_counter_in_group:
+#                             lst_checked_counter_in_group.append(item_list)
 
                     
-            for itemLst in listcheckItemTree:
-                for itemCounter in list_CounterDB:
-                    if itemLst == itemCounter['name_counter_full']:
-                        lst_checked_single_counter.append(itemCounter['id'])
-                        break
-            return lst_checked_counter_in_group, lst_checked_group, lst_checked_single_counter
+#             for itemLst in listcheckItemTree:
+#                 for itemCounter in list_CounterDB:
+#                     if itemLst == itemCounter['name_counter_full']:
+#                         lst_checked_single_counter.append(itemCounter['id'])
+#                         break
+#             return lst_checked_counter_in_group, lst_checked_group, lst_checked_single_counter
         
+
+# def create_id_LstCheckedCounterAndGroups():
+#     lst_checked_group = [] 
+#     lst_checked_counter_in_group = []
+#     lst_checked_single_counter = []
+#     list_CounterDB, rezult_getListOfCounterDB = msql.getListCounterDB()
+#     list_GroupDB, rezult_getListOfGroupDB = msql.getListGroupDB()
+
+#     for item_name in cfg.lst_checked_single_counter_name:
+#         id_item_counter, rezult =  msql.get_id_counter_DBC(item_name)
+#         if rezult: lst_checked_single_counter.append(id_item_counter)
+#     # for itemLst in cfg.lst_checked_single_counter_name:
+#     #     for itemCounter in list_CounterDB:
+#     #         if itemLst == itemCounter['name_counter_full']:
+#     #             lst_checked_single_counter.append(itemCounter['id'])
+#     #             break
+    
+#     for itemLst in cfg.lst_checked_group_name:
+#         id_item_group, rezult =  msql.get_id_group_DBG(item_name)
+#         if rezult: lst_checked_group.append(id_item_group)
+#     for itemLst in lst_checked_group:
+#         for itemGroup in list_GroupDB:
+#             if itemLst == itemGroup['id']:
+#                 # lst_checked_group.append(itemGroup['id'])
+#                 #  и найдем какие счетчики есть в этой группу и начнем заполнять список счетчиками группы
+#                 list_counter_in_group, rezult_get = msql.get_list_counter_in_group_DBGC(itemGroup['id'])
+#                 for item_list in list_counter_in_group:
+#                     lst_checked_counter_in_group.append(item_list)
+
+#     # for itemLst in cfg.lst_checked_group_name:
+#     #     for itemGroup in list_GroupDB:
+#     #         if itemLst == itemGroup['name_group_full']:
+#     #             lst_checked_group.append(itemGroup['id'])
+#     #             #  и найдем какие счетчики есть в этой группу и начнем заполнять список счетчиками группы
+#     #             list_counter_in_group, rezult_get = msql.get_list_counter_in_group_DBGC(itemGroup['id'])
+#     #             for item_list in list_counter_in_group:
+#     #                 lst_checked_counter_in_group.append(item_list)
+#     #             break
+
+#     return lst_checked_counter_in_group, lst_checked_group, lst_checked_single_counter
+
 # def roundDateTimeToN(dateTime:datetime, N:int):
 #     """ округление минут до кратности N в меньшую сторону
 #     """
@@ -235,7 +276,7 @@ def createView_periodView(arr_data, arr_TimeAxis, periodIntegr:str):
                 break
             if arr_TimeAxis[num][num_period_integr] != arr_TimeAxis[num+1][num_period_integr]:
                 time_cur = arr_TimeAxis[num][num_period_integr]
-                for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
+                for num_counter, item_counter in enumerate(cfg.lst_id_checked_counter_in_group + cfg.lst_id_checked_single_counter):
                     arr_data[num+1][num_counter] = (arr_data[num][num_counter] + arr_data[num+1][num_counter])/2 # вычисляем среднее арифметическое
                 arr_data = np.delete(arr_data, num , axis = 0)
                 arr_TimeAxis = np.delete(arr_TimeAxis, num , axis = 0)
@@ -261,7 +302,7 @@ def _insert_row(arr_ins, arr_axis, num_ins:int, key_strng:int):
 def _insert_row_itogo_month_group(arr_data, arr_TimeAxis, num_time, key_monthgr, len_arr, mesto, num_month, arr_summ_time_Group):
     arr_data, arr_TimeAxis = _insert_row(arr_data, arr_TimeAxis, num_time, key_monthgr)
     len_arr +=1
-    for num_group, item_group in enumerate(cfg.lst_checked_group):
+    for num_group, item_group in enumerate(cfg.lst_id_checked_group):
         arr_data[num_time+1][mesto[num_group]] = str(arr_summ_time_Group[1][num_month][num_group])
     num_time = num_time+1
     return arr_data, arr_TimeAxis, num_time, len_arr
@@ -269,7 +310,7 @@ def _insert_row_itogo_month_group(arr_data, arr_TimeAxis, num_time, key_monthgr,
 def _insert_row_itogo_month_counter(arr_data, arr_TimeAxis, num_time, key_month, len_arr, num_month, arr_summ_time):
     arr_data, arr_TimeAxis = _insert_row(arr_data, arr_TimeAxis, num_time, key_month)
     len_arr +=1
-    for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
+    for num_counter, item_counter in enumerate(cfg.lst_id_checked_counter_in_group + cfg.lst_id_checked_single_counter):
         arr_data[num_time+1][num_counter] = str(arr_summ_time[1][num_month][num_counter])
     num_time = num_time+1
     return arr_data, arr_TimeAxis, num_time, len_arr
@@ -277,7 +318,7 @@ def _insert_row_itogo_month_counter(arr_data, arr_TimeAxis, num_time, key_month,
 def _insert_row_itogo_day_counter(arr_data, arr_TimeAxis, num_time, key_day, len_arr, num_day, arr_summ_time):
     arr_data, arr_TimeAxis = _insert_row(arr_data, arr_TimeAxis, num_time, key_day)
     len_arr +=1
-    for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
+    for num_counter, item_counter in enumerate(cfg.lst_id_checked_counter_in_group + cfg.lst_id_checked_single_counter):
         arr_data[num_time+1][num_counter] = str(arr_summ_time[0][num_day][num_counter])
     num_time = num_time+1
     return arr_data, arr_TimeAxis, num_time, len_arr
@@ -285,7 +326,7 @@ def _insert_row_itogo_day_counter(arr_data, arr_TimeAxis, num_time, key_day, len
 def _insert_row_itogo_day_group(arr_data, arr_TimeAxis, num_time, key_daygr, len_arr, mesto, num_day, arr_summ_time_Group):
     arr_data, arr_TimeAxis = _insert_row(arr_data, arr_TimeAxis, num_time, key_daygr)
     len_arr +=1
-    for num_group, item_group in enumerate(cfg.lst_checked_group):
+    for num_group, item_group in enumerate(cfg.lst_id_checked_group):
         arr_data[num_time+1][mesto[num_group]] = str(arr_summ_time_Group[0][num_day][num_group])
     num_time = num_time+1
     return arr_data, arr_TimeAxis, num_time, len_arr
@@ -314,7 +355,7 @@ def insert_summ_v2 (arr_data, arr_TimeAxis, period_View:str, arr_summ_Alltime, a
     # выход - список содержащий индексы столбцов для Итого
     mesto = []
     sm_mesto = 0
-    for num_group, itemGroup in enumerate(cfg.lst_checked_group):
+    for num_group, itemGroup in enumerate(cfg.lst_id_checked_group):
         mesto.append(sm_mesto)  # для первго Итого - нулевой столбец
         # узнаем какие счетчики содержит группа
         list_counter_in_group, rezult_get = msql.get_list_counter_in_group_DBGC(itemGroup)
@@ -492,12 +533,12 @@ def insert_summ_v2 (arr_data, arr_TimeAxis, period_View:str, arr_summ_Alltime, a
                 # num_time += 1
 
                 arr_data, arr_TimeAxis = _insert_row(arr_data, arr_TimeAxis, num_time, key_counterPeriod)
-                for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
+                for num_counter, item_counter in enumerate(cfg.lst_id_checked_counter_in_group + cfg.lst_id_checked_single_counter):
                     arr_data[num_time+1][num_counter] = str(arr_summ_time[2][num_year][num_counter])       # ПЕРЕДЕЛАТЬ!!!
                 num_time += 1
 
                 arr_data, arr_TimeAxis = _insert_row(arr_data, arr_TimeAxis, num_time, key_groupPeriod)
-                for num_group, item_group in enumerate(cfg.lst_checked_group):
+                for num_group, item_group in enumerate(cfg.lst_id_checked_group):
                     # arr_data[num_time+1][mesto[num_group]] = str(arr_symm_GroupPeriod[num_group])
                     arr_data[num_time+1][mesto[num_group]] = str(arr_summ_time_Group[2][num_year][num_group])       # ПЕРЕДЕЛАТЬ!!!
                 num_time += 1
@@ -541,12 +582,12 @@ def insert_summ_v2 (arr_data, arr_TimeAxis, period_View:str, arr_summ_Alltime, a
                 # num_time += 1
 
                 arr_data, arr_TimeAxis = _insert_row(arr_data, arr_TimeAxis, num_time, key_counterPeriod)
-                for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
+                for num_counter, item_counter in enumerate(cfg.lst_id_checked_counter_in_group + cfg.lst_id_checked_single_counter):
                     arr_data[num_time+1][num_counter] = str(arr_summ_time[2][num_year][num_counter])       # ПЕРЕДЕЛАТЬ!!!
                 num_time += 1
                 
                 arr_data, arr_TimeAxis = _insert_row(arr_data, arr_TimeAxis, num_time, key_groupPeriod)
-                for num_group, item_group in enumerate(cfg.lst_checked_group):
+                for num_group, item_group in enumerate(cfg.lst_id_checked_group):
                     arr_data[num_time+1][mesto[num_group]] = str(arr_summ_time_Group[2][num_year][num_group])       # ПЕРЕДЕЛАТЬ!!!
                 num_time += 1
 
@@ -556,7 +597,7 @@ def insert_summ_v2 (arr_data, arr_TimeAxis, period_View:str, arr_summ_Alltime, a
 
                 arr_data, arr_TimeAxis = _insert_row(arr_data, arr_TimeAxis, num_time, key_day)
                 arr_data[num_time+1][0] = key_allday
-                for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
+                for num_counter, item_counter in enumerate(cfg.lst_id_checked_counter_in_group + cfg.lst_id_checked_single_counter):
                     arr_data[num_time+1][num_counter] = str(arr_summ_time[0][num_day][num_counter])
                 num_time = num_time+1
 
@@ -588,12 +629,12 @@ def insert_summ_v2 (arr_data, arr_TimeAxis, period_View:str, arr_summ_Alltime, a
                 # num_time += 1
 
                 arr_data, arr_TimeAxis = _insert_row(arr_data, arr_TimeAxis, num_time, key_counterPeriod)
-                for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
+                for num_counter, item_counter in enumerate(cfg.lst_id_checked_counter_in_group + cfg.lst_id_checked_single_counter):
                     arr_data[num_time+1][num_counter] = str(arr_summ_time[2][num_year][num_counter])       # ПЕРЕДЕЛАТЬ!!!
                 num_time += 1
                 
                 arr_data, arr_TimeAxis = _insert_row(arr_data, arr_TimeAxis, num_time, key_groupPeriod)
-                for num_group, item_group in enumerate(cfg.lst_checked_group):
+                for num_group, item_group in enumerate(cfg.lst_id_checked_group):
                     arr_data[num_time+1][mesto[num_group]] = str(arr_summ_time_Group[2][num_year][num_group])       # ПЕРЕДЕЛАТЬ!!!
                 num_time += 1
 
@@ -803,7 +844,7 @@ def create_header_table(lst_checked_counter):
 # вначале выходного списка для создания Header внесем сочетание Группа/счетчик
         num_counters_in_groups = 0  # посчитаем общее количество счетчиков в выбранных группах
         # пройдемся по спску выбранных пльзователем групп
-        for itemGroup in cfg.lst_checked_group:
+        for itemGroup in cfg.lst_id_checked_group:
             
             
             # узнаем какие счетчики содержит группа
@@ -850,7 +891,7 @@ def create_header_table2(lst_checked_counter):
 # вначале выходного списка для создания Header внесем сочетание Группа/счетчик
         num_counters_in_groups = 0  # посчитаем общее количество счетчиков в выбранных группах
         # пройдемся по спску выбранных пльзователем групп
-        for itemGroup in cfg.lst_checked_group:
+        for itemGroup in cfg.lst_id_checked_group:
             # узнаем какие счетчики содержит группа
             list_counter_in_group, rezult_get = msql.get_list_counter_in_group_DBGC(itemGroup)
             for item_counter in list_counter_in_group:

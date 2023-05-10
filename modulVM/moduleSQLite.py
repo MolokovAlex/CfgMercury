@@ -188,6 +188,22 @@ def createTableDBFile(nameFileDB:str)->bool:
 # ----------------- DBG -------------------------------------------------------------
 # ------------------------------------------------------------------------------------
 
+def get_id_group_DBG(item_name):
+        rezult = False
+        lst_counterDB = []       
+        cursorDB = cfg.sql_base_conn.cursor()
+        with cfg.sql_base_conn:
+            # cursorDB.execute("""SELECT id, schem, name_counter_full, net_adress, manuf_number, manuf_data, klass_react, klass_act, nom_u, ku, ki, koefA, comment FROM DBC ORDER BY name_counter_full ASC""")
+            cursorDB.execute("""SELECT id 
+                                FROM DBG 
+                                WHERE name_group_full = ?;""", (item_name,))
+            data = cursorDB.fetchone() 
+            if data:
+                rezult = True
+            else:
+                rezult = False
+        return data[0], rezult
+
 def getListGroupDB():
         rezult_get = False
         lst_groupDB = []
@@ -317,6 +333,23 @@ def fill_TableDBG_demo_value(nameFileDB:str):
 # ------------------------------------------------------------------------------------
 # ----------------- DBC -------------------------------------------------------------
 # ------------------------------------------------------------------------------------
+
+def get_id_counter_DBC(item_name):
+        rezult = False
+        lst_counterDB = []       
+        cursorDB = cfg.sql_base_conn.cursor()
+        with cfg.sql_base_conn:
+            # cursorDB.execute("""SELECT id, schem, name_counter_full, net_adress, manuf_number, manuf_data, klass_react, klass_act, nom_u, ku, ki, koefA, comment FROM DBC ORDER BY name_counter_full ASC""")
+            cursorDB.execute("""SELECT id 
+                                FROM DBC 
+                                WHERE name_counter_full = ?;""", (item_name,))
+            data = cursorDB.fetchone() 
+            if data:
+                rezult = True
+            else:
+                rezult = False
+        return data[0], rezult
+
 
 def getListCounterDB():
         rezult_get = False
