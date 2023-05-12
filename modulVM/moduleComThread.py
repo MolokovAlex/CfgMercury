@@ -142,18 +142,20 @@ class CommunicationCounterThread(QThread):
                 if rezult :
                     rezult = self.update_adress_in_LOSTDATAPP(id_counter, adr_last_record)
                     if rezult: 
-                        ml.logger.debug(f"поток: обновлено значение adr_last_record= {adr_last_record} в БД LOSTDATAPP")
+                        ml.logger.info(f"поток: обновлено значение adr_last_record= {adr_last_record} в БД LOSTDATAPP")
                         adress = adr_last_record
             # считываем по этому адресу из счетчика - получаем словарь с полями datetime и P+...
             # проверяем есть ли такой datetime в DBPP
             # если есть - update запись в DBPP
             # если нет - insert запись в DBPP
 
-            for itter in range (1,7,1):
+            for itter in range (1,6,1):
                 dic_data_pp, rezult_ReadRecordMassProfilPower = mpm.fn_ReadRecordMassProfilPower(itemCounter, adress) #adress, id_counter)
-                dt = dic_data_pp['datetime']
-                ml.logger.debug(f"поток: считывание записи adr = {adress}, datetime = {dt}")
+                
                 if rezult_ReadRecordMassProfilPower:
+                    # dt = dic_data_pp['datetime']
+                    dt = datetime.datetime.strptime(dic_data_pp['datetime'], "%d/%m/%Y %H:%M")
+                    ml.logger.debug(f"поток: считывание записи adr = {adress}, datetime = {dt}")
                     rezult_is_record, data = self.is_record_from_DBPP(id_counter, dt)
                     if rezult_is_record:
                         ml.logger.debug(f"поток: update в таблицу DBPP")
@@ -189,6 +191,7 @@ class CommunicationCounterThread(QThread):
         flag_rezult = False
         try:
             # cursorDB = cfg.sql_base_conn.cursor()
+            
             with self.connectDB:
                 self.cursor.execute("""SELECT datetime FROM DBPP WHERE id_counter=? AND 
                                                                     datetime = ? AND
@@ -205,19 +208,19 @@ class CommunicationCounterThread(QThread):
             flag_rezult = False
         return flag_rezult, data
 
-    def delete_record_in_LOSTDATAPP(self, id_record):
-        rezult = False
-        try:
-            cursorDB = cfg.sql_base_conn.cursor()
-            with cfg.sql_base_conn:
-                    cursorDB.execute("""DELETE FROM LOSTDATAPP WHERE id=?;""", (id_record,))
-                    cfg.sql_base_conn.commit()
-                    rezult = True
-        except sql3.Error as error_sql:
-            ml.logger.error("Exception occurred", exc_info=True)
-            self.viewCodeError (error_sql)
-            rezult = False
-        return rezult
+    # def delete_record_in_LOSTDATAPP(self, id_record):
+    #     rezult = False
+    #     try:
+    #         cursorDB = cfg.sql_base_conn.cursor()
+    #         with cfg.sql_base_conn:
+    #                 cursorDB.execute("""DELETE FROM LOSTDATAPP WHERE id=?;""", (id_record,))
+    #                 cfg.sql_base_conn.commit()
+    #                 rezult = True
+    #     except sql3.Error as error_sql:
+    #         ml.logger.error("Exception occurred", exc_info=True)
+    #         self.viewCodeError (error_sql)
+    #         rezult = False
+    #     return rezult
 
 
     def select_one_record_datetime_from_LOSTDATAPP(self, id_counter):#, date_time):
@@ -305,7 +308,9 @@ class CommunicationCounterThread(QThread):
                         self.stop_th()
                         ml.logger.error(" поток: посылка сигнала на пере-сброс потока по ошибкам")
                         if not(cfg.MODE_QOBJECT): self.signal_errorCount.emit()  #  при большом количестве ошибок - перезагрузим поток
-                if not(cfg.MODE_QOBJECT): self.signal_progressRS.emit(numCounter) #  пусть порядковый номер счетчика в списке будет процентом выполненного объема цикла опроса
+                if not(cfg.MODE_QOBJECT): 
+                    self.signal_progressRS.emit(numCounter) #  пусть порядковый номер счетчика в списке будет процентом выполненного объема цикла опроса
+                    self.signal_thread_is_working.emit()  #  сигнал о том что поток жив и не завис
         return None
 
     def getListCounterDB(self):

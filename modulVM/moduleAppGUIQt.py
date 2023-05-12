@@ -104,6 +104,13 @@ class MainWindow(QMainWindow):
         # self.thread_FindLostData.start()
 
         # self.connect(self.thread, SIGNAL("mysignal(QString"), self.onChangeProgressRS, Qt.QueuedConnection)
+
+
+        # запись в БД кофф KU kI
+        # отключить эти сроки на последющем update
+        msql.insert_kU_kI_in_DBC()
+
+
         return None
 
     def open_window_wait(self):
