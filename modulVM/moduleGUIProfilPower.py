@@ -29,7 +29,7 @@ import modulVM.moduleLogging as ml
 class TableProfilePowerDialog(QDialog):
         inc_progressDB = pyqtSignal(int)
         send_message_statusBar = pyqtSignal(str)
-        def __init__(self, data=np.array([[]]), parent=None):
+        def __init2__(self, data=np.array([[]]), parent=None):
             # super().__init__()
             super(TableProfilePowerDialog, self).__init__(parent)
             self.setWindowFlags(self.windowFlags()
@@ -123,6 +123,8 @@ class TableProfilePowerDialog(QDialog):
             # layout.addWidget(self.tableProfilePowerCounts2, 1, 0, 1, 13, alignment=Qt.AlignmentFlag.AlignBottom)
             
             #
+
+
             self.model = NpModel()
             self.tableProfilePowerCounts = QTableView()
             self.tableProfilePowerCounts.setModel(self.model)
@@ -132,12 +134,160 @@ class TableProfilePowerDialog(QDialog):
             self.tableProfilePowerCounts.verticalHeader().hide()
             self.tableProfilePowerCounts.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
             # layout.addWidget(self.tableProfilePowerCounts,2,0, 10, 13)
+            # layout.addWidget(self.tableProfilePowerCounts,2,0, 2, 13, alignment=Qt.AlignmentFlag.AlignTop)
             layout.addWidget(self.tableProfilePowerCounts,2,0, 2, 13, alignment=Qt.AlignmentFlag.AlignTop)
 
             # layout.setRowStretch(0, 0)
             # layout.setRowStretch(1, 0)
             # layout.setRowStretch(2, 0)
             self.setLayout(layout)
+
+            # self.load()
+            self.tableProfilePowerCounts.resizeColumnsToContents()
+
+            return None
+        
+        def __init__(self, data=np.array([[]]), parent=None):
+            # super().__init__()
+            super(TableProfilePowerDialog, self).__init__(parent)
+            self.setWindowFlags(self.windowFlags()
+                | Qt.WindowMinimizeButtonHint
+                | Qt.WindowMaximizeButtonHint
+                )
+            self.setMinimumSize(QSize(800, 400))         # Устанавливаем размеры
+            self.setWindowTitle("Таблица профиля мощности") # Устанавливаем заголовок окна
+
+
+            hbox = QHBoxLayout(self)
+            self.leftFrame = QFrame(self)       
+            self.leftFrame.setFrameShape(QFrame.StyledPanel)
+            self.leftLayout = QGridLayout(self.leftFrame)
+            self.treeCount = QTreeWidget()
+            self.treeCount.itemClicked.connect(self.onItemClicked)
+            self.renderTreePanel_for_ProfilPower2()
+            # self.treeCount.clicked.connect(self.click_in_tree)
+            self.leftLayout.addWidget(self.treeCount,0,0)
+            
+            
+            self.rightFrame = QFrame(self)
+            self.rightFrame.setFrameShape(QFrame.StyledPanel)
+            self.rightLayout = QGridLayout(self.rightFrame)
+            self.rightLayout.setSpacing(1)
+
+
+            
+
+
+            
+            
+            # флаг разрешения нажатия на кнопки Обновить и Импорт в Иксель - пока не выбраны счетчики и группы он опущен
+            self.flag_caseCountersAndGroups = False
+            # значение Combox периода интегрирования в окне профиля мощности
+            self.period_integr = ""
+            
+            self.lst_checkItemTree=[]
+
+            # btn_caseCountsAndGroups = QPushButton("Выбор счетчиков и групп")
+            # self.rightLayout.addWidget(btn_caseCountsAndGroups, 0, 0)
+            # btn_caseCountsAndGroups.clicked.connect(self.click_btn_caseCountsAndGroups)
+            
+            self.de_dateFrom = QDateEdit(self)
+            self.rightLayout.addWidget(self.de_dateFrom, 0, 0)
+            self.de_dateFrom.setCalendarPopup(True) 
+
+            # от первого дня месяца
+            ddate_from = QDate(QDate.currentDate().year(), QDate.currentDate().month(), 1)
+            # до текущей даты
+            ddate_to = QDate.currentDate()
+
+            lbl_empty2 = QLabel("<-интервал->")
+            self.rightLayout.addWidget(lbl_empty2, 0, 1)
+            lbl_empty2.setAlignment(Qt.AlignCenter)
+
+            self.de_dateTo = QDateEdit(self)
+            self.rightLayout.addWidget(self.de_dateTo, 0, 2)
+            self.de_dateTo.setCalendarPopup(True)
+            # self.de_dateTo.setDate(QDate(2022, 12, 25))
+            # d = ddatefrom.addDays(2)
+            # print(d)
+            self.de_dateFrom.setDate(ddate_from)
+            self.de_dateTo.setDate(ddate_to)
+
+            lbl_empty4 = QLabel("Период отображения")
+            self.rightLayout.addWidget(lbl_empty4, 0, 4)
+            lbl_empty4.setAlignment(Qt.AlignRight)
+            self.cb_interval = QComboBox()
+            self.rightLayout.addWidget(self.cb_interval, 0, 5)
+            self.cb_interval.addItems(cfg.VALUE_PERIOD_INTEGR_POFIL)
+            self.cb_interval.currentIndexChanged.connect( self.change_cb_interval )
+            self.period_integr = self.cb_interval.currentText()
+
+            self.cbox = QCheckBox("применить kU и kI")
+            self.cbox.setChecked(False)
+            self.cbox.toggled.connect(self.onClicked_cbox) 
+            self.rightLayout.addWidget(self.cbox, 0, 6)
+
+            self.btnRefreshTableProfilePowerCounts = QPushButton("Обновить")
+            self.rightLayout.addWidget(self.btnRefreshTableProfilePowerCounts, 0, 8)
+            self.btnRefreshTableProfilePowerCounts.clicked.connect(self.click_btnRefreshTableProfilePowerCounts_ver2)
+            if not self.flag_caseCountersAndGroups:
+                self.btnRefreshTableProfilePowerCounts.setEnabled(False)
+            else:
+                self.btnRefreshTableProfilePowerCounts.setEnabled(True) 
+
+            # ckb_cycleRefresh = QCheckBox("циклически")
+            # layout.addWidget(ckb_cycleRefresh, 1, 10)
+
+            lbl_empty3 = QLabel("    ")
+            self.rightLayout.addWidget(lbl_empty3, 0, 11)
+
+            self.btnImportTableProfilePowerCounts = QPushButton("Импорт в Excel")
+            self.rightLayout.addWidget(self.btnImportTableProfilePowerCounts, 0, 12)
+            self.btnImportTableProfilePowerCounts.clicked.connect(self.click_bth_ImportInExcel)
+            if not self.flag_caseCountersAndGroups:
+                self.btnImportTableProfilePowerCounts.setEnabled(False)
+            else:
+                self.btnImportTableProfilePowerCounts.setEnabled(True)    
+        
+            #
+            # self.model2 = NpModel2()
+            # self.tableProfilePowerCounts2 = QTableView()
+            # self.tableProfilePowerCounts2.setModel(self.model2)
+            # self.tableProfilePowerCounts2.horizontalHeader().setSectionResizeMode(0)
+            # # self.tableProfilePowerCounts.horizontalHeader().setSectionResizeMode(1)#,QHeaderView.ResizeToContents)
+            # # self.tableProfilePowerCounts.horizontalHeader().hide()
+            # self.tableProfilePowerCounts2.verticalHeader().hide()
+            # # self.tableProfilePowerCounts2.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
+            # layout.addWidget(self.tableProfilePowerCounts2, 1, 0, 1, 13, alignment=Qt.AlignmentFlag.AlignBottom)
+            
+            #
+
+       
+
+            self.model = NpModel()
+            self.tableProfilePowerCounts = QTableView()
+            self.tableProfilePowerCounts.setModel(self.model)
+            self.tableProfilePowerCounts.horizontalHeader().setSectionResizeMode(0)
+            # self.tableProfilePowerCounts.horizontalHeader().setSectionResizeMode(1)#,QHeaderView.ResizeToContents)
+            # self.tableProfilePowerCounts.horizontalHeader().hide()
+            self.tableProfilePowerCounts.verticalHeader().hide()
+            self.tableProfilePowerCounts.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
+            # layout.addWidget(self.tableProfilePowerCounts,2,0, 10, 13)
+            # layout.addWidget(self.tableProfilePowerCounts,2,0, 2, 13, alignment=Qt.AlignmentFlag.AlignTop)
+            self.rightLayout.addWidget(self.tableProfilePowerCounts,2,0, 2, 13, alignment=Qt.AlignmentFlag.AlignTop)
+
+            # layout.setRowStretch(0, 0)
+            # layout.setRowStretch(1, 0)
+            # layout.setRowStretch(2, 0)
+
+            # self.setLayout(layout)
+            splitter = QSplitter(Qt.Horizontal)
+            splitter.addWidget(self.leftFrame)
+            splitter.addWidget(self.rightFrame)
+            splitter.setStretchFactor(1, 1)
+            splitter.setSizes([125, 150])
+            hbox.addWidget(splitter)
+            self.setLayout(hbox)
 
             # self.load()
             self.tableProfilePowerCounts.resizeColumnsToContents()
@@ -180,18 +330,18 @@ class TableProfilePowerDialog(QDialog):
         
             layout = QGridLayout()
             self.DialogCaseCounterAndGroups.setLayout(layout)
-            self.tree = QTreeWidget()
+            self.treeCount = QTreeWidget()
             # self.tree.setColumnCount(2)
             # self.tree.setHeaderLabels(['Наименование', 'Сетевой адрес'])
-            self.tree.setColumnCount(1)
-            self.tree.setHeaderLabels(['Наименование'])
+            self.treeCount.setColumnCount(1)
+            self.treeCount.setHeaderLabels(['Наименование'])
             self.renderTreePanel_for_ProfilPower()
             # self.tree.clicked.connect(self.click_onClickedOnItemTree)
             # self.tree.selectionModel().selectionChanged.connect(self.onSelectionChanged)      # QItemSelectionModel
             # self.tree.itemChanged.connect(self.onChangeCheckBox)
             # self.tree.doubleClicked.connect(self.click_onClickedOnItemTree)
-            self.tree.itemClicked.connect(self.onItemClicked)
-            layout.addWidget(self.tree,0,0,2,2)
+            self.treeCount.itemClicked.connect(self.onItemClicked)
+            layout.addWidget(self.treeCount,0,0,2,2)
             
             btn_OKCase = QPushButton("OK")
             layout.addWidget(btn_OKCase, 2, 0)
@@ -205,31 +355,31 @@ class TableProfilePowerDialog(QDialog):
         
         
 
-        def onChangeCheckBox(self, item):
-            a=0
-            run_inSelectionChange= cfg.run_inSelectionChange
-            run_onChangeCheckBox = cfg.run_onChangeCheckBox
-            if cfg.run_onChangeCheckBox == 1: return None
-            if cfg.run_inSelectionChange == 1: return None
-            cfg.run_onChangeCheckBox = 1
-            run_onChangeCheckBox = cfg.run_onChangeCheckBox
-            # item.setSelected(True)
-            # self.onSelectionChanged(item)
-            # item.setSelected(True)
-            self.onItemClicked(item, 0)
-            # self.onSelectionChanged(item)
-            # cfg.run_inSelectionChange = 0
-            run_inSelectionChange= cfg.run_inSelectionChange
-            # item.setSelected(False)
+        # def onChangeCheckBox(self, item):
+        #     a=0
+        #     run_inSelectionChange= cfg.run_inSelectionChange
+        #     run_onChangeCheckBox = cfg.run_onChangeCheckBox
+        #     if cfg.run_onChangeCheckBox == 1: return None
+        #     if cfg.run_inSelectionChange == 1: return None
+        #     cfg.run_onChangeCheckBox = 1
+        #     run_onChangeCheckBox = cfg.run_onChangeCheckBox
+        #     # item.setSelected(True)
+        #     # self.onSelectionChanged(item)
+        #     # item.setSelected(True)
+        #     self.onItemClicked(item, 0)
+        #     # self.onSelectionChanged(item)
+        #     # cfg.run_inSelectionChange = 0
+        #     run_inSelectionChange= cfg.run_inSelectionChange
+        #     # item.setSelected(False)
 
-            # if cfg.flag_callonChangeCheckBox == 0:
-            #     self.onSelectionChanged(item)
+        #     # if cfg.flag_callonChangeCheckBox == 0:
+        #     #     self.onSelectionChanged(item)
                 
-            # cfg.flag_callonChangeCheckBox = 0
-            # flag_callonChangeCheckBox= cfg.flag_callonChangeCheckBox
-            cfg.run_onChangeCheckBox = 0
-            run_onChangeCheckBox = cfg.run_onChangeCheckBox
-            return None
+        #     # cfg.flag_callonChangeCheckBox = 0
+        #     # flag_callonChangeCheckBox= cfg.flag_callonChangeCheckBox
+        #     cfg.run_onChangeCheckBox = 0
+        #     run_onChangeCheckBox = cfg.run_onChangeCheckBox
+        #     return None
         
         def onItemClicked(self, it, col):
             a=0
@@ -259,8 +409,8 @@ class TableProfilePowerDialog(QDialog):
             lst_id_checked_group = cfg.lst_id_checked_group.copy()
             lst_id_checked_single_counter = cfg.lst_id_checked_single_counter.copy()
             lst_id_checked_counter_in_group = cfg.lst_id_checked_counter_in_group.copy()
-            for sel in self.tree.selectedIndexes():
-                selected_idgetItem = self.tree.itemFromIndex(sel)
+            for sel in self.treeCount.selectedIndexes():
+                selected_idgetItem = self.treeCount.itemFromIndex(sel)
                 val = sel.data()
                 try:
                 # если название предположительно - название группы - по названию получим  id группы
@@ -376,6 +526,15 @@ class TableProfilePowerDialog(QDialog):
             cfg.run_inSelectionChange = 0
             run_inSelectionChange = cfg.run_inSelectionChange
                 # selected_idgetItem.setSelected(False)
+            if cfg.lst_id_checked_group or cfg.lst_id_checked_single_counter:
+                self.flag_caseCountersAndGroups = True
+                self.btnRefreshTableProfilePowerCounts.setEnabled(True)
+                self.btnImportTableProfilePowerCounts.setEnabled(True) 
+            else:
+                # если пользователь снял все галочки
+                self.flag_caseCountersAndGroups = False
+                self.btnRefreshTableProfilePowerCounts.setEnabled(False)
+                self.btnImportTableProfilePowerCounts.setEnabled(False)
             return None
         
         # def click_onClickedOnItemTree(self , sel:QModelIndex):
@@ -415,9 +574,9 @@ class TableProfilePowerDialog(QDialog):
             # cfg.lst_id_checked_counter_in_group, cfg.lst_id_checked_group, cfg.lst_id_checked_single_counter = mg.create_id_LstCheckedCounterAndGroups()
             # закроем диалоговое окно
             self.DialogCaseCounterAndGroups.hide() 
-            lst_id_checked_group = cfg.lst_id_checked_group.copy()
-            lst_id_checked_single_counter = cfg.lst_id_checked_single_counter.copy()
-            lst_id_checked_counter_in_group = cfg.lst_id_checked_counter_in_group.copy() 
+            # lst_id_checked_group = cfg.lst_id_checked_group.copy()
+            # lst_id_checked_single_counter = cfg.lst_id_checked_single_counter.copy()
+            # lst_id_checked_counter_in_group = cfg.lst_id_checked_counter_in_group.copy() 
             cfg.run_inSelectionChange = 0  
             return
         
@@ -740,17 +899,15 @@ class TableProfilePowerDialog(QDialog):
                     "Ошибка обработки записи в Excel"
                     )
                 
-
-
     #------------------------------------------------------------------------------------------------------
     #------------------------------------------------------------------------------------------------------    
-        def renderTreePanel_for_ProfilPower(self):
+        def renderTreePanel_for_ProfilPower2(self):
             
             list_counterDB, rezult_getListOfCounterDB = msql.getListCounterDB()
             list_GroupDB, rezult_getListOfGroupDB = msql.getListGroupDB()
-            self.tree.clear()
+            self.treeCount.clear()
             for item_Group in list_GroupDB:
-                parent = QTreeWidgetItem(self.tree)
+                parent = QTreeWidgetItem(self.treeCount)
                 parent.setText(0, item_Group['name_group_full'])
                 list_DictGroupWithCounterDB, rezult_getListOfGroupDB = msql.getListCounterInGroupDB(self,item_Group['name_group_full'])
                 parent.setFlags(parent.flags() | Qt.ItemIsUserCheckable)
@@ -764,7 +921,7 @@ class TableProfilePowerDialog(QDialog):
                     child.setForeground(0, Qt.darkBlue)
                     child.setText(0, "    " + item['name_counter_full'])
                     # child.setText(1, item['net_adress'])
-            parent = QTreeWidgetItem(self.tree)
+            parent = QTreeWidgetItem(self.treeCount)
             parent.setText(0, "Все счетчики")
             for item_Counter in list_counterDB:
                     child = QTreeWidgetItem(parent)
@@ -778,8 +935,49 @@ class TableProfilePowerDialog(QDialog):
                         if itemChek == item_Counter['id']:
                             child.setCheckState(0, Qt.Checked)
                             break
-            self.tree.expandAll()
-            self.tree.resizeColumnToContents(0)
+            self.treeCount.expandAll()
+            self.treeCount.resizeColumnToContents(0)
+            # self.tree.resizeColumnToContents(1)
+            return None
+
+    #------------------------------------------------------------------------------------------------------
+    #------------------------------------------------------------------------------------------------------    
+        def renderTreePanel_for_ProfilPower(self):
+            
+            list_counterDB, rezult_getListOfCounterDB = msql.getListCounterDB()
+            list_GroupDB, rezult_getListOfGroupDB = msql.getListGroupDB()
+            self.treeCount.clear()
+            for item_Group in list_GroupDB:
+                parent = QTreeWidgetItem(self.treeCount)
+                parent.setText(0, item_Group['name_group_full'])
+                list_DictGroupWithCounterDB, rezult_getListOfGroupDB = msql.getListCounterInGroupDB(self,item_Group['name_group_full'])
+                parent.setFlags(parent.flags() | Qt.ItemIsUserCheckable)
+                parent.setCheckState(0, Qt.Unchecked)
+                for itemChek in cfg.lst_id_checked_group:
+                    if itemChek == item_Group['id']:
+                        parent.setCheckState(0, Qt.Checked)
+                        break
+                for item in list_DictGroupWithCounterDB:
+                    child = QTreeWidgetItem(parent)
+                    child.setForeground(0, Qt.darkBlue)
+                    child.setText(0, "    " + item['name_counter_full'])
+                    # child.setText(1, item['net_adress'])
+            parent = QTreeWidgetItem(self.treeCount)
+            parent.setText(0, "Все счетчики")
+            for item_Counter in list_counterDB:
+                    child = QTreeWidgetItem(parent)
+                    child.setFlags(child.flags() | Qt.ItemIsUserCheckable)
+                    child.setCheckState(0, Qt.Unchecked)
+                    child.setForeground(0, Qt.darkBlue)
+                    child.setText(0, item_Counter['name_counter_full'])
+                    # child.setText(1, item_Counter['net_adress'])
+                    # for itemChek in (cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
+                    for itemChek in (cfg.lst_id_checked_single_counter):    
+                        if itemChek == item_Counter['id']:
+                            child.setCheckState(0, Qt.Checked)
+                            break
+            self.treeCount.expandAll()
+            self.treeCount.resizeColumnToContents(0)
             # self.tree.resizeColumnToContents(1)
             return None
 
