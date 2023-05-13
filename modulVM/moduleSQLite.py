@@ -792,6 +792,32 @@ def insert_TableDBPP_value(dictData: dict):
     return  flag_rezult
 
 
+
+def select_one_PandQ_from_DBPP(item_counter, dateTime):
+    flag_rezult = False
+    dict_data = {}
+    data_out = []
+    lst_pole = ['datetime','P_plus', 'P_minus', 'Q_plus', 'Q_minus']
+    cursorDB = cfg.sql_base_conn.cursor()
+    with cfg.sql_base_conn:
+        cursorDB.execute("""SELECT datetime, P_plus, P_minus, Q_plus, Q_minus FROM DBPP WHERE id_counter=? AND 
+                                                                                        datetime = ? AND
+                                                                                        period_int ='30'
+                                                                                        """, (item_counter,dateTime))
+        data = cursorDB.fetchone() 
+    if data:
+        data_out = list(data)
+        data_out[1] = int(data_out[1])
+        data_out[2] = int(data_out[2])
+        data_out[3] = int(data_out[3])
+        data_out[4] = int(data_out[4])
+        dict_data=dict(zip(lst_pole, data))
+        flag_rezult = True
+    else:
+        flag_rezult = False
+    return flag_rezult, dict_data, data
+
+
 def selectPandQfromDBPP(item_counter, dateFrom=None, dateTo=None):
     flag_rezult = False
     dic_out_data = {}

@@ -337,17 +337,10 @@ def insert_summ_v2 (arr_data, arr_TimeAxis, period_View:str, arr_summ_Alltime, a
 
     # ключи для установки в эти места определнных слов ИТОГО... или ВСЕГО...
     key_allday = 111  # 'ВСЕГО ДЕНЬ'
-    # key_alldaygr = 222  # 'ВСЕГО ДЕНЬ ПО ГРУППЕ'
-    # key_allmoth = 333  # 'ВСЕГО МЕСЯЦ'
-    # key_allmothgr = 444  # 'ВСЕГО МЕСЯЦ ПО ГРУППЕ'
-    # key_allyear = 555       # 'ВСЕГО ГОД'
-    # key_allyeargr = 777     # 'ВСЕГО ГОД ПО ГРУППЕ'
     key_day = 110           # 'ИТОГО ДЕНЬ'
     key_daygr = 220         # 'ИТОГО ДЕНЬ ПО ГРУППЕ'
     key_month = 330          # 'ИТОГО МЕСЯЦ'
     key_monthgr = 440        # 'ИТОГО МЕСЯЦ ПО ГРУППЕ'
-    # key_year = 550          # 'ИТОГО ГОД'
-    # key_yeargr = 770        # 'ИТОГО ГОД ПО ГРУППЕ'
     key_groupPeriod = 880       # 'ИТОГО ПО ГРУППЕ ЗА ПЕРИОД'
     key_counterPeriod = 990       # 'ИТОГО ПО счетчику ЗА ПЕРИОД'
 
@@ -365,12 +358,6 @@ def insert_summ_v2 (arr_data, arr_TimeAxis, period_View:str, arr_summ_Alltime, a
     # for num in range (arr.shape[0]-1,0,-1):
     len_arr = np.shape(arr_data)[0]
     num_time=0
-    # num_lst_sum_day = 0
-    # num_lst_sum_month = 0
-    # num_lst_sum_year = 0
-    # num_lst_sum_day_in_group = 0
-    # num_lst_sum_month_in_group = 0
-    # num_lst_sum_year_in_group = 0
     num_day = 0
     num_month = 0
     num_year = 0
@@ -387,128 +374,50 @@ def insert_summ_v2 (arr_data, arr_TimeAxis, period_View:str, arr_summ_Alltime, a
             month_future = arr_TimeAxis[num_time][1]
             year_past = arr_TimeAxis[num_time+1][0]
             year_future = arr_TimeAxis[num_time][0]
-# если период отображения ДЕНЬ - то должны поставить ИТОГО МЕСЯЦ и ИТОГО ГОД
-            if period_View == "день":
-                # если меняется месяц - добавим ИТОГО МЕСЯЦ
-                if month_past != month_future:
+            # если меняется день - добавим ИТОГО ДЕНЬ
+            if day_past != day_future:
+                num_time +=1
+                arr_data, arr_TimeAxis, num_time, len_arr = _insert_row_itogo_day_counter(arr_data, arr_TimeAxis, num_time, key_day, len_arr, num_day, arr_summ_time)
+                arr_data, arr_TimeAxis, num_time, len_arr = _insert_row_itogo_day_group(arr_data, arr_TimeAxis, num_time, key_daygr, len_arr, mesto, num_day, arr_summ_time_Group)
+                num_day +=1
+            # если меняется месяц - добавим ИТОГО МЕСЯЦ
+            if month_past != month_future:
+                arr_data, arr_TimeAxis, num_time, len_arr = _insert_row_itogo_month_counter(arr_data, arr_TimeAxis, num_time, key_month, len_arr, num_month,arr_summ_time)
+                arr_data, arr_TimeAxis, num_time, len_arr = _insert_row_itogo_month_group(arr_data, arr_TimeAxis, num_time, key_monthgr, len_arr, mesto, num_month, arr_summ_time_Group)
+                num_month +=1
+            if year_past != year_future:
+                pass
+# # если период отображения ДЕНЬ - то должны поставить ИТОГО МЕСЯЦ и ИТОГО ГОД
+#             if period_View == "день":
+#                 # если меняется месяц - добавим ИТОГО МЕСЯЦ
+#                 if month_past != month_future:
+#                     arr_data, arr_TimeAxis, num_time, len_arr = _insert_row_itogo_month_counter(arr_data, arr_TimeAxis, num_time, key_month, len_arr, num_month,arr_summ_time)
+#                     arr_data, arr_TimeAxis, num_time, len_arr = _insert_row_itogo_month_group(arr_data, arr_TimeAxis, num_time, key_monthgr, len_arr, mesto, num_month, arr_summ_time_Group)
+#                     num_month +=1
                     
-                    arr_data, arr_TimeAxis, num_time, len_arr = _insert_row_itogo_month_counter(arr_data, arr_TimeAxis, num_time, key_month, len_arr, num_month,arr_summ_time)
-                    # arr_data, arr_TimeAxis = _insert_row(arr_data, arr_TimeAxis, num_time, key_month)
-                    # len_arr +=1
-                    # for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
-                    #     arr_data[num_time+1][num_counter] = str(arr_summ_time[1][num_month][num_counter])
-                    # num_time = num_time+1
+#                 if year_past != year_future:
+#                     pass
 
-                    arr_data, arr_TimeAxis, num_time, len_arr = _insert_row_itogo_month_group(arr_data, arr_TimeAxis, num_time, key_monthgr, len_arr, mesto, num_month, arr_summ_time_Group)
-                    # arr_data, arr_TimeAxis = insert_row(arr_data, arr_TimeAxis, num_time, key_mothgr)
-                    # len_arr +=1
-                    # for num_group, item_group in enumerate(cfg.lst_checked_group):
-                    #     arr_data[num_time+1][mesto[num_group]] = str(arr_summ_time_Group[1][num_month][num_group])
-                    # num_time = num_time+1
-
-                    num_month +=1
+# # если период отображения ЧАС - то должны поставить ИТОГО ДЕНЬ и ИТОГО МЕСЯЦ и ИТОГО ГОД
+#             if (period_View == "час") or (period_View == "30 мин"):
+#                 # если меняется день - добавим ИТОГО ДЕНЬ
+#                 if day_past != day_future:
+#                     arr_data, arr_TimeAxis, num_time, len_arr = _insert_row_itogo_day_counter(arr_data, arr_TimeAxis, num_time, key_day, len_arr, num_day, arr_summ_time)
+#                     arr_data, arr_TimeAxis, num_time, len_arr = _insert_row_itogo_day_group(arr_data, arr_TimeAxis, num_time, key_daygr, len_arr, mesto, num_day, arr_summ_time_Group)
+#                     num_day +=1                    
                     
-
-                if year_past != year_future:
-                    pass
-                    # # отключим ИТОГО год по группе
-                    # arr_data, arr_TimeAxis = insert_row(arr_data, arr_TimeAxis, num_time, key_yeargr)
-                    # len_arr +=1
-                    # for num_group, item_group in enumerate(cfg.lst_checked_group):
-                    #     arr_data[num_time+1][mesto[num_group]] = str(arr_summ_time_Group[2][num_year][num_group])
-
-                    # num_time = num_time+1
-
-                    # # отключим ИТОГО год по счетчику
-                    # arr_data, arr_TimeAxis = insert_row(arr_data, arr_TimeAxis, num_time, key_year)
-                    # len_arr +=1
-                    # for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
-                    #     arr_data[num_time+1][num_counter] = str(arr_summ_time[2][num_year][num_counter])
+#                 if month_past != month_future:
+#                     arr_data, arr_TimeAxis, num_time, len_arr = _insert_row_itogo_month_counter(arr_data, arr_TimeAxis, num_time, key_month, len_arr, num_month, arr_summ_time)
+#                     arr_data, arr_TimeAxis, num_time, len_arr = _insert_row_itogo_month_group(arr_data, arr_TimeAxis, num_time, key_monthgr, len_arr, mesto, num_month,arr_summ_time_Group)
+#                     num_month +=1
                     
+#                 if year_past != year_future:
+#                     pass
+# # если период отображения МЕСЯЦ - то должны поставить ИТОГО ГОД , ИТОГО ГОД
+#             if period_View == "месяц":
+#                 if year_past != year_future:
+#                     pass
 
-                    # num_year +=1
-                    # num_time = num_time+1
-# если период отображения ЧАС - то должны поставить ИТОГО ДЕНЬ и ИТОГО МЕСЯЦ и ИТОГО ГОД
-            if (period_View == "час") or (period_View == "30 мин"):
-                # если меняется день - добавим ИТОГО ДЕНЬ
-                if day_past != day_future:
-
-                    arr_data, arr_TimeAxis, num_time, len_arr = _insert_row_itogo_day_counter(arr_data, arr_TimeAxis, num_time, key_day, len_arr, num_day, arr_summ_time)
-                    # arr_data, arr_TimeAxis = _insert_row(arr_data, arr_TimeAxis, num_time, key_day)
-                    # len_arr +=1
-                    # for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
-                    #     arr_data[num_time+1][num_counter] = str(arr_summ_time[0][num_day][num_counter])
-                    # num_time = num_time+1
-
-                    arr_data, arr_TimeAxis, num_time, len_arr = _insert_row_itogo_day_group(arr_data, arr_TimeAxis, num_time, key_daygr, len_arr, mesto, num_day, arr_summ_time_Group)
-                    # arr_data, arr_TimeAxis = _insert_row(arr_data, arr_TimeAxis, num_time, key_daygr)
-                    # len_arr +=1
-                    # for num_group, item_group in enumerate(cfg.lst_checked_group):
-                    #     arr_data[num_time+1][mesto[num_group]] = str(arr_summ_time_Group[0][num_day][num_group])
-                    # num_time = num_time+1
-
-                    num_day +=1                    
-                    
-
-                if month_past != month_future:
-
-                    arr_data, arr_TimeAxis, num_time, len_arr = _insert_row_itogo_month_counter(arr_data, arr_TimeAxis, num_time, key_month, len_arr, num_month, arr_summ_time)
-                    # arr_data, arr_TimeAxis = _insert_row(arr_data, arr_TimeAxis, num_time, key_month)
-                    # len_arr +=1
-                    # for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
-                    #     arr_data[num_time+1][num_counter] = str(arr_summ_time[1][num_month][num_counter])
-                    # num_time = num_time+1
-
-                    arr_data, arr_TimeAxis, num_time, len_arr = _insert_row_itogo_month_group(arr_data, arr_TimeAxis, num_time, key_monthgr, len_arr, mesto, num_month,arr_summ_time_Group)
-                    # arr_data, arr_TimeAxis = _insert_row(arr_data, arr_TimeAxis, num_time, key_monthgr)
-                    # len_arr +=1
-                    # for num_group, item_group in enumerate(cfg.lst_checked_group):
-                    #     arr_data[num_time+1][mesto[num_group]] = str(arr_summ_time_Group[1][num_month][num_group])
-                    # num_time = num_time+1
-
-                    num_month +=1
-                    
-
-                if year_past != year_future:
-                    pass
-                    # # отключим ИТОГО год по группе
-                    # arr_data, arr_TimeAxis = insert_row(arr_data, arr_TimeAxis, num_time, key_yeargr)
-                    # len_arr +=1
-                    # for num_group, item_group in enumerate(cfg.lst_checked_group):
-                    #     arr_data[num_time+1][mesto[num_group]] = str(arr_summ_time_Group[2][num_year][num_group])
-
-                    # num_time = num_time+1
-
-                    # отключим ИТОГО год по счетчику
-                    # arr_data, arr_TimeAxis = insert_row(arr_data, arr_TimeAxis, num_time, key_year)
-                    # len_arr +=1
-                    # for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
-                    #     arr_data[num_time+1][num_counter] = str(arr_summ_time[2][num_year][num_counter])
-                    
-
-                    # num_year +=1
-                    # num_time = num_time+1
-# если период отображения МЕСЯЦ - то должны поставить ИТОГО ГОД , ИТОГО ГОД
-            if period_View == "месяц":
-                if year_past != year_future:
-                    pass
-                    # # отключим ИТОГО год по группе
-                    # arr_data, arr_TimeAxis = insert_row(arr_data, arr_TimeAxis, num_time, key_yeargr)
-                    # len_arr +=1
-                    # for num_group, item_group in enumerate(cfg.lst_checked_group):
-                    #     arr_data[num_time+1][mesto[num_group]] = str(arr_summ_time_Group[2][num_year][num_group])
-
-                    # num_time = num_time+1
-
-                    # # отключим ИТОГО год по счетчику
-                    # arr_data, arr_TimeAxis = insert_row(arr_data, arr_TimeAxis, num_time, key_year)
-                    # len_arr +=1
-                    # for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
-                    #     arr_data[num_time+1][num_counter] = str(arr_summ_time[2][num_year][num_counter])
-                    
-
-                    # num_year +=1
-                    # num_time = num_time+1
         num_time +=1
 #  если это последняя строка таблицы - сделаем заключительные ИТОГО для дня, месяца и года
         if num_time == len_arr-1: 
@@ -516,21 +425,7 @@ def insert_summ_v2 (arr_data, arr_TimeAxis, period_View:str, arr_summ_Alltime, a
             if period_View == "день":
                 
                 arr_data, arr_TimeAxis, num_time, len_arr = _insert_row_itogo_month_counter(arr_data, arr_TimeAxis, num_time, key_month, len_arr, num_month, arr_summ_time)
-                # arr_data, arr_TimeAxis = _insert_row(arr_data, arr_TimeAxis, num_time, key_month)
-                # for num_counter, item_counter in enumerate(cfg.lst_checked_counter_in_group + cfg.lst_checked_single_counter):
-                #     arr_data[num_time+1][num_counter] = str(arr_summ_time[1][num_month][num_counter])
-                # num_time += 1
-
                 arr_data, arr_TimeAxis, num_time, len_arr = _insert_row_itogo_month_group(arr_data, arr_TimeAxis, num_time, key_monthgr, len_arr, mesto, num_month, arr_summ_time_Group)
-                # arr_data, arr_TimeAxis = _insert_row(arr_data, arr_TimeAxis, num_time, key_monthgr)
-                # for num_group, item_group in enumerate(cfg.lst_checked_group):
-                #     arr_data[num_time+1][mesto[num_group]] = str(arr_summ_time_Group[1][num_month][num_group])
-                # num_time += 1
-
-                # Добавлю пусую строку для наглядности
-                # arr_data = np.insert(arr_data, num_time+1, np.nan, axis=0)
-                # arr_TimeAxis = np.insert(arr_TimeAxis, num_time+1, 0, axis=0)
-                # num_time += 1
 
                 arr_data, arr_TimeAxis = _insert_row(arr_data, arr_TimeAxis, num_time, key_counterPeriod)
                 for num_counter, item_counter in enumerate(cfg.lst_id_checked_counter_in_group + cfg.lst_id_checked_single_counter):
@@ -701,6 +596,7 @@ def summ_per_day_and_month_and_year_v2(arr_data, arr_TimeAxis, lst_checked_group
     """ найдем сумму для Итого за месяц (num_period_sum=1) - по каждому месяцу
     и для Итого за год (num_period_sum=0) 
     """
+    flag1 = False
     num_period_view_day = 2 # индекс в массиве чисел дней
     num_period_view_month = 1 # индекс в массиве чисел месяца
     num_period_view_year = 0 # индекс в массиве чисел года
@@ -740,18 +636,21 @@ def summ_per_day_and_month_and_year_v2(arr_data, arr_TimeAxis, lst_checked_group
             arr_summ_Alltime[1][num_month][num_counter] =  arr_summ_Alltime[1][num_month][num_counter] +   val[num_counter]
             arr_summ_Alltime[2][num_year][num_counter] =   arr_summ_Alltime[2][num_year][num_counter] +       val[num_counter]
 
+        if flag1: 
+            num_day +=1
+            flag1 = False
+
         if num_time < np.shape(arr_data)[0]-1:
             # поменяется цифра дня ?
             if arr_TimeAxis[num_time][num_period_view_day] != arr_TimeAxis[num_time+1][num_period_view_day]:
-                # запомнм сумму в выходном массиве Итого, т.е. перейдем на след день
-                num_day +=1
+                flag1 = True
+
+                # num_day +=1
             # поменяется цифра месяца ?
             if arr_TimeAxis[num_time][num_period_view_month] != arr_TimeAxis[num_time+1][num_period_view_month]:
-                # запомнм сумму в выходном массиве Итого, т.е. перейдем на след месяц
                 num_month +=1
             # поменяется цифра года ?
             if arr_TimeAxis[num_time][num_period_view_year] != arr_TimeAxis[num_time+1][num_period_view_year]:
-                # запомнм сумму в выходном массиве Итого, т.е. перейдем на след год
                 num_year +=1
 
 
@@ -1025,33 +924,63 @@ def korrekt_dataDB(arr_dataDB, dateFrom:datetime, dateTo:datetime):
             arr_dataDB = np.delete(arr_dataDB, num_rowDB, 0)
     return arr_dataDB
 
-def create_full_datetime_FromTo(de_dateFrom: QDate, de_dateTo: QDate):
+def create_datetimeFromTo_custom(de_dateFrom: QDate, de_dateTo: QDate):
     """ подготавливаем даты От и До
     как для выбранного пользователем диапазона,
-    так и полного диапазона - там где ОТ: от первого числа месяца, - там где ДО: до последнего числа месяца (для вычисления суммы "ВСЕГО")
     In:
     de_dateFrom: QDate, de_dateTo: QDate - данные из QDateEdit приложения/окна/виджета
     Out:
     dateFrom, dateTo :datetime - даты От и До для выбранного пользователем диапазона в формате datetime
+    """
+    date_From = None
+    date_To = None
+    # преобразуем составне части в формат datetime
+    # начальную дату дополним часами 00.30 текущего дня
+    # date_From = de_dateFrom.dateTime().toPyDateTime()
+    date_From = de_dateFrom.dateTime().toPyDateTime().replace(hour=0,  minute = 30)
+    #конечную дату дополним часами до конца дня, до 00.00 следующего дня
+    # date_To = de_dateTo.dateTime().toPyDateTime().replace(hour=23,  minute = 30)
+    date_To = de_dateTo.dateTime().toPyDateTime()
+    date_To = date_To + timedelta(days=1)
+    date_To = date_To.replace(hour=0,  minute = 0)
+
+    return date_From, date_To
+
+
+def create_full_datetimeFromTo(date_From, date_To):
+    """ подготавливаем даты От и До
+    как для полного диапазона - там где ОТ: от первого числа месяца, - там где ДО: до последнего числа месяца (для вычисления суммы "ВСЕГО")
+    In:
+    dateFrom, dateTo :datetime - даты От и До для выбранного пользователем диапазона в формате datetime
+    Out:
     full_date_From, full_date_To: datetime - даты От и До для полного диапазона в формате datetime
     """
     full_date_From = None
     full_date_To =None
-    date_From = None
-    date_To = None
+    # date_From = None
+    # date_To = None
     # преобразуем составне части в формат datetime
-    date_From = de_dateFrom.dateTime().toPyDateTime()
+    # date_From = de_dateFrom.dateTime().toPyDateTime()
+    date_From = date_From.replace(hour=0,  minute = 30)
     #конечную дату дополним часами до конца дня, до 23.30
-    date_To = de_dateTo.dateTime().toPyDateTime().replace(hour=23,  minute = 30)
+    # date_To = de_dateTo.dateTime().toPyDateTime().replace(hour=23,  minute = 30)
+    # date_To = de_dateTo.dateTime().toPyDateTime()
+    # date_To = date_To + timedelta(days=1)
+    date_To = date_To.replace(hour=0,  minute = 0)
     # вычисляем полные полные месяца
-    full_date_From = de_dateFrom.dateTime().toPyDateTime().replace(day =1 , hour=0,  minute = 0)
-    selected_date = date_To
-    if selected_date.month == 12: # December
-        last_day_selected_month = date(selected_date.year, selected_date.month, 31)
+    full_date_From = date_From.replace(day =1 , hour=0,  minute = 30)
+    # date_To = date_To
+    if date_To.month == 12: # December
+        last_day_selected_month = date(date_To.year, date_To.month, 31)
     else:
-        last_day_selected_month = date(selected_date.year, selected_date.month + 1, 1) - timedelta(days=1)
-    full_date_To = selected_date.replace(day=last_day_selected_month.day , hour=23,  minute = 30)
-    return full_date_From, full_date_To, date_From, date_To
+        # last_day_selected_month = date(date_To.year, date_To.month + 1, 1) - timedelta(days=1)
+        last_day_selected_month = date(date_To.year, date_To.month + 1, 1) # + timedelta(days=1)
+    # last_day_selected_month = last_day_selected_month + timedelta(days=1)
+    # last_day_selected_month = date(date_To.year, date_To.month, 1)
+    # full_date_To = last_day_selected_month + timedelta(days=1)
+    # full_date_To = full_date_To.replace(month=full_date_To.month, day=full_date_To.day , hour = 0,  minute = 0)
+    full_date_To = date_To.replace(month=last_day_selected_month.month, day=last_day_selected_month.day , hour=0,  minute = 0)
+    return full_date_From, full_date_To
 
 def create_Array_TimeAxis(dateFrom_full, dateTo_full):
     """ создаем массив временной оси (массив с датами времени) для таблицы профиля мощности

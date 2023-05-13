@@ -29,123 +29,123 @@ import modulVM.moduleLogging as ml
 class TableProfilePowerDialog(QDialog):
         inc_progressDB = pyqtSignal(int)
         send_message_statusBar = pyqtSignal(str)
-        def __init2__(self, data=np.array([[]]), parent=None):
-            # super().__init__()
-            super(TableProfilePowerDialog, self).__init__(parent)
-            self.setWindowFlags(self.windowFlags()
-                | Qt.WindowMinimizeButtonHint
-                | Qt.WindowMaximizeButtonHint
-                )
-            self.setMinimumSize(QSize(800, 400))         # Устанавливаем размеры
-            self.setWindowTitle("Таблица профиля мощности") # Устанавливаем заголовок окна
+        # def __init2__(self, data=np.array([[]]), parent=None):
+        #     # super().__init__()
+        #     super(TableProfilePowerDialog, self).__init__(parent)
+        #     self.setWindowFlags(self.windowFlags()
+        #         | Qt.WindowMinimizeButtonHint
+        #         | Qt.WindowMaximizeButtonHint
+        #         )
+        #     self.setMinimumSize(QSize(800, 400))         # Устанавливаем размеры
+        #     self.setWindowTitle("Таблица профиля мощности") # Устанавливаем заголовок окна
 
-            layout = QGridLayout()
-            layout.setSpacing(1)
+        #     layout = QGridLayout()
+        #     layout.setSpacing(1)
             
-            # флаг разрешения нажатия на кнопки Обновить и Импорт в Иксель - пока не выбраны счетчики и группы он опущен
-            self.flag_caseCountersAndGroups = False
-            # значение Combox периода интегрирования в окне профиля мощности
-            self.period_integr = ""
+        #     # флаг разрешения нажатия на кнопки Обновить и Импорт в Иксель - пока не выбраны счетчики и группы он опущен
+        #     self.flag_caseCountersAndGroups = False
+        #     # значение Combox периода интегрирования в окне профиля мощности
+        #     self.period_integr = ""
             
-            self.lst_checkItemTree=[]
+        #     self.lst_checkItemTree=[]
 
-            btn_caseCountsAndGroups = QPushButton("Выбор счетчиков и групп")
-            layout.addWidget(btn_caseCountsAndGroups, 0, 0)
-            btn_caseCountsAndGroups.clicked.connect(self.click_btn_caseCountsAndGroups)
+        #     btn_caseCountsAndGroups = QPushButton("Выбор счетчиков и групп")
+        #     layout.addWidget(btn_caseCountsAndGroups, 0, 0)
+        #     btn_caseCountsAndGroups.clicked.connect(self.click_btn_caseCountsAndGroups)
             
-            self.de_dateFrom = QDateEdit(self)
-            layout.addWidget(self.de_dateFrom, 0, 2)
-            self.de_dateFrom.setCalendarPopup(True) 
+        #     self.de_dateFrom = QDateEdit(self)
+        #     layout.addWidget(self.de_dateFrom, 0, 2)
+        #     self.de_dateFrom.setCalendarPopup(True) 
 
-            # от первого дня месяца
-            ddate_from = QDate(QDate.currentDate().year(), QDate.currentDate().month(), 1)
-            # до текущей даты
-            ddate_to = QDate.currentDate()
+        #     # от первого дня месяца
+        #     ddate_from = QDate(QDate.currentDate().year(), QDate.currentDate().month(), 1)
+        #     # до текущей даты
+        #     ddate_to = QDate.currentDate()
 
-            lbl_empty2 = QLabel("<-интервал->")
-            layout.addWidget(lbl_empty2, 0, 3)
-            lbl_empty2.setAlignment(Qt.AlignCenter)
+        #     lbl_empty2 = QLabel("<-интервал->")
+        #     layout.addWidget(lbl_empty2, 0, 3)
+        #     lbl_empty2.setAlignment(Qt.AlignCenter)
 
-            self.de_dateTo = QDateEdit(self)
-            layout.addWidget(self.de_dateTo, 0, 4)
-            self.de_dateTo.setCalendarPopup(True)
-            # self.de_dateTo.setDate(QDate(2022, 12, 25))
-            # d = ddatefrom.addDays(2)
-            # print(d)
-            self.de_dateFrom.setDate(ddate_from)
-            self.de_dateTo.setDate(ddate_to)
+        #     self.de_dateTo = QDateEdit(self)
+        #     layout.addWidget(self.de_dateTo, 0, 4)
+        #     self.de_dateTo.setCalendarPopup(True)
+        #     # self.de_dateTo.setDate(QDate(2022, 12, 25))
+        #     # d = ddatefrom.addDays(2)
+        #     # print(d)
+        #     self.de_dateFrom.setDate(ddate_from)
+        #     self.de_dateTo.setDate(ddate_to)
 
-            lbl_empty4 = QLabel("Период отображения")
-            layout.addWidget(lbl_empty4, 0, 6)
-            lbl_empty4.setAlignment(Qt.AlignRight)
-            self.cb_interval = QComboBox()
-            layout.addWidget(self.cb_interval, 0, 7)
-            self.cb_interval.addItems(cfg.VALUE_PERIOD_INTEGR_POFIL)
-            self.cb_interval.currentIndexChanged.connect( self.change_cb_interval )
-            self.period_integr = self.cb_interval.currentText()
+        #     lbl_empty4 = QLabel("Период отображения")
+        #     layout.addWidget(lbl_empty4, 0, 6)
+        #     lbl_empty4.setAlignment(Qt.AlignRight)
+        #     self.cb_interval = QComboBox()
+        #     layout.addWidget(self.cb_interval, 0, 7)
+        #     self.cb_interval.addItems(cfg.VALUE_PERIOD_INTEGR_POFIL)
+        #     self.cb_interval.currentIndexChanged.connect( self.change_cb_interval )
+        #     self.period_integr = self.cb_interval.currentText()
 
-            self.cbox = QCheckBox("применить kU и kI")
-            self.cbox.setChecked(False)
-            self.cbox.toggled.connect(self.onClicked_cbox) 
-            layout.addWidget(self.cbox, 0, 8)
+        #     self.cbox = QCheckBox("применить kU и kI")
+        #     self.cbox.setChecked(False)
+        #     self.cbox.toggled.connect(self.onClicked_cbox) 
+        #     layout.addWidget(self.cbox, 0, 8)
 
-            self.btnRefreshTableProfilePowerCounts = QPushButton("Обновить")
-            layout.addWidget(self.btnRefreshTableProfilePowerCounts, 0, 9)
-            self.btnRefreshTableProfilePowerCounts.clicked.connect(self.click_btnRefreshTableProfilePowerCounts_ver2)
-            if not self.flag_caseCountersAndGroups:
-                self.btnRefreshTableProfilePowerCounts.setEnabled(False)
-            else:
-                self.btnRefreshTableProfilePowerCounts.setEnabled(True) 
+        #     self.btnRefreshTableProfilePowerCounts = QPushButton("Обновить")
+        #     layout.addWidget(self.btnRefreshTableProfilePowerCounts, 0, 9)
+        #     self.btnRefreshTableProfilePowerCounts.clicked.connect(self.click_btnRefreshTableProfilePowerCounts_ver2)
+        #     if not self.flag_caseCountersAndGroups:
+        #         self.btnRefreshTableProfilePowerCounts.setEnabled(False)
+        #     else:
+        #         self.btnRefreshTableProfilePowerCounts.setEnabled(True) 
 
-            # ckb_cycleRefresh = QCheckBox("циклически")
-            # layout.addWidget(ckb_cycleRefresh, 1, 10)
+        #     # ckb_cycleRefresh = QCheckBox("циклически")
+        #     # layout.addWidget(ckb_cycleRefresh, 1, 10)
 
-            lbl_empty3 = QLabel("    ")
-            layout.addWidget(lbl_empty3, 0, 11)
+        #     lbl_empty3 = QLabel("    ")
+        #     layout.addWidget(lbl_empty3, 0, 11)
 
-            self.btnImportTableProfilePowerCounts = QPushButton("Импорт в Excel")
-            layout.addWidget(self.btnImportTableProfilePowerCounts, 0, 12)
-            self.btnImportTableProfilePowerCounts.clicked.connect(self.click_bth_ImportInExcel)
-            if not self.flag_caseCountersAndGroups:
-                self.btnImportTableProfilePowerCounts.setEnabled(False)
-            else:
-                self.btnImportTableProfilePowerCounts.setEnabled(True)    
+        #     self.btnImportTableProfilePowerCounts = QPushButton("Импорт в Excel")
+        #     layout.addWidget(self.btnImportTableProfilePowerCounts, 0, 12)
+        #     self.btnImportTableProfilePowerCounts.clicked.connect(self.click_bth_ImportInExcel)
+        #     if not self.flag_caseCountersAndGroups:
+        #         self.btnImportTableProfilePowerCounts.setEnabled(False)
+        #     else:
+        #         self.btnImportTableProfilePowerCounts.setEnabled(True)    
         
-            #
-            # self.model2 = NpModel2()
-            # self.tableProfilePowerCounts2 = QTableView()
-            # self.tableProfilePowerCounts2.setModel(self.model2)
-            # self.tableProfilePowerCounts2.horizontalHeader().setSectionResizeMode(0)
-            # # self.tableProfilePowerCounts.horizontalHeader().setSectionResizeMode(1)#,QHeaderView.ResizeToContents)
-            # # self.tableProfilePowerCounts.horizontalHeader().hide()
-            # self.tableProfilePowerCounts2.verticalHeader().hide()
-            # # self.tableProfilePowerCounts2.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
-            # layout.addWidget(self.tableProfilePowerCounts2, 1, 0, 1, 13, alignment=Qt.AlignmentFlag.AlignBottom)
+        #     #
+        #     # self.model2 = NpModel2()
+        #     # self.tableProfilePowerCounts2 = QTableView()
+        #     # self.tableProfilePowerCounts2.setModel(self.model2)
+        #     # self.tableProfilePowerCounts2.horizontalHeader().setSectionResizeMode(0)
+        #     # # self.tableProfilePowerCounts.horizontalHeader().setSectionResizeMode(1)#,QHeaderView.ResizeToContents)
+        #     # # self.tableProfilePowerCounts.horizontalHeader().hide()
+        #     # self.tableProfilePowerCounts2.verticalHeader().hide()
+        #     # # self.tableProfilePowerCounts2.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
+        #     # layout.addWidget(self.tableProfilePowerCounts2, 1, 0, 1, 13, alignment=Qt.AlignmentFlag.AlignBottom)
             
-            #
+        #     #
 
 
-            self.model = NpModel()
-            self.tableProfilePowerCounts = QTableView()
-            self.tableProfilePowerCounts.setModel(self.model)
-            self.tableProfilePowerCounts.horizontalHeader().setSectionResizeMode(0)
-            # self.tableProfilePowerCounts.horizontalHeader().setSectionResizeMode(1)#,QHeaderView.ResizeToContents)
-            # self.tableProfilePowerCounts.horizontalHeader().hide()
-            self.tableProfilePowerCounts.verticalHeader().hide()
-            self.tableProfilePowerCounts.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
-            # layout.addWidget(self.tableProfilePowerCounts,2,0, 10, 13)
-            # layout.addWidget(self.tableProfilePowerCounts,2,0, 2, 13, alignment=Qt.AlignmentFlag.AlignTop)
-            layout.addWidget(self.tableProfilePowerCounts,2,0, 2, 13, alignment=Qt.AlignmentFlag.AlignTop)
+        #     self.model = NpModel()
+        #     self.tableProfilePowerCounts = QTableView()
+        #     self.tableProfilePowerCounts.setModel(self.model)
+        #     self.tableProfilePowerCounts.horizontalHeader().setSectionResizeMode(0)
+        #     # self.tableProfilePowerCounts.horizontalHeader().setSectionResizeMode(1)#,QHeaderView.ResizeToContents)
+        #     # self.tableProfilePowerCounts.horizontalHeader().hide()
+        #     self.tableProfilePowerCounts.verticalHeader().hide()
+        #     self.tableProfilePowerCounts.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
+        #     # layout.addWidget(self.tableProfilePowerCounts,2,0, 10, 13)
+        #     # layout.addWidget(self.tableProfilePowerCounts,2,0, 2, 13, alignment=Qt.AlignmentFlag.AlignTop)
+        #     layout.addWidget(self.tableProfilePowerCounts,2,0, 2, 13, alignment=Qt.AlignmentFlag.AlignTop)
 
-            # layout.setRowStretch(0, 0)
-            # layout.setRowStretch(1, 0)
-            # layout.setRowStretch(2, 0)
-            self.setLayout(layout)
+        #     # layout.setRowStretch(0, 0)
+        #     # layout.setRowStretch(1, 0)
+        #     # layout.setRowStretch(2, 0)
+        #     self.setLayout(layout)
 
-            # self.load()
-            self.tableProfilePowerCounts.resizeColumnsToContents()
+        #     # self.load()
+        #     self.tableProfilePowerCounts.resizeColumnsToContents()
 
-            return None
+        #     return None
         
         def __init__(self, data=np.array([[]]), parent=None):
             # super().__init__()
@@ -173,12 +173,6 @@ class TableProfilePowerDialog(QDialog):
             self.rightFrame.setFrameShape(QFrame.StyledPanel)
             self.rightLayout = QGridLayout(self.rightFrame)
             self.rightLayout.setSpacing(1)
-
-
-            
-
-
-            
             
             # флаг разрешения нажатия на кнопки Обновить и Импорт в Иксель - пока не выбраны счетчики и группы он опущен
             self.flag_caseCountersAndGroups = False
@@ -316,42 +310,42 @@ class TableProfilePowerDialog(QDialog):
             """
             self.period_integr = self.cb_interval.currentText()
 
-        def click_btn_caseCountsAndGroups(self):
-            """
-                Обработка нажания кноепки Выбор счетчиков и групп
-                Выводиться окно с Tree
+        # def click_btn_caseCountsAndGroups(self):
+        #     """
+        #         Обработка нажания кноепки Выбор счетчиков и групп
+        #         Выводиться окно с Tree
             
-            """
-            self.flag_caseCountersAndGroups = False
-            self.DialogCaseCounterAndGroups = QDialog()
-            self.DialogCaseCounterAndGroups.setWindowTitle("Выбор счетчиков и групп")
-            self.DialogCaseCounterAndGroups.setWindowModality(Qt.ApplicationModal)
-            self.DialogCaseCounterAndGroups.resize(800, 800)
+        #     """
+        #     self.flag_caseCountersAndGroups = False
+        #     self.DialogCaseCounterAndGroups = QDialog()
+        #     self.DialogCaseCounterAndGroups.setWindowTitle("Выбор счетчиков и групп")
+        #     self.DialogCaseCounterAndGroups.setWindowModality(Qt.ApplicationModal)
+        #     self.DialogCaseCounterAndGroups.resize(800, 800)
         
-            layout = QGridLayout()
-            self.DialogCaseCounterAndGroups.setLayout(layout)
-            self.treeCount = QTreeWidget()
-            # self.tree.setColumnCount(2)
-            # self.tree.setHeaderLabels(['Наименование', 'Сетевой адрес'])
-            self.treeCount.setColumnCount(1)
-            self.treeCount.setHeaderLabels(['Наименование'])
-            self.renderTreePanel_for_ProfilPower()
-            # self.tree.clicked.connect(self.click_onClickedOnItemTree)
-            # self.tree.selectionModel().selectionChanged.connect(self.onSelectionChanged)      # QItemSelectionModel
-            # self.tree.itemChanged.connect(self.onChangeCheckBox)
-            # self.tree.doubleClicked.connect(self.click_onClickedOnItemTree)
-            self.treeCount.itemClicked.connect(self.onItemClicked)
-            layout.addWidget(self.treeCount,0,0,2,2)
+        #     layout = QGridLayout()
+        #     self.DialogCaseCounterAndGroups.setLayout(layout)
+        #     self.treeCount = QTreeWidget()
+        #     # self.tree.setColumnCount(2)
+        #     # self.tree.setHeaderLabels(['Наименование', 'Сетевой адрес'])
+        #     self.treeCount.setColumnCount(1)
+        #     self.treeCount.setHeaderLabels(['Наименование'])
+        #     self.renderTreePanel_for_ProfilPower()
+        #     # self.tree.clicked.connect(self.click_onClickedOnItemTree)
+        #     # self.tree.selectionModel().selectionChanged.connect(self.onSelectionChanged)      # QItemSelectionModel
+        #     # self.tree.itemChanged.connect(self.onChangeCheckBox)
+        #     # self.tree.doubleClicked.connect(self.click_onClickedOnItemTree)
+        #     self.treeCount.itemClicked.connect(self.onItemClicked)
+        #     layout.addWidget(self.treeCount,0,0,2,2)
             
-            btn_OKCase = QPushButton("OK")
-            layout.addWidget(btn_OKCase, 2, 0)
-            btn_OKCase.clicked.connect(self.click_btn_OKCase)
-            btn_CancelCase = QPushButton("Cancel")
-            layout.addWidget(btn_CancelCase, 2, 1)
-            btn_CancelCase.clicked.connect(self.click_btn_CancelCase)
+        #     btn_OKCase = QPushButton("OK")
+        #     layout.addWidget(btn_OKCase, 2, 0)
+        #     btn_OKCase.clicked.connect(self.click_btn_OKCase)
+        #     btn_CancelCase = QPushButton("Cancel")
+        #     layout.addWidget(btn_CancelCase, 2, 1)
+        #     btn_CancelCase.clicked.connect(self.click_btn_CancelCase)
 
-            self.DialogCaseCounterAndGroups.exec_()
-            return None
+        #     self.DialogCaseCounterAndGroups.exec_()
+        #     return None
         
         
 
@@ -385,7 +379,7 @@ class TableProfilePowerDialog(QDialog):
             a=0
             if cfg.run_onChangeCheckBox == 1: return None
             if cfg.run_inSelectionChange == 1: return None
-            print(it, col, it.text(col))
+            # print(it, col, it.text(col))
             it.setSelected(True)
             self.onSelectionChanged()
             return None
@@ -546,51 +540,100 @@ class TableProfilePowerDialog(QDialog):
         #     return None
         
         
-        def click_btn_OKCase(self):
-            """
-            обработка нажатия клавиши ОК в окне выбора счетчиков и групп
-            """
-            # составим список элементов, где пользователь поставиль галочки в дереве
-            # self.lst_checkItemTree=[]
-            # iterator = QTreeWidgetItemIterator(self.tree, QTreeWidgetItemIterator.Checked)
-            # while iterator.value():
-            #     item = iterator.value()
-            #     print (item.text(0))
-            #     self.lst_checkItemTree.append(item.text(0))
-            #     iterator += 1
-            # если какой то выбор сделан - разблокированить кнопки Обновить и Экспорт в Иксель
-            # if self.lst_checkItemTree:
-            if cfg.lst_id_checked_group or cfg.lst_id_checked_single_counter:
-                self.flag_caseCountersAndGroups = True
-                self.btnRefreshTableProfilePowerCounts.setEnabled(True)
-                self.btnImportTableProfilePowerCounts.setEnabled(True) 
-            else:
-                # если пользователь снял все галочки
-                self.flag_caseCountersAndGroups = False
-                self.btnRefreshTableProfilePowerCounts.setEnabled(False)
-                self.btnImportTableProfilePowerCounts.setEnabled(False)
-            # создаем список выбранных пользователем групп и список выбранных счетчиков - все по отдельности
-            # cfg.lst_checked_counter_in_group, cfg.lst_checked_group, cfg.lst_checked_single_counter = mg.createLstCheckedCounterAndGroups(self.lst_checkItemTree)
-            # cfg.lst_id_checked_counter_in_group, cfg.lst_id_checked_group, cfg.lst_id_checked_single_counter = mg.create_id_LstCheckedCounterAndGroups()
-            # закроем диалоговое окно
-            self.DialogCaseCounterAndGroups.hide() 
-            # lst_id_checked_group = cfg.lst_id_checked_group.copy()
-            # lst_id_checked_single_counter = cfg.lst_id_checked_single_counter.copy()
-            # lst_id_checked_counter_in_group = cfg.lst_id_checked_counter_in_group.copy() 
-            cfg.run_inSelectionChange = 0  
-            return
+        # def click_btn_OKCase(self):
+        #     """
+        #     обработка нажатия клавиши ОК в окне выбора счетчиков и групп
+        #     """
+        #     # составим список элементов, где пользователь поставиль галочки в дереве
+        #     # self.lst_checkItemTree=[]
+        #     # iterator = QTreeWidgetItemIterator(self.tree, QTreeWidgetItemIterator.Checked)
+        #     # while iterator.value():
+        #     #     item = iterator.value()
+        #     #     print (item.text(0))
+        #     #     self.lst_checkItemTree.append(item.text(0))
+        #     #     iterator += 1
+        #     # если какой то выбор сделан - разблокированить кнопки Обновить и Экспорт в Иксель
+        #     # if self.lst_checkItemTree:
+        #     if cfg.lst_id_checked_group or cfg.lst_id_checked_single_counter:
+        #         self.flag_caseCountersAndGroups = True
+        #         self.btnRefreshTableProfilePowerCounts.setEnabled(True)
+        #         self.btnImportTableProfilePowerCounts.setEnabled(True) 
+        #     else:
+        #         # если пользователь снял все галочки
+        #         self.flag_caseCountersAndGroups = False
+        #         self.btnRefreshTableProfilePowerCounts.setEnabled(False)
+        #         self.btnImportTableProfilePowerCounts.setEnabled(False)
+        #     # создаем список выбранных пользователем групп и список выбранных счетчиков - все по отдельности
+        #     # cfg.lst_checked_counter_in_group, cfg.lst_checked_group, cfg.lst_checked_single_counter = mg.createLstCheckedCounterAndGroups(self.lst_checkItemTree)
+        #     # cfg.lst_id_checked_counter_in_group, cfg.lst_id_checked_group, cfg.lst_id_checked_single_counter = mg.create_id_LstCheckedCounterAndGroups()
+        #     # закроем диалоговое окно
+        #     self.DialogCaseCounterAndGroups.hide() 
+        #     # lst_id_checked_group = cfg.lst_id_checked_group.copy()
+        #     # lst_id_checked_single_counter = cfg.lst_id_checked_single_counter.copy()
+        #     # lst_id_checked_counter_in_group = cfg.lst_id_checked_counter_in_group.copy() 
+        #     cfg.run_inSelectionChange = 0  
+        #     return
         
-        def click_btn_CancelCase(self):
-            """
-            обработка нажатия клавиши Cancel в окне выбора счетчиков и групп
-            """
-            # закроем диалоговое окно
-            self.DialogCaseCounterAndGroups.hide()
-            return
+        # def click_btn_CancelCase(self):
+        #     """
+        #     обработка нажатия клавиши Cancel в окне выбора счетчиков и групп
+        #     """
+        #     # закроем диалоговое окно
+        #     self.DialogCaseCounterAndGroups.hide()
+        #     return
         
         
+        # def click_btnRefreshTableProfilePowerCounts_ver3(self):
+        #     """
+        #         нажатие на кнопку Обновить
+        #     """
+        #     # t0 = time()
+        #     self.emit_string_statusBar("Пожалуйста, подождите. Идут запросы в БД...")
+        #     self.emit_value(5)
+        #     self.model.set()
+        #     # подготавливаем даты От и До
+        #     # как для выбранного пользователем диапазона,
+        #     # так и полного диапазона - там где ОТ: от первого числа месяца, - там где ДО: до последнего числа месяца (для вычисления суммы "ВСЕГО")
+        #     # dateFrom_full, dateTo_full, dateFrom, dateTo = mg.create_full_datetime_FromTo(self.de_dateFrom, self.de_dateTo)
+        #     dateFrom_custom, dateTo_custom = mg.create_datetimeFromTo_custom(self.de_dateFrom, self.de_dateTo)
+        #     dateFrom_full, dateTo_full = mg.create_full_datetimeFromTo(dateFrom_custom, dateTo_custom)
+        #     # создаем массив временной оси (массив с датами времени) для таблицы профиля мощности
+        #     # arr_TimeAxis_full, dateFrom_full, dateTo_full, dateFrom, dateTo, rezult = self.create_Array_TimeAxis()
+        #     arr_TimeAxis_full, rezult = mg.create_Array_TimeAxis(dateFrom_full, dateTo_full)
+        #     #
+        #     self.emit_value(20)
+        #     arr_data = np.full(shape=(np.shape(arr_TimeAxis_full)[0], len(cfg.lst_id_checked_counter_in_group + cfg.lst_id_checked_single_counter)),fill_value=0)
+        #     if True:
+        #         self.emit_value(25)
+        #         #
+        #         for num_arrTimeAxis, val_arrTimeAxis in enumerate(arr_TimeAxis_full):
+        #             for num_counter, item_counter in enumerate(cfg.lst_id_checked_counter_in_group + cfg.lst_id_checked_single_counter):
+        #                 dt_arrTimeAxis = datetime.datetime(val_arrTimeAxis[0], val_arrTimeAxis[1], val_arrTimeAxis[2], val_arrTimeAxis[3], val_arrTimeAxis[4])
+        #                 rezult, dict_one_data, lst_data = msql.select_one_PandQ_from_DBPP(item_counter=item_counter, dateTime=dt_arrTimeAxis)
+        #                 # если по конктреному datetime получили числа - заносим их в таблицу
+        #                 # если записи в БД нет - заносим нули
+        #                 if rezult:
+        #                     a=0
+        #                 else:
+        #                     lst_data = [0,0,0,0,0]
+        #                 arr_dataDB = np.array(lst_data)
+        #                 arr_dataDB = np.delete(arr_dataDB, [0] , axis = 0)
+        #                 arr_dataDB = np.array(arr_dataDB, dtype=float)
+        #                 # вычисление полной мощьности
+        #                 arr_dataDB[0] = arr_dataDB[0]-arr_dataDB[1]
+        #                 # удалим лишние столбцы
+        #                 arr_dataDB = np.delete(arr_dataDB, [1,2,3] , axis = 0)
+        #                 arr_data[num_arrTimeAxis][num_counter] = arr_dataDB[0]
+        #             arr_data_custom = np.array(arr_data, dtype=str)
+        #             # arr_data_custom = np.array(arr_data_custom, dtype=str)
+        #             # arr_Table = np.hstack((arr_TimeAxis_custom, arr_data_custom))
+        #             self.data = arr_data_custom
+        #             self.model.set(self.data.copy())
+        #             self.tableProfilePowerCounts.resizeColumnsToContents()
+                        
+        #     return None
 
-        
+
 
         def click_btnRefreshTableProfilePowerCounts_ver2(self):
             """
@@ -599,12 +642,13 @@ class TableProfilePowerDialog(QDialog):
             # t0 = time()
             self.emit_string_statusBar("Пожалуйста, подождите. Идут запросы в БД...")
             self.emit_value(5)
-
+            self.model.set()
             # подготавливаем даты От и До
             # как для выбранного пользователем диапазона,
             # так и полного диапазона - там где ОТ: от первого числа месяца, - там где ДО: до последнего числа месяца (для вычисления суммы "ВСЕГО")
-            dateFrom_full, dateTo_full, dateFrom, dateTo = mg.create_full_datetime_FromTo(self.de_dateFrom, self.de_dateTo)
-
+            # dateFrom_full, dateTo_full, dateFrom, dateTo = mg.create_full_datetime_FromTo(self.de_dateFrom, self.de_dateTo)
+            dateFrom_custom, dateTo_custom = mg.create_datetimeFromTo_custom(self.de_dateFrom, self.de_dateTo)
+            dateFrom_full, dateTo_full = mg.create_full_datetimeFromTo(dateFrom_custom, dateTo_custom)
             # создаем массив временной оси (массив с датами времени) для таблицы профиля мощности
             # arr_TimeAxis_full, dateFrom_full, dateTo_full, dateFrom, dateTo, rezult = self.create_Array_TimeAxis()
             arr_TimeAxis_full, rezult = mg.create_Array_TimeAxis(dateFrom_full, dateTo_full)
@@ -666,9 +710,11 @@ class TableProfilePowerDialog(QDialog):
                 #
                 self.emit_value(35)
                 # обрежем массив в соответвии с датами, которые выбрал пользователь
-                arr_data_custom, arr_TimeAxis_custom = mg.cut_arr_custom_time(arr_data, arr_TimeAxis_full, dateFrom, dateTo)
+                arr_data_custom, arr_TimeAxis_custom = mg.cut_arr_custom_time(arr_data, arr_TimeAxis_full, dateFrom_custom, dateTo_custom)
                 #
                 self.emit_value(40)
+                # приведение к виду периода отображения
+                arr_data_custom, arr_TimeAxis_custom = mg.createView_periodView(arr_data_custom, arr_TimeAxis_custom, self.period_integr)
                 # найдем сумму для ВСЕГО 
                 arr_summ_Alltime, arr_summ_Alltime_Group =mg.summ_per_day_and_month_and_year_v2(arr_data_custom, arr_TimeAxis_custom, cfg.lst_id_checked_group, cfg.lst_id_checked_counter_in_group, cfg.lst_id_checked_single_counter)
                 #
@@ -678,8 +724,8 @@ class TableProfilePowerDialog(QDialog):
                 #  Сделаем ИТОГО за период по группе
                 summGroupPeriod = np.full(shape=(len(cfg.lst_id_checked_group)),fill_value=0.0, dtype=float)
                 self.emit_value(50)
-                # приведение к виду периода отображения
-                arr_data_custom, arr_TimeAxis_custom = mg.createView_periodView(arr_data_custom, arr_TimeAxis_custom, self.period_integr)
+                # # приведение к виду периода отображения
+                # arr_data_custom, arr_TimeAxis_custom = mg.createView_periodView(arr_data_custom, arr_TimeAxis_custom, self.period_integr)
                 #
                 # вставка строк/столбцов суммы как итого
                 arr_data_custom, arr_TimeAxis_custom, mesto = mg.insert_summ_v2(arr_data_custom, arr_TimeAxis_custom, self.period_integr, arr_summ_Alltime, arr_summ_Alltime_Group, arr_summ_Alltime_custom, arr_summ_Alltime_Group_custom, summGroupPeriod)
@@ -1065,43 +1111,43 @@ class NpModel(QAbstractTableModel):
 
 
 
-class NpModel2(QAbstractTableModel):
-    def __init__(self, data = np.array([[]])):
-        super().__init__()
-        self.npdata = data
-        self.lst_header_table = []
+# class NpModel2(QAbstractTableModel):
+#     def __init__(self, data = np.array([[]])):
+#         super().__init__()
+#         self.npdata = data
+#         self.lst_header_table = []
         
-    def rowCount(self,index=QModelIndex()):
-        return len(self.npdata)
+#     def rowCount(self,index=QModelIndex()):
+#         return len(self.npdata)
         
-    def columnCount(self,index=QModelIndex()):
-        return len(self.npdata[0])
+#     def columnCount(self,index=QModelIndex()):
+#         return len(self.npdata[0])
     
-    def data(self,index,role):
-        return None
+#     def data(self,index,role):
+#         return None
    
-    def headerData(self,section,orientation,role):
-        # if role != Qt.DisplayRole: 
-        #     return None
-        if role == Qt.DisplayRole:
-            if orientation == Qt.Vertical:
-                ret = 'Строка ' + str(section)
-                return ret
-            if orientation == Qt.Horizontal:
-                # ret = 'Столбец ' + str(section)
-                ret = self.lst_header_table[section]
-                return ret
-        if role == Qt.FontRole:
-            font = QFont()
-            font.setBold(True)
-            # font.setPointSize(10)
-            return font
+#     def headerData(self,section,orientation,role):
+#         # if role != Qt.DisplayRole: 
+#         #     return None
+#         if role == Qt.DisplayRole:
+#             if orientation == Qt.Vertical:
+#                 ret = 'Строка ' + str(section)
+#                 return ret
+#             if orientation == Qt.Horizontal:
+#                 # ret = 'Столбец ' + str(section)
+#                 ret = self.lst_header_table[section]
+#                 return ret
+#         if role == Qt.FontRole:
+#             font = QFont()
+#             font.setBold(True)
+#             # font.setPointSize(10)
+#             return font
  
-    def set(self,arr=np.array([[]])):
-        self.beginResetModel()
-        self.npdata = arr
-        self.endResetModel()
-        self.layoutChanged.emit()
+#     def set(self,arr=np.array([[]])):
+#         self.beginResetModel()
+#         self.npdata = arr
+#         self.endResetModel()
+#         self.layoutChanged.emit()
     
-    def get(self):
-        return self.npdata
+#     def get(self):
+#         return self.npdata
